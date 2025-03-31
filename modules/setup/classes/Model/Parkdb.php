@@ -1,0 +1,137 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+
+class Model_Parkdb extends Model {
+	
+	
+	
+	/*
+	20.03.2025 Проверка наличия указанных таблицы
+	
+	*/
+	public function checkTableIsPresent($table)
+	{
+		$res=array();
+		$sql='select distinct RDB$RELATION_NAME
+				from RDB$RELATION_FIELDS
+				where RDB$RELATION_NAME=\''.$table.'\'';
+		//echo Debug::vars('12', $sql); exit;
+		
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		if($query) return true;
+		return false;
+		
+	}
+	
+	
+	/*
+	20.03.2025 Проверка наличия указанных процедур
+	
+	*/
+	public function checkProcedureIsPresent($name)
+	{
+		$res=array();
+
+		$sql='select distinct * from  RDB$PROCEDURES
+			where RDB$PROCEDURE_name = \''.$name.'\'';
+		
+		//echo Debug::vars('12', $sql); exit;
+		
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		if($query) return true;
+		return false;
+	}
+	
+	/*
+	20.03.2025 Проверка наличия указанных процедур
+	
+	*/
+	public function checkGeneratorIsPresent($name)
+	{
+		$res=array();
+
+		$sql='select distinct * from rdb$GENERATORS
+    where rdb$GENERATOR_name=\'GEN_'.$name.'_ID\'';
+		
+		//echo Debug::vars('12', $sql); exit;
+		
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		if($query) return true;
+		return false;
+	}
+	
+	
+	
+	
+	public function makeQuery($query)
+	{
+		try{
+			Database::instance('fb')->query(NULL, $query);
+		} catch (Exception $e) {
+			echo Debug::vars('99', $e->getMessage());
+		}
+		
+	}
+	
+	
+	public function delTable($tableName)
+	{
+		$this->delGenerator($tableName);
+		$this->makeQuery('DROP TABLE '. $tableName);
+		
+	}
+	
+	
+	
+	//31.03.2025 Добавление таблицы сводится к выполнению нескольких sql запросов, взятых из файла конфигурации.
+	public function addTable($tableName)
+	{
+		$this->makeQuery('DROP TABLE '. $tableName);
+		//выбираю набор команд для указанной таблицы
+		
+		$sqlarray=Arr::get(Kohana::$config->load('artonitparking_table'), $tableName, null);//выбираю набор команд для добавления таблицы.
+			if($sqlarray)
+			{
+				//выполняю команды в цикле
+				foreach($sqlarray as $key=>$value){
+					$result = $this->makeQuery(iconv('UTF-8', 'CP1251', $value));
+				}
+				
+			} else {
+				
+				echo Debug::vars('102 нет данных для таблицы '. Arr::get($_POST, 'addTable'));//exit;
+			}
+			
+		
+	}
+	
+	public function delGenerator($name)
+	{
+		$this->makeQuery('DROP GENERATOR GEN_'. $name.'_ID');
+		
+		
+	}
+	
+	public function delProcedure($name)
+	{
+		$this->makeQuery('DROP PROCEDURE '. $name);
+	}
+	
+	
+	//31.03.2025 ДОбавление процедуры сводится к выполнению скрипта, взятого из файлов.
+	public function addProcedure($name)
+	{
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:c:\vnii\vnii.GDB -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
+			
+			
+		 exec(iconv('UTF-8', 'CP1251', $ttt));
+	}
+	
+	
+	
+}
