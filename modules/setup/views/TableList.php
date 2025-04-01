@@ -1,6 +1,6 @@
 <?php
 //echo Debug::vars('2', $tableList); //exit;
-echo Debug::vars('3', $tableListCheck); //exit;
+//echo Debug::vars('3', $tableListCheck); //exit;
 //echo Debug::vars('4', $procedureList); //exit;
 //echo Debug::vars('5', $procedureListCheck); //exit;
 echo Form::open('Checkdb/worker');

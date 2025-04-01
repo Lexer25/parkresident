@@ -9,7 +9,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		  <?= HTML::anchor('rubic', __('City'),  array('class'=>'navbar-brand')) ?>
+		  <?= HTML::anchor('ResidentPlace', __('City'),  array('class'=>'navbar-brand')) ?>
     </div>
 	<div class="navbar-collapse collapse">
 		

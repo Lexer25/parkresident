@@ -2,6 +2,9 @@
 
 class Model_Parking extends Model {
 	
+	
+	
+	
 	public function get_list_parking($id_parking=null)// получить список парковок для указанного жилого копмлекса
 	{
 		$res=array();

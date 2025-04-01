@@ -1,6 +1,7 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по парковочной системе
 //echo Debug::vars('3', $rubic_list);
+//echo Debug::vars('3', $id_resident);
 echo Form::open('ResidentPlace/rp_control');
 ?>
 			
@@ -17,7 +18,10 @@ echo Form::open('ResidentPlace/rp_control');
 			<th><?echo Kohana::message('rubic','select');?></th>
 			<th><?echo Kohana::message('rubic','rp_id');?></th>
 			<th><?echo Kohana::message('rubic','rp_name');?></th>
-			<th><?echo __('Количество машиномест');?></th>
+			<th><?echo __('is_active');?></th>
+			<th><?echo __('created');?></th>
+			<th><?echo __('parking_count');?></th>
+			<th><?echo __('Общее количество машиномест');?></th>
 			
 		</tr>
 		<?php 
@@ -26,15 +30,29 @@ echo Form::open('ResidentPlace/rp_control');
 		$total_place=0;
 		$total_occup=0;
 		$total_vacant=0;
-		foreach($rubic_list as $key=>$value)
+		
+			$dis1='';
+			$dis1_arr='';
+			$dis2='';
+			$dis2_lighten='';
+			$dis3='';
+							
+							
+		foreach($id_resident as $key=>$value)
 		{
+			
+			$residence=new Residence(Arr::get($value, 'ID'));
 			echo '<tr>';
 				if($i==0) echo '<td>'.Form::radio('id_rp', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
 				if($i>0) echo '<td>'.Form::radio('id_rp', Arr::get($value,'ID'), FALSE).'</td>';
-				echo '<td>'.Arr::get($value,'ID').'</td>';
-				echo '<td>'. HTML::anchor('parking?id_parking='.Arr::get($value,'ID', 0) , iconv('windows-1251','UTF-8', Arr::get($value,'NAME'))).'</td>';
-				echo Form::hidden('del_rp_name', Arr::get($value,'NAME'));
-				echo '<td>'.Arr::get($value,'MAXCOUNT').'</td>';
+				echo '<td>'.$residence->id.'</td>';
+				echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , iconv('windows-1251','UTF-8', $residence->name)).'</td>';
+				echo '<td>'.$residence->is_active.'</td>';
+				echo '<td>'.$residence->created.'</td>';
+				$parkinPlace=Model::factory('parking')->get_list_parking($residence->id);
+				echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
+				echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
+				
 			echo '</tr>';	
 			
 		}

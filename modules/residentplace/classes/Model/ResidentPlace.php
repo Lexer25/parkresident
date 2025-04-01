@@ -3,14 +3,11 @@
 class Model_ResidentPlace extends Model {
 	
 	
-	
-	
-	public function get_list_rp($id_parking)// получить список жилых комплексов
+	public function get_list_rp()// получить список жилых комплексов
 	{
 		$res=array();
-		$sql='select hlp.id, hlp.name, hlp.enabled, hlp.enabled, hlp.maxcount as MAXCOUNT, hlp.parent from hl_parking hlp
-				where hlp.parent ='.$id_parking.'
-				group by hlp.id, hlp.name, hlp.enabled, hlp.enabled,  MAXCOUNT, hlp.parent';
+				
+		$sql='select hlr.id from hl_resident hlr';
 		
 		
 		$query = DB::query(Database::SELECT, $sql)
@@ -44,10 +41,10 @@ class Model_ResidentPlace extends Model {
 
 	public function add_rp($rp_name) //добавление нового жилого комплекса
 	{
-		//echo Debug::vars('783', $rp_name);exit;
-		if($rp_name === NULL) $rp_name=$this->getOrgName($id_org);
-		$sql='INSERT INTO HL_PARKING (NAME, PARENT)
-			values (\''.$rp_name.'\', 0)';
+		$sql='INSERT INTO HL_resident (NAME)
+			values (\''.$rp_name.'\')';
+			
+			
 		//echo Debug::vars('783', $sql);exit;
 		try
 				{
@@ -63,7 +60,7 @@ class Model_ResidentPlace extends Model {
 	public function del_rp($id_rp)// удаление жилого комплекса
 	{
 		
-		$sql='delete from hl_parking hlp where hlp.id='.$id_rp;
+		$sql='delete from hl_resident hlr where hlr.id='.$id_rp;
 		//echo Debug::vars('806', $sql);exit;
 		try
 				{
@@ -75,12 +72,11 @@ class Model_ResidentPlace extends Model {
 		return;
 	}
 	
-	public function update_rp($data)// удаление жилого комплекса
+	public function update_rp($data)// обновление данных жилого комплекса
 	{
 		//echo Debug::vars('62', $data, Arr::get($data, 'id_rp'), Arr::get($data, 'name'));exit;
-		$sql='UPDATE HL_PARKING
+		$sql='UPDATE HL_RESIDENT
 			SET NAME = \''.Arr::get($data, 'name').'\',
-				MAXCOUNT = \''.Arr::get($data, 'maxcount', 0).'\',
 				ENABLED = 1
 				WHERE (ID = '.Arr::get($data, 'id_rp').')';
 			//echo Debug::vars('95', $sql);exit;
@@ -88,11 +84,13 @@ class Model_ResidentPlace extends Model {
 				{
 				$query = DB::query(Database::UPDATE, iconv('UTF-8','windows-1251',$sql))
 					->execute(Database::instance('fb'));
+					return true;
 					
 				} catch (Exception $e) {
 					Log::instance()->add(Log::NOTICE, '102 '. $e->getMessage());
+					return false;
 				}
-		return;
+		
 	}
 	
 	

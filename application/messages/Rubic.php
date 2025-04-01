@@ -25,7 +25,7 @@ return array(
 		'rubic_door_add_as_enter'=>'Добавить точку прохода в Вход',
 		'rubic_add_door_as_exit'=>'Добавить точку прохода в Выход',
 		'rubic_del_parking_inside'=>'Очистить таблицу',
-		'rubic_list'=>'Список парковок',
+		'rubic_list'=>'Список парковок для жилого комплекса ',
 		'rp_list'=>'Список жилых комплексов',
 		'rubic_list_desc'=>'Список зарегистрированных парковок',
 		'select'=>'Выбор',

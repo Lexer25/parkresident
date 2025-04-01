@@ -36,30 +36,35 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 		$_SESSION['menu_active']='rubic';
 		$query=Validation::factory($this->request->query());
 					$query->rule('id_parking', 'not_empty')
-							->rule('id_card', 'digit')
+							->rule('id_parking', 'digit')
 							;
 					if($query->check())
 					{
-						$id_parking=Arr::get($query, 'id_parking'); // имеется номер родительской парковки
+						$id_resident=Arr::get($query, 'id_parking'); // имеется номер ЖК, и надо показывать именно его
 						
 						
 					} else 
 					{
-						$id_parking=0; // номер родительской паровки не указан
+						$id_resident=0; // номер родительской паровки не указан. надо показывать все ЖК.
+						$id_resident=Model::factory('residentPlace')->get_list_rp();
+						
 					}
-					
-		
+		//echo Debug::vars('52', $id_resident);exit;			
+		$rubic_list=array();
+		$count_busy=array();
+		$org_list=array();
+			
 		//echo Debug::vars('38', $this->request->query(), $id_parking); //exit;
-		$rubic_list=Model::Factory('rubic')->get_list_parking($id_parking);//список парковок
-		$count_busy=Model::Factory('rubic')->count_busy();//список количества свободных мест
-		$org_list=Model::Factory('rubic')->get_list_org();//список организация для формирования новой парковки
+		//$rubic_list=Model::Factory('rubic')->get_list_parking($id_parking);//список парковок
+		//$count_busy=Model::Factory('rubic')->count_busy();//список количества свободных мест
+		//$org_list=Model::Factory('rubic')->get_list_org();//список организация для формирования новой парковки
 		
 		
-		$content = View::factory('rubic/ResidentPlace', array(
+		$content = View::factory('ResidentPlace', array(
 			'rubic_list'=>$rubic_list,
 			'org_list'=>$org_list,
 			'count_busy'=>$count_busy,
-			//'setup'=>$setup,
+			'id_resident'=>$id_resident,
 			
 		
 		));

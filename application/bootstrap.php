@@ -134,6 +134,8 @@ Kohana::modules(array(
 	// 'unittest'   => MODPATH.'unittest',   // Unit testing
 	 'userguide'  => MODPATH.'userguide',  // User guide and API documentation
 	 'setup'  => MODPATH.'setup',  // Набор инструментов для проверки наличия нужных таблиц в базы данных
+	 'residentplace'  => MODPATH.'residentplace',  // Набор инструментов для управления списками жилых комплексов и парковочных площадок
+	 'parkingplace'  => MODPATH.'parkingplace',  // Набор инструментов для управления парковочными площадями. В одном ЖК может быть несколько парковочных площадей.
 	));
 
 /**
@@ -153,7 +155,8 @@ Kohana::modules(array(
     
 Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->defaults(array(
-		'controller' => 'rubic',
+//		'controller' => 'rubic',
+		'controller' => 'residentPlace',
 		'action'     => 'index',
 	));
 

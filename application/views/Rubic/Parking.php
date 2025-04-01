@@ -1,13 +1,17 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по парковочным площадям
-
+//echo Debug::vars('3', $rubic_list);//exit;
+//echo Debug::vars('4', $count_busy);//exit;
+//echo Debug::vars('5', $id_resident);//exit;
+$residentInfo=Model::factory('ResidentPlace')->getResidentPlaceInfo($id_resident);
+//echo Debug::vars('7', $residentInfo);//exit;
 
 echo Form::open('parking/control');
 ?>
 			
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?echo Kohana::message('rubic','rubic_list')?></h3>
+		<h3 class="panel-title"><?echo Kohana::message('rubic','rubic_list'). iconv('windows-1251','UTF-8', Arr::get($residentInfo, 'NAME'));?></h3>
 	</div>
 	<div class="panel-body">
 		<?php
@@ -89,6 +93,7 @@ echo Form::open('parking/control');
 		<?
 		echo Kohana::message('rubic','rubic_add_new_parking');
 		echo Form::input('add_parking_name', 'Новая парковочная площадь');
+		echo Form::hidden('id_resident', $id_resident);
 		
 		//echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add_parking','class'=>'btn btn-success', 'type' => 'submit', 'disabled'=>'disabled'));	
 		echo Form::button('todo', Kohana::message('rubic','add_rubic','rubic_add'), array('value'=>'add_parking','class'=>'btn btn-success', 'type' => 'submit'));	

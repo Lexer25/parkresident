@@ -846,11 +846,16 @@ and kpc.id_org is null';
 		return iconv('windows-1251','UTF-8',$query);
 	}
 	
-	public function add_rubic($park_name, $id_org) //добавление новой парковки для выбранной организации
+	public function add_rubic($park_name, $id_org) //добавление новой парковки для выбранного жилого комплекса
 	{
+		echo Debug::vars('851');//exit;
+		//if($park_name === NULL) $park_name=$this->getOrgName($id_org);
+		//$sql='insert into kp_counters (id_org, name, maxcount) values ('.$id_org.', \''.$park_name.'\', 0)';
+		//$sql='insert into hl_parking (id_org, name, maxcount) values ('.$id_org.', \''.$park_name.'\', 0)';
 		
-		if($park_name === NULL) $park_name=$this->getOrgName($id_org);
-		$sql='insert into kp_counters (id_org, name, maxcount) values ('.$id_org.', \''.$park_name.'\', 0)';
+		$sql='INSERT INTO HL_PARKING (NAME, PARENT)
+			values (\''.$park_name.'\','. $id_org.')';
+		//echo Debug::vars('858', $sql);exit;
 		try
 				{
 				$query = DB::query(Database::INSERT, iconv('UTF-8','windows-1251',$sql))

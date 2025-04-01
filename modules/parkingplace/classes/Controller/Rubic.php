@@ -47,7 +47,7 @@ class Controller_Rubic extends Controller_Template {
 		
 		$rubic_list=Model::Factory('ResidentPlace')->get_list_rp($rp);//список жилый комлексов
 		
-		$content = View::factory('rubic/ResidentPlace', array(
+		$content = View::factory('ResidentPlace', array(
 			'rubic_list'=>$rubic_list,
 			
 		));
@@ -251,7 +251,7 @@ class Controller_Rubic extends Controller_Template {
 			break;
 			
 			case 'add_new_place'://добавление нового машиноместа
-			
+			//echo Debug::vars('254');exit;
 				$post=Validation::factory($this->request->post());
 				$post->rule('new_place_number', 'not_empty')
 						->rule('new_place_number', 'digit')

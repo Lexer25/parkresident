@@ -23,48 +23,55 @@ class Controller_Parking extends Controller_Template { // класс описы�
 	}
 	
 	
-	public function action_index()// главная страница при входе. Показываю жилые комплексы + возможность добавить ЖК
+	public function action_index()// главная страница при входе. Показываю парковочные площадки для указанного жилого комплекса
 	{
+		
 		$_SESSION['menu_active']='rubic';
+		//проверяю наличие родителя. Если он есть, то надо показывать парковочные площадки (а не список комплексов).
 		$query=Validation::factory($this->request->query());
-					$query->rule('id_parking', 'not_empty')
-							->rule('id_card', 'digit')
+					$query->rule('id_resident', 'not_empty')
+							->rule('id_resident', 'digit')
 							;
 					if($query->check())
 					{
-						$id_parking=Arr::get($query, 'id_parking'); // имеется номер родительской парковки
+						$id_resident=Arr::get($query, 'id_resident'); // имеется номер родительской парковки
+						//echo Debug::vars('38', $this->request->query(), $id_resident); //exit;
+						$rubic_list=Model::Factory('parking')->get_list_parking($id_resident);//список парковок
+						$count_busy=Model::Factory('parking')->count_busy();//список количества свободных мест
 						
+						$content = View::factory('rubic/parking', array(
+							'rubic_list'=>$rubic_list,
+							'count_busy'=>$count_busy,
+							'id_resident'=>$id_resident,
+							//'setup'=>$setup,
+							
 						
+						));
+						$this->template->content = $content;
+										
 					} else 
 					{
 						$id_parking=0; // номер родительской паровки не указан
+						$this->redirect('/');
 					}
 					
 		
-		//echo Debug::vars('38', $this->request->query(), $id_parking); //exit;
-		$rubic_list=Model::Factory('parking')->get_list_parking($id_parking);//список парковок
-		$count_busy=Model::Factory('parking')->count_busy();//список количества свободных мест
 		
-		$content = View::factory('rubic/parking', array(
-			'rubic_list'=>$rubic_list,
-			'count_busy'=>$count_busy,
-			//'setup'=>$setup,
-			
-		
-		));
-        $this->template->content = $content;
 	}
 	
 	public function action_control()
 	{
-		//echo Debug::vars('30', $_GET, $_POST); exit;
+		echo Debug::vars('30', $_GET, $_POST); //exit;
 		//echo Debug::vars('68', $_SESSION);
 		
 		$todo = $this->request->post('todo');
 		switch ($todo){
+			case 'add_parking'://добавление новой парковочной площади для жилого комплекса
 			case 'add_rubic'://добавление новой парковки
-				$add_rubic = $this->request->post('add_rubic');// далее добавляем новую парковку.
-				$add_org = $this->request->post('id_org');// для указанной организации.
+			
+				$add_rubic = $this->request->post('add_parking_name');// далее добавляем новую парковку.
+				$add_org = $this->request->post('id_resident');// для указанной организации.
+				//echo Debug::vars('67', $add_rubic, $add_org);exit;
 				Model::factory('rubic')->add_rubic($add_rubic, $add_org);
 				$this->redirect('rubic');
 			break;
