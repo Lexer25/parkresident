@@ -60,7 +60,6 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 		
 		));
         $this->template->content = $content;
-		
 	}
 	
 	public function action_rp_control()
@@ -230,14 +229,14 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 				$this->redirect('/');
 			break;
 		}
-		$content='';
-        $this->template->content = $content;
+		//$content='';
+        //$this->template->content = $content;
 		
 		
 	}
 
 		
-	public function action_edit()// редактирование информации о жилом комплекса
+	public function _action_edit()// редактирование информации о жилом комплекса
 	{
 		
 		$param=array('id'=>$this->request->param('id'));
@@ -249,6 +248,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 		if($_data->check())
 		{
 			$residence = new Residence(Arr::get($_data, 'id'));
+			//echo Debug::vars('252', $residence);exit;
 			$content = View::factory('edit', array(
 					'residence'=>$residence,
 					));

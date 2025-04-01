@@ -1,8 +1,8 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
  //echo Debug::vars('11', $rp_info); 
 // страница для редактирования сущности
-echo Debug::vars('4');exit;
-echo Debug::vars('5', $residence);exit;
+//echo Debug::vars('4');exit;
+//echo Debug::vars('5', $residence);exit;
 echo Form::open('ResidentPlace/rp_control');
 
 if(Auth::Instance()->logged_in())
@@ -28,7 +28,7 @@ if(Auth::Instance()->logged_in())
 		<?php 
 		//echo Debug::vars('11', $rp_info, Arr::get($rp_info, 'ENABLED'));
 		//echo Form::hidden('id_rubic', Arr::get($rp_info, 'ID'));
-		echo Debug::vars('28', $residence);//exit;
+		//echo Debug::vars('28', $residence);//exit;
 		echo Kohana::message('rubic','rubic_name').Form::input('name', iconv('windows-1251','UTF-8', $residence->name), array('maxlength'=>50)).'<br>';
 		echo __('Активен ').Form::checkbox( 'is_active', 1, $residence->is_active == 1).'<br>';
 		echo __('ID ЖК'). ' '. $residence->id.'<br>';
