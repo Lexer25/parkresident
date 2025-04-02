@@ -3,7 +3,7 @@
 // страница для редактирования сущности
 //echo Debug::vars('4');exit;
 //echo Debug::vars('5', $residence);exit;
-echo Form::open('ResidentPlace/rp_control');
+echo Form::open('ResidentPlace/control');
 
 if(Auth::Instance()->logged_in())
 {?>
@@ -36,7 +36,7 @@ if(Auth::Instance()->logged_in())
 		
 		?>
 			<?php
-		echo Form::button('todo', Kohana::message('rubic','rubic_change_config'), array('value'=>'update_rp','class'=>'btn btn-success', 'type' => 'submit'));	
+		echo Form::button('todo', Kohana::message('rubic','rubic_change_config'), array('value'=>'update','class'=>'btn btn-success', 'type' => 'submit'));	
 		?>
 	</div>
 </div>

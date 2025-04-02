@@ -37,24 +37,11 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 					} else 
 					{
 						$id_resident=0; // номер родительской паровки не указан. надо показывать все ЖК.
-						$id_resident=Model::factory('residentPlace')->get_list_rp();
+						$id_resident=Model::factory('residentPlace')->get_list();
 						
 					}
-		//echo Debug::vars('52', $id_resident);exit;			
-		$rubic_list=array();
-		$count_busy=array();
-		$org_list=array();
-			
-		//echo Debug::vars('38', $this->request->query(), $id_parking); //exit;
-		//$rubic_list=Model::Factory('rubic')->get_list_parking($id_parking);//список парковок
-		//$count_busy=Model::Factory('rubic')->count_busy();//список количества свободных мест
-		//$org_list=Model::Factory('rubic')->get_list_org();//список организация для формирования новой парковки
-		
-		
 		$content = View::factory('list', array(
-			'rubic_list'=>$rubic_list,
-			'org_list'=>$org_list,
-			'count_busy'=>$count_busy,
+			
 			'id_resident'=>$id_resident,
 			
 		
@@ -62,13 +49,12 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
         $this->template->content = $content;
 	}
 	
-	public function action_rp_control()
+	public function action_control()
 	{
-		//echo Debug::vars('269', $_GET, $_POST); exit;
-		//echo Debug::vars('68', $_SESSION);
+		
 		$post=Validation::factory($this->request->post());
 					$post->rule('todo', 'not_empty')
-							//->rule('todo', 'digit')
+							
 							;
 					if($post->check())
 					{
@@ -83,7 +69,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 			
 			
 			
-			case 'add_rp'://добавление нового жилого комлпекса add_rp_name
+			case 'add'://добавление нового жилого комлпекса add_rp_name
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('add_rp_name', 'not_empty')
 							;
@@ -102,8 +88,6 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 							
 						}
 						
-						//Model::factory('residentplace')->add_rp(Arr::get($_data, 'add_rp_name'));// далее добавляем новый ЖК.
-						
 						
 					} else 
 					{
@@ -113,7 +97,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 				$this->redirect('residentplace');
 			break;
 			
-			case 'del_rp'://удаление Жилого комплекса из списка
+			case 'del'://удаление Жилого комплекса из списка
 				//echo Debug::vars('301', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('id_rp', 'not_empty')
@@ -122,7 +106,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 					if($_data->check())
 					{
 						$residence = new Residence();
-						//echo Debug::vars('144', $_data);exit;
+						
 						$residence->id=Arr::get($_data, 'id_rp');
 						if($residence->del())
 						{
@@ -142,23 +126,13 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 					$this->redirect('residentplace');
 			break;
 			
-			case 'edit_rp'://просмотр и редакция парковки. Переход на форму редактирования
+			case 'edit'://просмотр и редакция парковки. Переход на форму редактирования
 			//echo Debug::vars('235', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('id_rp', 'not_empty')
 						->rule('id_rp', 'digit')
 						
 						;
-				/* if($_data->check())
-				{
-					$this->redirect('residentplace/edit/'.Arr::get($_data, 'id_rp'));
-					echo Debug::vars('174');exit;
-				} else 
-				{
-					//echo Debug::vars('177');exit;
-					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
-					$this->redirect('residentplace');
-				} */
 				
 				
 				if($_data->check())
@@ -178,7 +152,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 				}
 			break;
 			
-			case 'update_rp'://обновление данных о жилом комплексе. Примем данных и обновление данных о ЖК.
+			case 'update'://обновление данных о жилом комплексе. Примем данных и обновление данных о ЖК.
 			//echo Debug::vars('185', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('id_rp', 'not_empty')
@@ -189,8 +163,6 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 				if($_data->check())
 				{
 					$residence = new Residence(Arr::get($_data, 'id_rp'));
-					//echo Debug::vars('197', $residence);//exit;
-					//echo Debug::vars('198', filter_var(Arr::get($_data, 'is_active'), FILTER_VALIDATE_BOOLEAN));//exit;
 					$residence->name=Arr::get($_data, 'name');
 					if(is_null(Arr::get($_data, 'is_active'))) $residence->is_active=0;
 					if(filter_var(Arr::get($_data, 'is_active'), FILTER_VALIDATE_BOOLEAN)) 
@@ -199,8 +171,6 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 					} else{
 						$residence->is_active=0;
 					}
-					//echo Debug::vars('197', $residence);exit;
-					//echo Debug::vars('202', $residence);exit;
 					if($residence->update())
 						{
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' обновлен успешно')));
@@ -210,8 +180,6 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 							
 						}
 						
-					//Model::factory('residentplace')->update_rp($_data);
-					//Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' обновлен успешно')));
 					
 				} else 
 				{
@@ -229,36 +197,10 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 				$this->redirect('/');
 			break;
 		}
-		//$content='';
-        //$this->template->content = $content;
 		
 		
 	}
 
 		
-	public function _action_edit()// редактирование информации о жилом комплекса
-	{
-		
-		$param=array('id'=>$this->request->param('id'));
-		//echo Debug::vars('263', $_GET, $_POST, $this->request->param('id'), $param); //exit;
-		$_data=Validation::factory($param);
-		$_data->rule('id', 'not_empty')
-				->rule('id', 'digit')
-				;
-		if($_data->check())
-		{
-			$residence = new Residence(Arr::get($_data, 'id'));
-			//echo Debug::vars('252', $residence);exit;
-			$content = View::factory('edit', array(
-					'residence'=>$residence,
-					));
-			$this->template->content = $content;
-		} else 
-		{
-
-			Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
-			$this->redirect('residentplace');
-		}
 	
-	}
 } 

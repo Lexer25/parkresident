@@ -13,6 +13,7 @@ class Residence
 	public $id;
 	public $is_active;
 	public $created;
+	public $modify;//дата последнего изменения
 	public $mess;//сообщения всякие
 
 	
@@ -23,7 +24,7 @@ class Residence
        if(!is_null($id))//если указан id, то создаю экземпляр класса с данными из БД.
 	   {
 	   $this->id = $id;
-		$sql='select hlr.id, hlr.name, hlr.is_active, hlr.created from hl_resident hlr where hlr.id ='.$this->id;
+		$sql='select hlr.id, hlr.name, hlr.is_active, hlr.created, hlr.modify from hl_resident hlr where hlr.id ='.$this->id;
 		try
 		{
 			$query = Arr::flatten(DB::query(Database::SELECT, $sql)
@@ -32,6 +33,7 @@ class Residence
 			$this->name=Arr::get($query, 'NAME');
 			$this->is_active=Arr::get($query, 'IS_ACTIVE');
 			$this->created=Arr::get($query, 'CREATED');
+			$this->modify=Arr::get($query, 'MODIFY');
 			
 			
 			//echo Debug::vars('23', $sql, $query); exit;

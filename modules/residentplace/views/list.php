@@ -2,7 +2,7 @@
 // страница отображения данных по парковочной системе
 //echo Debug::vars('3', $rubic_list);
 //echo Debug::vars('3', $id_resident);
-echo Form::open('ResidentPlace/rp_control');
+echo Form::open('ResidentPlace/control');
 ?>
 			
 <div class="panel panel-primary">
@@ -20,6 +20,7 @@ echo Form::open('ResidentPlace/rp_control');
 			<th><?echo Kohana::message('rubic','rp_name');?></th>
 			<th><?echo __('is_active');?></th>
 			<th><?echo __('created');?></th>
+			<th><?echo __('modify');?></th>
 			<th><?echo __('parking_count');?></th>
 			<th><?echo __('Общее количество машиномест');?></th>
 			
@@ -49,6 +50,7 @@ echo Form::open('ResidentPlace/rp_control');
 				echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , iconv('windows-1251','UTF-8', $residence->name)).'</td>';
 				echo '<td>'.$residence->is_active.'</td>';
 				echo '<td>'.$residence->created.'</td>';
+				echo '<td>'.$residence->modify.'</td>';
 				$parkinPlace=Model::factory('parking')->get_list_parking($residence->id);
 				echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
 				echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
@@ -64,8 +66,8 @@ echo Form::open('ResidentPlace/rp_control');
 		
 		<?php if(Auth::Instance()->logged_in())
 		{
-			echo Form::button('todo', Kohana::message('rubic','rp_edit'), array('value'=>'edit_rp','class'=>'btn btn-success  btn-xs', 'type' => 'submit'));	
-			echo Form::button('todo', Kohana::message('rubic','rp_del'), array('value'=>'del_rp','class'=>'btn btn-danger  btn-xs', 'type' => 'submit', 'onclick'=>'return confirm(\''.__('delete').'?\') ? true : false;'));
+			echo Form::button('todo', Kohana::message('rubic','rp_edit'), array('value'=>'edit','class'=>'btn btn-success  btn-xs', 'type' => 'submit'));	
+			echo Form::button('todo', Kohana::message('rubic','rp_del'), array('value'=>'del','class'=>'btn btn-danger  btn-xs', 'type' => 'submit', 'onclick'=>'return confirm(\''.__('delete').'?\') ? true : false;'));
 		} else {
 			echo Form::button('todo', Kohana::message('rubic','to_view'), array('value'=>'edit_rubic','class'=>'btn btn-success', 'type' => 'submit'));	
 		}?>
@@ -87,7 +89,7 @@ echo Form::open('ResidentPlace/rp_control');
 		<?
 		echo Kohana::message('rubic','rp_add_rubic');
 		echo Form::input('add_rp_name', 'Новый жилой комплекс');
-		echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add_rp','class'=>'btn btn-success', 'type' => 'submit'));	
+		echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
 		
 		?>	
 
