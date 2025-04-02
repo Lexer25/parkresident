@@ -2,7 +2,7 @@
 // страница отображения данных по парковочной системе
 //echo Debug::vars('3', $rubic_list);
 //echo Debug::vars('3', $id_resident);
-echo Form::open('ResidentPlace/control');
+echo Form::open('ParkingPlace/control');
 ?>
 			
 <div class="panel panel-primary">
@@ -21,6 +21,7 @@ echo Form::open('ResidentPlace/control');
 			<th><?echo __('is_active');?></th>
 			<th><?echo __('created');?></th>
 			<th><?echo __('modify');?></th>
+			<th><?echo __('parent');?></th>
 			<!--<th><?echo __('parking_count');?></th>
 			<th><?echo __('Общее количество машиномест');?></th>-->
 			
@@ -42,19 +43,18 @@ echo Form::open('ResidentPlace/control');
 		foreach($id_resident as $key=>$value)
 		{
 			
-			$residence=new Residence(Arr::get($value, 'ID'));
+			$residence=new Parking(Arr::get($value, 'ID'));
 			echo '<tr>';
-				if($i==0) echo '<td>'.Form::radio('id_rp', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
-				if($i>0) echo '<td>'.Form::radio('id_rp', Arr::get($value,'ID'), FALSE).'</td>';
+				if($i==0) echo '<td>'.Form::radio('id', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
+				if($i>0) echo '<td>'.Form::radio('id', Arr::get($value,'ID'), FALSE).'</td>';
 				echo '<td>'.$residence->id.'</td>';
 				//echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , iconv('windows-1251','UTF-8', $residence->name)).'</td>';
 				echo '<td>'. iconv('windows-1251','UTF-8', $residence->name).'</td>';
 				echo '<td>'.$residence->is_active.'</td>';
 				echo '<td>'.$residence->created.'</td>';
 				echo '<td>'.$residence->modify.'</td>';
-				//$parkinPlace=Model::factory('parking')->get_list_parking($residence->id);
-				//echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
-				//echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
+				echo '<td>'.$residence->parent.'</td>';
+				
 				
 			echo '</tr>';	
 			
@@ -88,8 +88,8 @@ echo Form::open('ResidentPlace/control');
 	  <div class="panel-body">
 	  
 		<?
-		echo Kohana::message('rubic','rp_add_rubic');
-		echo Form::input('add_rp_name', 'Новый жилой комплекс');
+		echo __('Добавить парковочную площадку');
+		echo Form::input('name', 'Новая парковочная площадка');
 		echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
 		
 		?>	

@@ -9,7 +9,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		  <?= HTML::anchor('ResidentPlace', __('City'),  array('class'=>'navbar-brand')) ?>
+		  <?= HTML::anchor('Dashboard', __('City'),  array('class'=>'navbar-brand')) ?>
     </div>
 	<div class="navbar-collapse collapse">
 		
@@ -22,7 +22,9 @@
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='rmo') echo 'class="active"';?>><?php  echo  HTML::anchor('rmo', __('Рабочее место охраны')); ?></li>
 					<li <?php //if (Arr::get($_SESSION,'menu_active')=='monitor') echo 'class="active"';?>><?php  //echo  HTML::anchor('monitor', __('Монитор')); ?></li>
 					<!--<li <?php if (Arr::get($_SESSION,'menu_active')=='grztest') echo 'class="active"';?>><?php  echo  HTML::anchor('grz/test', __('grztest')); ?></li> -->
-					<li <?php if (Arr::get($_SESSION,'menu_active')=='grztest') echo 'class="active"';?>><?php  echo  HTML::anchor('checkdb', __('checkDB')); ?></li>
+					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('checkdb', __('checkDB')); ?></li>
+					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('residentPlace', __('residentPlace')); ?></li>
+					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('parkingPlace', __('parking')); ?></li>
 			   </ul>
 		<?php
 		if(Auth::Instance()->logged_in())

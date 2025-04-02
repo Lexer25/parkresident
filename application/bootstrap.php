@@ -155,8 +155,8 @@ Kohana::modules(array(
     
 Route::set('default', '(<controller>(/<action>(/<id>)))')
 	->defaults(array(
-//		'controller' => 'rubic',
-		'controller' => 'residentPlace',
+		'controller' => 'dashboard',
+//		'controller' => 'residentPlace',
 		'action'     => 'index',
 	));
 
