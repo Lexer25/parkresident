@@ -132,10 +132,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('id_rp', 'not_empty')
 						->rule('id_rp', 'digit')
-						
 						;
-				
-				
 				if($_data->check())
 				{
 					//echo Debug::vars('167', $_data, Arr::get($_data, 'id_rp'));//exit;

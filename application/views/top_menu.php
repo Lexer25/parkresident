@@ -14,7 +14,7 @@
 	<div class="navbar-collapse collapse">
 		
 				<ul class="nav navbar-nav">
-					<li <?php if (Arr::get($_SESSION,'menu_active')=='placeList') echo 'class="active"';?>><?php  echo  HTML::anchor('rubic/placeList', __('Машиноместа'));?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='placeList') echo 'class="active"';?>><?php  echo  HTML::anchor('place/list', __('Машиноместа'));?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='garage') echo 'class="active"';?>><?php echo  HTML::anchor('garage', __('Гараж'), array('class'=>'active')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='event') echo 'class="active"';?>><?php  echo  HTML::anchor('rubic/event', __('События')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='gate') echo 'class="active"';?>><?php  echo  HTML::anchor('gate', __('gate_menu')); ?></li>
@@ -25,6 +25,7 @@
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('checkdb', __('checkDB')); ?></li>
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('residentPlace', __('residentPlace')); ?></li>
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('parkingPlace', __('parking')); ?></li>
+					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('place', __('Машиноместо')); ?></li>
 			   </ul>
 		<?php
 		if(Auth::Instance()->logged_in())

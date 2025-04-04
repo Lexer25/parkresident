@@ -90,11 +90,11 @@ class Controller_Rubic extends Controller_Template {
 		$_SESSION['menu_active']='placeList';
 		//echo Debug::vars('20', $_SESSION);
 		$place_list=Model::Factory('rubic')->get_list_parking_place();//список парковочный мест
-		$list_parking=Model::Factory('parking')->get_list_parking();//список паркингов. Нужен для показа расположения машиноместа
+		//$list_parking=Model::Factory('parking')->get_list_parking();//список паркингов. Нужен для показа расположения машиноместа
 		//echo Debug::vars('105', $place_list); exit;
 		$content = View::factory('rubic/placeList', array(
 			'place_list'=>$place_list,
-			'list_parking'=>$list_parking,
+			//'list_parking'=>$list_parking,
 				
 		));
         $this->template->content = $content;
