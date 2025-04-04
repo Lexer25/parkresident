@@ -93,9 +93,9 @@ echo Form::open('place/control');
 			
 }
 				echo '<td>'.iconv('windows-1251','UTF-8', $place->name). '</td>';
-				echo '<td>'.iconv('windows-1251','UTF-8',Arr::get($value,'DESCRIPTION')).'</td>';
-				echo '<td>'.iconv('windows-1251','UTF-8',Arr::get($value,'NOTE')).'</td>';
-				echo '<td>'.iconv('windows-1251','UTF-8', Arr::get($value,'PARKING_NAME')).'</td>';
+				echo '<td>'.iconv('windows-1251','UTF-8',$place->description).'</td>';
+				echo '<td>'.iconv('windows-1251','UTF-8',$place->note).'</td>';
+				echo '<td>'.iconv('windows-1251','UTF-8', $place->id_parking).'</td>';
 				echo '<td>'.HTML::anchor('garage/edit_garage/'.Arr::get($value,'ID_GARAGE'),  iconv('windows-1251','UTF-8', Arr::get($value,'GARAGE_NAME'))).' </td>';
 				
 			echo '</tr>';	
