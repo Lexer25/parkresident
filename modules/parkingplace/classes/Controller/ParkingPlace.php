@@ -167,7 +167,9 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 				if($_data->check())
 				{
 					$_entity = new Parking(Arr::get($_data, 'id'));
+					echo Debug::vars('170', $_entity);//exit;
 					$_entity->name=Arr::get($_data, 'name');
+					$_entity->parent=Arr::get($_data, 'parent');
 					if(is_null(Arr::get($_data, 'is_active'))) $_entity->is_active=0;
 					if(filter_var(Arr::get($_data, 'is_active'), FILTER_VALIDATE_BOOLEAN)) 
 					{
@@ -175,6 +177,7 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 					} else{
 						$_entity->is_active=0;
 					}
+					//echo Debug::vars('178', $_entity);exit;
 					if($_entity->update())
 						{
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' обновлен успешно')));

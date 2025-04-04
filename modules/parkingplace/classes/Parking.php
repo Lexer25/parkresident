@@ -17,6 +17,7 @@ class Parking
 	public $parent;// родительская резиденция.
 	public $modify;//дата последнего изменения
 	public $mess;//сообщения всякие
+	public $count;//количество машиномест
 
 	
 	
@@ -26,7 +27,7 @@ class Parking
        if(!is_null($id))//если указан id, то создаю экземпляр класса с данными из БД.
 	   {
 	   $this->id = $id;
-		$sql='select hlr.id, hlr.name, hlr.enabled, hlr.created, hlr.modify, hlr.parent from hl_parking hlr where hlr.id ='.$this->id;
+		$sql='select hlr.id, hlr.name, hlr.enabled, hlr.created, hlr.modify, hlr.parent, hlr.maxcount from hl_parking hlr where hlr.id ='.$this->id;
 		//echo Debug::vars('30', $sql);exit;
 		try
 		{
@@ -38,9 +39,10 @@ class Parking
 			$this->created=Arr::get($query, 'CREATED');
 			$this->modify=Arr::get($query, 'MODIFY');
 			$this->parent=Arr::get($query, 'PARENT');
+			$this->count=Arr::get($query, 'MAXCOUNT');
 			
 			
-			//echo Debug::vars('23', $sql, $query); exit;
+			//echo Debug::vars('23', $sql, $query, $this); exit;
 			
 		} catch (Exception $e) {
 			////echo Debug::vars('30', $sql, $e->getMessage()); exit;
@@ -85,9 +87,9 @@ class Parking
 	{
 		//echo Debug::vars('36', $this->name, $this->standalone);
 		
-		$sql='UPDATE HL_RESIDENT
+		$sql='UPDATE HL_PARKING
 				SET NAME = \''.$this->name.'\',
-				IS_ACTIVE = '.$this->is_active.',
+				ENABLED = '.$this->is_active.',
 				PARENT = '.$this->parent.'
 			WHERE (ID = '.$this->id.')';
 		Log::instance()->add(Log::DEBUG, 'Line 101 '. $sql);

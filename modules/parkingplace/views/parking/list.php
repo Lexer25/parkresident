@@ -7,7 +7,7 @@ echo Form::open('ParkingPlace/control');
 			
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?echo Kohana::message('rubic','rp_list')?></h3>
+		<h3 class="panel-title"><?echo __('Список парковочных площадок')?></h3>
 	</div>
 	<div class="panel-body">
 
@@ -16,14 +16,13 @@ echo Form::open('ParkingPlace/control');
 
 		<tr>
 			<th><?echo Kohana::message('rubic','select');?></th>
-			<th><?echo Kohana::message('rubic','rp_id');?></th>
-			<th><?echo Kohana::message('rubic','rp_name');?></th>
+			<th><?echo __('ID парковочной плоащки');?></th>
+			<th><?echo __('Название парковочной плоащки');?></th>
 			<th><?echo __('is_active');?></th>
 			<th><?echo __('created');?></th>
 			<th><?echo __('modify');?></th>
 			<th><?echo __('parent');?></th>
-			<!--<th><?echo __('parking_count');?></th>
-			<th><?echo __('Общее количество машиномест');?></th>-->
+			<th><?echo __('Количество машиномест');?></th>
 			
 		</tr>
 		<?php 
@@ -54,6 +53,7 @@ echo Form::open('ParkingPlace/control');
 				echo '<td>'.$residence->created.'</td>';
 				echo '<td>'.$residence->modify.'</td>';
 				echo '<td>'.$residence->parent.'</td>';
+				echo '<td>'.$residence->count.'</td>';
 				
 				
 			echo '</tr>';	
@@ -83,7 +83,7 @@ echo Form::open('ParkingPlace/control');
 		{?>
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
-		<h3 class="panel-title"><?echo Kohana::message('rubic','rp_add_rubic','rp_add_rubic')?></h3>
+		<h3 class="panel-title"><?echo __('Добавить парковочную площадку')?></h3>
 	  </div>
 	  <div class="panel-body">
 	  
