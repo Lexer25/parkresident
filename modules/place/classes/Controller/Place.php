@@ -29,16 +29,17 @@ class Controller_Place extends Controller_Template { // класс описыв�
 		$query=Validation::factory($this->request->query());
 					$query->rule('id_parking', 'not_empty')
 							->rule('id_parking', 'digit')
+							->rule('id_parking', 'digit')
 							;
 					if($query->check())
 					{
-						$id_place=Arr::get($query, 'id_parking'); // имеется номер паркинга и надо показывать именно его
+						$id_parking=Arr::get($query, 'id_parking'); // имеется номер паркинга и надо показывать именно его
 						
 						
 					} else 
 					{
-						//$id_parking=0; // номер родительской паровки не указан. надо показывать все ЖК.
-						$id_place=Model::factory('ParkingPlace')->get_list();
+						//$id_parking=0; // номер родительской паровки не указан.
+						$id_parking=Model::factory('ParkingPlace')->get_list();
 						
 					}
 					//echo Debug::vars('44', $id_parking);exit;
@@ -205,7 +206,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						;
 				if($_data->check())
 				{
-					//echo Debug::vars('208', $_data);exit;
+					//echo Debug::vars('208', $_data);//exit;
 					$entity = new Place (Arr::get($_data, 'id'));
 					$entity->placenumber=Arr::get($_data, 'placenumber');
 					$entity->name=Arr::get($_data, 'name');
@@ -213,6 +214,9 @@ class Controller_Place extends Controller_Template { // класс описыв�
 					$entity->description=Arr::get($_data, 'description');
 					$entity->note=Arr::get($_data, 'note');
 					$entity->status=Arr::get($_data, 'status');
+					
+					if(Arr::get($_data, 'status') == '') $entity->status=0;
+					if(Arr::get($_data, 'id_parking') == '') $entity->id_parking=0;
 					//echo Debug::vars('211', $entity);exit;
 					
 					if($entity->update())
@@ -227,6 +231,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 					
 				} else 
 				{
+					echo Debug::vars('231');exit;
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 					
 				}

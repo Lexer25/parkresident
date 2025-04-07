@@ -1,6 +1,6 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по машноместам
-echo Debug::vars('3', $id_place);
+//echo Debug::vars('3', $id_place);
 echo Form::open('place/control');
 ?>
 <script type="text/javascript">
@@ -79,7 +79,10 @@ echo Form::open('place/control');
 			
 			echo '<tr>';
 				
-				echo '<td>'.($i+1). ' '. Debug::vars('82', $place);'</td>';
+				echo '<td>';
+					echo ($i+1);
+					//echo ' '. Debug::vars('82', $place);
+				echo '</td>';
 				echo '<td>'.Form::radio( 'id', $place->id, Arr::get($value, 'is_active' == 1)).' '.$place->id.' '.$place->created.'</td>';
 
 		if(Auth::Instance()->logged_in())

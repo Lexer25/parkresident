@@ -12,13 +12,13 @@ class Place
 {
 	public $id;
 	public $placenumber;
-	public $id_counters;
+	//public $id_counters;
 	public $description;
 	public $note;
 	public $status;
 	public $name;
 	public $id_parking;	
-	public $is_active;
+	//public $is_active;
 	public $created;
 	public $modify;//дата последнего изменения
 	public $mess;//сообщения всякие
@@ -46,7 +46,7 @@ class Place
 			$this->id_parking=Arr::get($query, 'ID_PARKING');
 			
 			
-			//echo Debug::vars('23', $sql, $query); exit;
+			//echo Debug::vars('49', $sql, $query); exit;
 			
 		} catch (Exception $e) {
 			////echo Debug::vars('30', $sql, $e->getMessage()); exit;
@@ -89,7 +89,8 @@ class Place
 	*/
 	public function update()
 	{
-		//echo Debug::vars('36', $this->name, $this->standalone);
+		//echo Debug::vars('36', $this);exit;
+		//echo Debug::vars('93', get_object_vars($this));//exit;
 		//hlr.id, hlr.name, hlr.is_active, hlr.created, hlr.modify
 		
 		$sql='UPDATE HL_PLACE
@@ -100,7 +101,7 @@ class Place
 				status = '.$this->status.',
 				id_parking = '.$this->id_parking.'
 			WHERE (ID = '.$this->id.')';
-		Log::instance()->add(Log::DEBUG, 'Line 101 '. $sql);
+		Log::instance()->add(Log::DEBUG, 'Line 101 '. $sql);//exit;
 		//echo Debug::vars('65', $sql); exit;
 		try
 			{
