@@ -1,8 +1,8 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
- //echo Debug::vars('2', $info_gate);
+ echo Debug::vars('2', $info_gate);
 
 	
-// страница отображения данных по парковочной системе
+// страница отображения данных по воротам
 echo Form::open('gate/control');
 
 if(Auth::Instance()->logged_in())
@@ -16,9 +16,9 @@ if(Auth::Instance()->logged_in())
 </script>
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo __('gate_config').' '. Arr::get($info_gate, 'name');
-		echo Form::hidden('id', Arr::get($info_gate,'id'));
-		echo Form::hidden('is_enter', Arr::get($info_gate,'is_enter'));
+		<h3 class="panel-title"><?php echo __('gate_config').' '. iconv('windows-1251','UTF-8', $info_gate->name);
+		echo Form::hidden('id', $info_gate->id);
+		echo Form::hidden('is_enter', $info_gate->is_enter);
 		?></h3>
 				
 				
@@ -29,12 +29,12 @@ if(Auth::Instance()->logged_in())
 	<div class="panel-body">
 		
 		<?php 
-		//echo Debug::vars('11', $info_gate, Arr::get($info_gate, 'ENABLED'));
+		//echo Debug::vars('11', $info_gate, $info_gate->ENABLED'));
 
-		echo __('gate_name').Form::input('name', Arr::get($info_gate, 'name'), array('maxlength'=>50)).'<br>';
-		echo __('id_gate'). ' '. Arr::get($info_gate, 'id').'<br>';
-		echo __('id_parking'). ' '. Arr::get($info_gate, 'id_parking').'<br>';
-		echo Form::hidden('id_parking', Arr::get($info_gate, 'id_parking'));
+		echo __('gate_name').Form::input('name', iconv('windows-1251','UTF-8', $info_gate->name), array('maxlength'=>50)).'<br>';
+		echo __('id_gate'). ' '. $info_gate->id.'<br>';
+		echo __('id_parking'). ' '. $info_gate->id_parking.'<br>';
+		echo Form::hidden('id_parking', $info_gate->id_parking);
 		
 		?>
 			<table id="tablesorter" class="table table-striped table-hover table-condensed tablesorter">
@@ -63,24 +63,27 @@ if(Auth::Instance()->logged_in())
 			echo '<tr>';
 				echo '<td>'.Form::select('is_enter',
 					array('1'=>'Въезд 1', '0'=>'Выезд 0'),
-					Arr::get($info_gate,'is_enter')).' '.Arr::get($info_gate,'is_enter','--').'</td>';
-				echo '<td>'.Form::input('tablo_ip', Arr::get($info_gate,'tablo_ip','--'), array('pattern'=>$patter_IP)).'</td>';
-				echo '<td>'.Form::input('tablo_port',Arr::get($info_gate,'tablo_port','--'), array('type'=>'number', 'size'=>'5', 'min'=>'1', 'max'=>'65535')).'</td>';
-				echo '<td>'.Form::input('box_ip',Arr::get($info_gate,'box_ip','--'), array('pattern'=>$patter_IP)).'</td>';
-				echo '<td>'.Form::input('box_port',Arr::get($info_gate,'box_port','--'), array('type'=>'number', 'size'=>'5', 'min'=>'1', 'max'=>'65535')).'</td>';
-				echo '<td>'.Form::input('id_cam',Arr::get($info_gate,'id_cam','--')).'</td>';
-				echo '<td>'.Form::input('id_dev',Arr::get($info_gate,'id_dev','--')).'</td>';
-				//echo '<td>'.Form::input('mode',Arr::get($info_gate,'mode','--'), array('type'=>'number', 'size'=>'1', 'min'=>'0', 'max'=>'3')).'</td>';
+					$info_gate->is_enter).' '.$info_gate->is_enter.'</td>';
+				echo '<td>'.Form::input('tablo_ip', $info_gate->tablo_ip, array('pattern'=>$patter_IP)).'</td>';
+				echo '<td>'.Form::input('tablo_port',$info_gate->tablo_port, array('type'=>'number', 'size'=>'5', 'min'=>'1', 'max'=>'65535')).'</td>';
+				echo '<td>'.Form::input('box_ip',$info_gate->box_ip, array('pattern'=>$patter_IP)).'</td>';
+				echo '<td>'.Form::input('box_port',$info_gate->box_port, array('type'=>'number', 'size'=>'5', 'min'=>'1', 'max'=>'65535')).'</td>';
+				echo '<td>'.Form::input('id_cam',$info_gate->id_cam).'</td>';
+				echo '<td>'.Form::input('id_dev',$info_gate->id_dev).'</td>';
+				//echo '<td>'.Form::input('mode',$info_gate->mode','--'), array('type'=>'number', 'size'=>'1', 'min'=>'0', 'max'=>'3')).'</td>';
 				echo '<td>'.Form::select('mode',
 					array('0'=>'Шлюз 0','1'=>'Ворота 1','2'=>'Шлагбаум 2','3'=>'Ворота+шлагбаум 3'),
-					Arr::get($info_gate,'mode',0),
-					array('type'=>'number', 'size'=>'1', 'min'=>'0', 'max'=>'3')).' '.Arr::get($info_gate,'mode','--').'</td>';
+					$info_gate->mode,
+					array('type'=>'number', 'size'=>'1', 'min'=>'0', 'max'=>'3')).' '.$info_gate->mode.'</td>';
 				//echo Form::select('id_dev', $door_list);
 			echo '</tr>';	
 		?>
 		</tbody>
 	</table>	
 			<?php
+			
+			echo __('Верхняя строка в режиме ожидания').Form::input('name', iconv('windows-1251','UTF-8', $info_gate->messageIdlleTop), array('maxlength'=>50)).'<br>';
+			echo __('Нижняя строка в режиме ожидания').Form::input('name', iconv('windows-1251','UTF-8', $info_gate->messageIdlleDown), array('maxlength'=>50)).'<br>';
 		echo Form::button('todo', __('update'), array('value'=>'update','class'=>'btn btn-success', 'type' => 'submit'));	
 		?>
 	</div>

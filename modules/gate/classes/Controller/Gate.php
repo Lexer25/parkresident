@@ -25,6 +25,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 	
 	public function action_index()// просмотр ворот и их настроек
 	{
+		echo Debug::vars('28', $_POST);exit;
 		$_SESSION['menu_active']='gate';
 		$query=Validation::factory($this->request->query());
 					$query->rule('id_parking', 'not_empty')
@@ -41,7 +42,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 					}
 					
 		
-		//echo Debug::vars('38', $_GET, $_POST, $id_parking); //exit;
+		echo Debug::vars('38', $_GET, $_POST, $id_parking); //exit;
 		$gate_list=Model::Factory('gates')->get_list_gate($id_parking);//список ворот
 		$checkplaceenable=Model::Factory('gates')->checkplaceenable();//статус счетчиков
 		$tabloMessages=Model::Factory('gates')->tabloMessages();//информация по строкам табло
@@ -121,80 +122,146 @@ class Controller_Gate extends Controller_Template { // класс описыва
 		//echo Debug::vars('68', $_SESSION);
 		
 		$todo = $this->request->post('todo');
-		$data=Validation::factory($this->request->post());
+		$_data=Validation::factory($this->request->post());
 		switch ($todo){
-			case 'add_gate'://добавление новой парковки
+			case 'add'://добавление новой парковки
 				//$data=Validation::factory($this->request->post());
-				$data->rule('new_gate_name', 'not_empty')
+				$_data->rule('name', 'not_empty')
 							;
-					if($data->check())
+					//==
+					
+					if($_data->check())
 					{
-						Model::factory('gates')->add_gate($data);// далее добавляем новые ворота.
-						Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($data, 'new_gate_name').' добавлено успешно')));
-						$this->redirect('gate');
+						
+						$entity = new Gate();
+						$entity->name='Новые ворота_'.Arr::get($_data, 'name');
+						
+						//echo Debug::vars('143', $entity);exit;
+						if ($entity->add())
+						{
+							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' добавлено успешно')));
+							
+						} else {
+							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' ошибка при добавлении')));
+							
+						}
+						
+						
 					} else 
 					{
-						Session::instance()->set('e_mess', $rp_name->errors('Valid_mess'));
-						$this->redirect('rubic');
+						//echo Debug::vars('137');exit;
+						Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
+						
 					}
+				$this->redirect('gate/list');
+					
+					//..==
 			break;
 			
-			case 'del_gate'://удаление ворот
-			
-				$data->rule('id', 'not_empty')
+			case 'del'://удаление ворот
+			//echo Debug::vars('162', $_POST);exit;
+				$_data->rule('id', 'not_empty')
 						->rule('id', 'digit')
 							;
-					if($data->check())
+					$_data=Validation::factory($this->request->post());
+				$_data->rule('id', 'not_empty')
+							->rule('id', 'digit')
+							;
+					if($_data->check())
 					{
-						Model::factory('gates')->del_gate($data);
-						Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($data, 'new_gate_name').' удалены успешно')));
-						$this->redirect('gate');
-					} else 
-					{
-						Session::instance()->set('e_mess', $data->errors('Valid_mess'));
-						$this->redirect('gate');
+						$entity = new Gate();
+						
+						$entity->id=Arr::get($_data, 'id');
+						if($entity->del())
+						{
+							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' удален успешно')));
+							
+						} else {
+							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' ошибка при удалении')));
+							
+						}
+						
+						
+						
+					} else {
+						Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
+						
 					}
+					$this->redirect('gate/list');
 				
-				$this->redirect('gate');
 			break;
 			
 			case 'update'://обновление ворот
 				
 				//echo Debug::vars('101', $_POST); exit;
 				//$data=Validation::factory($this->request->post());
-				$data->rule('name', 'not_empty')
-						->rule('id', 'not_empty')
+				$_data=Validation::factory($this->request->post());
+				$_data->rule('id', 'not_empty')
 						->rule('id', 'digit')
+						//->rule('name', 'not_empty')
+						->rule('placenumber', 'digit')
+						//->rule('placenumber', 'not_empty')
+						
 						;
-					if($data->check())
-					{
-						Model::factory('gates')->update_gate($data);
-						Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($data, 'new_gate_name').' удалены успешно')));
-						$this->redirect('gate');
-					} else 
-					{
-						Session::instance()->set('e_mess', $data->errors('Valid_mess'));
-						$this->redirect('gate');
-					}
-				
-				$this->redirect('gate');
-			break;
-			
-			case 'edit_gate'://просмотр и редакция ворот
-				//echo Debug::vars('122', $_POST); exit;
-				//$data=Validation::factory($this->request->post());
-				$data->rule('id', 'not_empty')
-						->rule('id', 'digit')
-						;
-				if($data->check())
+				if($_data->check())
 				{
-					$this->redirect('gate/edit/'.Arr::get($data, 'id'));
+					//echo Debug::vars('208', $_data);//exit;
+					$entity = new Gate (Arr::get($_data, 'id'));
+					
+					$entity->tablo_ip = Arr::get($_data, 'tablo_ip');
+					$entity->tablo_port = Arr::get($_data, 'tablo_port');
+					$entity->box_ip = Arr::get($_data, 'box_ip');
+					$entity->box_port = Arr::get($_data, 'box_port');
+					
+					$entity->id_cam = Arr::get($_data, 'id_cam');
+					$entity->id_dev = Arr::get($_data, 'id_dev');
+					$entity->mode = Arr::get($_data, 'mode');
+					$entity->name = Arr::get($_data, 'name');
+					$entity->id_parking = Arr::get($_data, 'id_parking');
+					$entity->is_enter = Arr::get($_data, 'is_enter');
+									
+					if($entity->update())
+						{
+							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' обновлен успешно')));
+							
+						} else {
+							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
+							
+						}
+						
+					
 				} else 
 				{
-					Session::instance()->set('e_mess', $data->errors('Valid_mess'));
-						$this->redirect('gate');
+					echo Debug::vars('231');exit;
+					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
+					
 				}
-		
+				
+				$this->redirect('gate/list');
+			break;
+			
+			case 'edit'://просмотр и редакция ворот
+				//echo Debug::vars('122', $_POST); exit;
+				
+				$_data=Validation::factory($this->request->post());
+				$_data->rule('id', 'not_empty')
+						->rule('id', 'digit')
+				;
+				if($_data->check())
+				{
+					//echo Debug::vars('167', $_data, Arr::get($_data, 'id_rp'));//exit;
+					$entity = new Gate(Arr::get($_data, 'id'));
+					//echo Debug::vars('227', $entity);exit;
+					$content = View::factory('gate/edit', array(
+							'info_gate'=>$entity,
+							));
+					$this->template->content = $content;
+				} else 
+				{
+					echo Debug::vars('193');exit;
+					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
+					$this->redirect('gate/list');
+				}
 			break;
 			
 			case 'check_count_off'://выключить счетчики свободных мест
@@ -224,7 +291,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 					$this->redirect('gate');
 				} else 
 				{
-					echo Debug::vars('183 err', $data); exit;
+					echo Debug::vars('267 err', $data); exit;
 					Session::instance()->set('e_mess', $data->errors('Valid_mess'));
 						$this->redirect('gate');
 				}
@@ -235,9 +302,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 				echo Debug::vars('95 controller gate', $_GET, $_POST); exit;
 			break;
 		}
-		$content='';
-        $this->template->content = $content;
-		
+				
 	}
 	
 	public function action_edit()//редактировать и просматривать  ворота

@@ -1,6 +1,6 @@
 <?php
 //echo Debug::vars('2', $gate_list, $id_parking);
-//echo Debug::vars('3', $id); exit;
+//echo Debug::vars('3', $gate_list); exit;
 /*
 "id" => string(2) "24"
         "id_parking" => string(1) "1"
@@ -59,29 +59,29 @@ echo Form::open('gate/control');
 				{
 					foreach($gate_list as $key=>$value)
 					{
-						$gate = new Gate(Arr::get($value,'id'));
-						echo Debug::vars('63', $gate);exit;
+						$gate = new Gate(Arr::get($value,'ID'));
+						//echo Debug::vars('63',$key, $value,  $gate);exit;
 						echo '<tr>';
-							if($i==0) echo '<td>'.Form::radio('id', Arr::get($value,'id'), FALSE, array('checked'=>$checked)).'</td>';
-							if($i>0) echo '<td>'.Form::radio('id', Arr::get($value,'id'), FALSE).'</td>';
-							echo '<td>'.Arr::get($value,'id').'</td>';
-							//echo '<td>'. HTML::anchor('gate/config/'.Arr::get($value,'id', 0) , Arr::get($value,'name')).'</td>';
-							echo '<td>'. Arr::get($value,'name').'</td>';
+							if($i==0) echo '<td>'.Form::radio('id', $gate->id, FALSE, array('checked'=>$checked)).'</td>';
+							if($i>0) echo '<td>'.Form::radio('id', $gate->id, FALSE).'</td>';
+							echo '<td>'.$gate->id.'</td>';
+							echo '<td>'. iconv('windows-1251','UTF-8', $gate->name).'</td>';
 							echo '<td>'.Form::select('is_enter',
 								array('0'=>'Выезд 0', '1'=>'Въезд 1'),
-								Arr::get($value,'is_enter'), 
-								array('disabled'=>'disabled')).' '.Arr::get($value,'is_enter','--').'</td>';
-							echo '<td>'.Arr::get($value,'id_parking','--').'</td>';
-							echo '<td>'.Arr::get($value,'tablo_ip','--').'</td>';
-							echo '<td>'.Arr::get($value,'tablo_port','--').'</td>';
-							echo '<td>'.Arr::get($value,'box_ip','--').'</td>';
-							echo '<td>'.Arr::get($value,'box_port','--').'</td>';
-							echo '<td>'.Arr::get($value,'id_cam','--').'</td>';
-							echo '<td>'.Arr::get($value,'dev_name','--').' ('.Arr::get($value,'id_dev','--').')</td>';
+								$gate->is_enter, 
+								array('disabled'=>'disabled'))
+								.' '.$gate->is_enter.'</td>';
+							echo '<td>'.$gate->id_parking.'</td>';
+							echo '<td>'.$gate->tablo_ip.'</td>';
+							echo '<td>'.$gate->tablo_port.'</td>';
+							echo '<td>'.$gate->box_ip.'</td>';
+							echo '<td>'.$gate->box_port.'</td>';
+							echo '<td>'.$gate->id_cam.'</td>';
+							echo '<td>'.$gate->dev_name.' ('.$gate->id_dev.')</td>';
 							echo '<td>'.Form::select('mode',
 								array('0'=>'Шлюз 0','1'=>'Ворота 1','2'=>'Шлагбаум 2','3'=>'Ворота+шлагбаум 3'),
-								Arr::get($value,'mode',0),
-								array('type'=>'number', 'size'=>'1', 'min'=>'0', 'max'=>'3', 'disabled'=>'disabled')).' '.Arr::get($value,'mode','--').'</td>';
+								$gate->mode,
+								array('type'=>'number', 'size'=>'1', 'min'=>'0', 'max'=>'3', 'disabled'=>'disabled')).' '.$gate->mode.'</td>';
 							
 						echo '</tr>';	
 						$i++;
@@ -97,8 +97,10 @@ echo Form::open('gate/control');
 		
 		<?php if(Auth::Instance()->logged_in())
 		{
-			echo Form::button('todo', __('gate_edit'), array('value'=>'edit_gate','class'=>'btn btn-success', 'type' => 'submit'));	
-			echo Form::button('todo', __('gate_del'), array('value'=>'del_gate','class'=>'btn btn-danger', 'type' => 'submit', 'onclick'=>'return confirm(\''.__('delete').'?\') ? true : false;'));
+			echo Form::button('todo', __('gate_edit'), array('value'=>'edit','class'=>'btn btn-success', 'type' => 'submit'));	
+			echo Form::button('todo', __('gate_del'), array('value'=>'del','class'=>'btn btn-danger', 'type' => 'submit', 'onclick'=>'return confirm(\''.__('delete').'?\') ? true : false;'));
+			echo Form::close();
+			echo Form::open('gate/control');
 		
 		?>
 		
@@ -118,47 +120,17 @@ echo Form::open('gate/control');
 
 				<?
 				echo __('Регстрация новых ворот');
-				echo Form::input('new_gate_name', 'Новые ворота');
-				//echo Form::hidden('id_parking', Arr::get($value,'id_parking'));
-				echo Form::hidden('id_parking', $id_parking);
-				echo Form::button('todo', __('reg_gate'), array('value'=>'add_gate','class'=>'btn btn-success', 'type' => 'submit'));	
-				
+				echo Form::input('name', 'Новые ворота');
+				echo Form::button('todo', __('reg_gate'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
+			echo Form::close();
+			echo Form::open('gate/control');	
 				?>	
 
 			  </div>
 
 		</div>
 			
-		<div class="panel panel-primary">
-			  <div class="panel-heading">
-				<h3 class="panel-title"><?php echo __('Заставка на табло');?></h3>
-			  </div>
-			  <div class="panel-body">
 
-
-
-					<?
-					echo __('Текст на табло в режиме ожидания');
-					echo '<div>'. __('Верхняя строка').
-						Form::input('new_top_string[\'text\']', iconv('windows-1251','UTF-8', Arr::get($tabloMessageIdle, 'top_string', 'No_text'))).
-						__('Прокрутка длинного текста').
-						Form::checkbox('new_top_string[\'scroll\']', 1, (bool) 1).
-						'</div>';
-					echo '<div>'. __('Нижняя строка').
-						Form::input('new_down_string[\'text\']', iconv('windows-1251','UTF-8', Arr::get($tabloMessageIdle, 'down_string', 'No_text'))).
-						__('Прокрутка длинного текста').
-						Form::checkbox('new_down_string[\'scroll\']', 1, (bool) 1).
-						'</div>';
-					//echo Form::hidden('id_parking', Arr::get($value,'id_parking'));
-					echo Form::hidden('id_parking', $id_parking);
-					echo Form::button('todo', __('Обновить'), array('value'=>'save_idle_text','class'=>'btn btn-success', 'type' => 'submit'));	
-					
-					?>	
-
-			  </div>
-
-			</div>
-			
 			<div class="panel panel-primary">
 				  <div class="panel-heading">
 					<h3 class="panel-title"><?php echo __('Управление подсчетом свободных мест');?></h3>
@@ -166,7 +138,8 @@ echo Form::open('gate/control');
 				  <div class="panel-body">
 						<?
 						//echo Form::hidden('id_parking', Arr::get($value,'id_parking'));
-						if($checkplaceenable>0)
+						//if($checkplaceenable>0)
+						if(true)
 						{
 						echo ' <span class="label label-success">'.__('Счетчики свободных мест включены').'</span><br><br>';
 						//echo Form::button('todo', __('Контроль свободных включен'), array('value'=>'check_count_on','class'=>'btn btn-success', 'type' => 'submit'));	
@@ -258,7 +231,7 @@ echo Form::open('gate/control');
 				
 				$i=0;
 				$checked=1;
-				if($gate_list)
+				if(false)
 				{
 					foreach($tabloMessages as $key=>$value)
 					{
@@ -380,7 +353,7 @@ echo Form::open('gate/control');
 		}?>
 
 
-<?echo Form::close();?>
+<?php echo Form::close();?>
 	
   
 
