@@ -35,6 +35,14 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 				'VALIDATEPASS_HL_PARKING_3',
 				'REGISTERPASS_HL_2',
 			);
+			
+	public	$dataList=array(
+				'HL_EVENTCODE_DATA',
+				'HL_MESSAGES_DATA',
+				
+			);
+			
+	
 	
 	public function before()
 	{
@@ -52,6 +60,7 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		//echo Debug::vars('37');exit;
 		$tableList=$this->tableList;
 		$procedureList=$this->procedureList;
+		$dataList=$this->dataList;
 		
 		
 		$db=Model::factory('Parkdb');
@@ -75,6 +84,7 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			'tableListCheck'=>$tableListCheck,
 			'procedureList'=>$procedureList,
 			'procedureListCheck'=>$procedureListCheck,
+			'dataList'=>$dataList,
 				
 		));
         $this->template->content = $content;
@@ -138,6 +148,8 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			
 			
 			
+			
+			
 			$this->redirect('/checkdb');
 		}
 		
@@ -151,6 +163,19 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			$parkDB->addTable($tableData);
 			$this->redirect('/checkdb');
 		}
+		
+		//7.04.2025 добавить данные
+		if(Arr::get($_POST, 'addData'))
+		{
+			
+			$tableData=Arr::get($_POST, 'addData'); //получил название таблицы
+			//$parkDB->delTable($tableData);//удаляю таблицу (вдруг она есть в базе данных)
+			$parkDB->addData($tableData);
+			$this->redirect('/checkdb');
+		}
+		
+		
+		
 		
 		if(Arr::get($_POST, 'delTable'))
 		{
@@ -184,6 +209,31 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		{
 		
 			$parkDB->delProcedure(Arr::get($_POST, 'delProcedure'));
+			$this->redirect('/checkdb');
+		}
+		
+		
+		//07.04.2025 работа с данными в таблице
+		if(Arr::get($_POST, 'addData'))
+		{
+			
+			$procSql=Arr::get($_POST, 'addProcedure'); //получил название процедуры
+			$parkDB->addData($procSql);
+			$this->redirect('/checkdb');
+			
+		}
+		
+		if(Arr::get($_POST, 'delData'))
+		{
+		echo Debug::vars('228', $_POST);exit;
+			$parkDB->delData(Arr::get($_POST, 'delProcedure'));
+			$this->redirect('/checkdb');
+		}
+		
+		if(Arr::get($_POST, 'delTableData'))
+		{
+		//echo Debug::vars('235', $_POST);exit;
+			$parkDB->delTableData(Arr::get($_POST, 'delTableData'));
 			$this->redirect('/checkdb');
 		}
 		

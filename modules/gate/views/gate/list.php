@@ -201,6 +201,11 @@ echo Form::open('gate/control');
 						
 
 				В нижзней строке табло выводится приглашение к проезду или пояснения к причине отказа.
+				<?php
+					$tmess=Model::factory('gates')->tabloMessages();
+					//echo Debug::vars('206', $tmess);//exit;
+				
+				?>
 				
 
 			<table id="tablesorter" class="table table-striped table-hover table-condensed tablesorter">
@@ -231,10 +236,11 @@ echo Form::open('gate/control');
 				
 				$i=0;
 				$checked=1;
-				if(false)
+				if($tmess)
 				{
-					foreach($tabloMessages as $key=>$value)
+					foreach($tmess as $key=>$value)
 					{
+						//echo Debug::vars('243', Arr::get($value,'PARAM'));exit;
 						$param=json_decode(Arr::get($value,'PARAM'), true);
 						echo '<tr>';
 							echo '<td>'. Arr::get($value,'EVENTCODE');'</td>';

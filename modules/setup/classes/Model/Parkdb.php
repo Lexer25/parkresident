@@ -86,6 +86,13 @@ class Model_Parkdb extends Model {
 		
 	}
 	
+	public function delTableData($tableName)
+	{
+		$this->delGenerator($tableName);
+		$this->makeQuery('delete from '. $tableName);
+		
+	}
+	
 	
 	
 	//31.03.2025 Добавление таблицы сводится к выполнению нескольких sql запросов, взятых из файла конфигурации.
@@ -125,6 +132,15 @@ class Model_Parkdb extends Model {
 	
 	//31.03.2025 ДОбавление процедуры сводится к выполнению скрипта, взятого из файлов.
 	public function addProcedure($name)
+	{
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:c:\vnii\vnii.GDB -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
+			
+			
+		 exec(iconv('UTF-8', 'CP1251', $ttt));
+	}
+	
+	//07.04.2025 Добавить и удалить данные из таблиц.
+	public function addData($name)
 	{
 		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:c:\vnii\vnii.GDB -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
 			

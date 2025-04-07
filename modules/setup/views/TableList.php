@@ -21,9 +21,11 @@ echo Form::open('Checkdb/worker');
 		<thead allign="center">
 			<tr>
 				<th><?echo __('№ п/п');?></th>
-				<th><?echo __('Код события');?></th>
-				<th><?echo __('КПП.');?></th>
-				<th><?echo __('Время события');?></th>
+				<th><?echo __('Таблица');?></th>
+				<th><?echo __('Наличие таблицы.');?></th>
+				<th><?echo __('Добавить таблицу');?></th>
+				<th><?echo __('Удалить таблицу');?></th>
+				<th><?echo __('Удалить данные');?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -42,6 +44,7 @@ echo Form::open('Checkdb/worker');
 				echo '</td>';
 				echo '<td>'.Form::button('addTable', 'Добавить таблицу', array('value'=>$value)).'</td>';
 				echo '<td>'.Form::button('delTable', 'Удалить таблицу', array('value'=>$value)).'</td>';
+				echo '<td>'.Form::button('delTableData', 'Удалить данные', array('value'=>$value)).'</td>';
 			echo '</tr>';	
 		}	
 		?>
@@ -53,7 +56,7 @@ echo Form::open('Checkdb/worker');
 	echo '<td>'.Form::button('delAllTable', 'Удалить все таблицы', array('value'=>$value)).'</td>';
 
 ?>	
-		Процедуры
+		<h2>Процедуры</h2>
 		<table id="tablesorter_ge" class="table table-striped table-hover table-condensed tablesorter">
 		<thead allign="center">
 			<tr>
@@ -78,6 +81,33 @@ echo Form::open('Checkdb/worker');
 				echo '</td>';
 				echo '<td>'.Form::button('addProcedure', 'Добавить процедуру', array('value'=>$value)).'</td>';
 				echo '<td>'.Form::button('delProcedure', 'Удалить процедуру', array('value'=>$value)).'</td>';
+				
+			echo '</tr>';	
+		}	
+		?>
+		</tbody>
+	</table>		
+		
+	<h2>Добавить данные в таблицы</h2>
+		<table id="tablesorter_ge" class="table table-striped table-hover table-condensed tablesorter">
+		<thead allign="center">
+			<tr>
+				<th><?echo __('№ п/п');?></th>
+				<th><?echo __('Таблица');?></th>
+				<th><?echo __('Записать.');?></th>
+				<th><?echo __('Удалить');?></th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php 
+		$i=0;
+		foreach($dataList as $key=>$value)
+		{
+		echo '<tr>';
+				echo '<td>'.++$i.'</td>';
+				echo '<td>'.$value.'</td>';
+				echo '<td>'.Form::button('addData', 'Записать данные', array('value'=>$value)).'</td>';
+				echo '<td>'.Form::button('delData', 'Удалить данные', array('value'=>$value)).'</td>';
 				
 			echo '</tr>';	
 		}	
