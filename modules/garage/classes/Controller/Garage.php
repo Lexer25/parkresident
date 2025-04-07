@@ -30,7 +30,7 @@ class Controller_Garage extends Controller_Template {
 		//echo Debug::vars('20', $_SESSION);
 		
 		$garageLst=Model::Factory('garage')->getAllGarageInfo();// список гаражей в виде класса
-		$content = View::factory('rubic/garageList', array(
+		$content = View::factory('garage/garageList', array(
 			'garageLst'=>$garageLst,
 				
 		));

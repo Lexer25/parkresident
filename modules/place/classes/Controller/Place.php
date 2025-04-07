@@ -60,7 +60,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	public function action_list()//
 	{
 		$id = $this->request->param('id');
-		$_SESSION['menu_active']='rubic';
+		//$_SESSION['menu_active']='rubic';
 		$query=Validation::factory($this->request->param());
 					$query->rule('id', 'not_empty')
 							->rule('id', 'digit')
@@ -74,15 +74,11 @@ class Controller_Place extends Controller_Template { // класс описыв�
 					{
 						//echo Debug::vars('75');exit;
 						//$id_parking=0; // номер родительской паровки не указан. надо показывать все ЖК.
-						$id_parking=Model::factory('ParkingPlace')->get_list();
+						//$id_parking=Model::factory('ParkingPlace')->get_list();
 						$id_place=Model::factory('place')->getAll();
 						
 					}
-		//echo Debug::vars('44', $id_parking);exit;
-		//а теперь выбираю все машиноместа для указанных паркингов
-		//$id_place=Model::factory('place')->getListForParent($id_parking);
-		//echo Debug::vars('83', $id_place);exit;
-		//echo Debug::vars('85', $id_place);exit;
+		
 		$content = View::factory('place/list', array(
 			
 			'id_place'=>$id_place,
@@ -115,14 +111,18 @@ class Controller_Place extends Controller_Template { // класс описыв�
 			case 'add'://добавление нового машиноместа
 
 				$_data=Validation::factory($this->request->post());
-				$_data->rule('new_place_number', 'not_empty')
+				$_data->rule('placenumber', 'not_empty')
 							;
 					if($_data->check())
 					{
 						
 						$entity = new Place();
-						$entity->name=Arr::get($_data, 'add_rp_name');
-						$entity->is_active=1;
+						$entity->name='Новое машиноместо_'.Arr::get($_data, 'placenumber');
+						$entity->placenumber=Arr::get($_data, 'placenumber');
+						$entity->id_parking=0;
+						$entity->description="";
+						$entity->note="";
+						$entity->status=0;
 						if ($entity->add())
 						{
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' добавлено успешно')));
@@ -135,7 +135,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						
 					} else 
 					{
-									echo Debug::vars('137');exit;
+						//echo Debug::vars('137');exit;
 						Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 						
 					}

@@ -27,7 +27,7 @@ echo Form::open('place/control');
 			</div>
 			<?
 			echo __('Регистрация парковочного места').'<br>';
-			echo Form::input('new_place_number','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required')).'<br>';
+			echo Form::input('placenumber','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required')).'<br>';
 			//echo Form::input('new_place_name', 'Название машиноместа').'<br>';
 			echo Form::button('todo', 'Зарегистрировать новое машиноместо', array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
 			

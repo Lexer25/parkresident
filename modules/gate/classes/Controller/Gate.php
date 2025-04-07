@@ -32,12 +32,12 @@ class Controller_Gate extends Controller_Template { // класс описыва
 							;
 					if($query->check())
 					{
-						$id_parking=Arr::get($query, 'id_parking'); // имеется номер родительской парковки
+						$id=Arr::get($query, 'id_parking'); // имеется номер ворот
 						
 						
 					} else 
 					{
-						$id_parking=0; // номер родительской паровки не указан
+						$id=0; // вывести список ворота
 					}
 					
 		
@@ -47,7 +47,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 		$tabloMessages=Model::Factory('gates')->tabloMessages();//информация по строкам табло
 		$tabloMessageIdle=Model::Factory('gates')->tabloMessageIdle();//информация по строкам табло на время ожидания
 		
-		
+			
 		$data=Validation::factory($gate_list);
 		$data->rule('result', 'digit')
 			->rule('result', 'in_array', array(':value', array(0)))
@@ -57,7 +57,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 		{			
 			Session::instance()->set('ok_mess', array('ok_mess' => 'Данные обновлены успешно'));
 			//echo Debug::vars('56', $data, Arr::get($data, 'res')); exit;
-			$content = View::factory('rubic/gatelist', array(
+			$content = View::factory('gate/gatelist', array(
 			'gate_list'=>Arr::get($data, 'res'),
 			'id_parking'=>$id_parking,
 			'checkplaceenable'=>$checkplaceenable,
@@ -65,15 +65,55 @@ class Controller_Gate extends Controller_Template { // класс описыва
 			'tabloMessageIdle'=>$tabloMessageIdle,
 			));
 		} else {
+			
 			Session::instance()->set('e_mess', array('Ошибка '.Arr::get($data, 'result').' не могу выдать данные по КПП.'));
-			$content = View::factory('rubic/gatelist', array(
-			'gate_list'=>null,
+			$content = View::factory('gate/gatelist', array(
+			//'gate_list'=>null,
+			'gate_list'=>Arr::get($data, 'res'),
 			'id_parking'=>$id_parking,
+			'id_parking'=>$id_parking,
+			'checkplaceenable'=>$checkplaceenable,
+			'tabloMessages'=>$tabloMessages,
+			'tabloMessageIdle'=>$tabloMessageIdle,
 			));
 		}
 		
         $this->template->content = $content;
 	}
+	
+	
+	public function action_list()//
+	{
+		$id = $this->request->param('id');
+		//$_SESSION['menu_active']='rubic';
+		$query=Validation::factory($this->request->param());
+					$query->rule('id', 'not_empty')
+							->rule('id', 'digit')
+							;
+					if($query->check())
+					{
+
+						$id=Arr::get($query, 'id');
+						
+					} else 
+					{
+						//echo Debug::vars('75');exit;
+						//$id_parking=0; // номер родительской паровки не указан. надо показывать все ЖК.
+						
+						$id=Model::factory('gates')->getAll();//получить список всех ворот.
+						
+					}
+		//echo Debug::vars('106', $id);exit;
+		
+		$content = View::factory('gate/list', array(
+			
+			'gate_list'=>$id,
+			
+		
+		));
+        $this->template->content = $content;
+	}
+	
 	
 	public function action_control()
 	{
@@ -209,7 +249,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 		
 		//echo Debug::vars('139', $info_gate, $_POST); exit;
 		
-		$content = View::factory('rubic/edit_gate', array(
+		$content = View::factory('gate/edit', array(
 			'info_gate'=>$info_gate,
 			
 		));

@@ -6,6 +6,20 @@ class Model_Gates extends Model {
 	public $res_err = 1;
 	public $res_hz = 2;
 	
+	
+	//7.04.2025 получить список всех ворот
+	public function getAll()
+	{
+		
+		$sql='select id from hl_param';
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		return $query;
+		
+	}
+	
+	
 	/*
 	Получить список gate для указанной парковки
 
@@ -78,7 +92,7 @@ class Model_Gates extends Model {
 	
 	public function  get_info_gate($id_gate)//получить информацию о воротах 
 	{
-			$res=array();
+		$res=array();
 		$res=array();
 		$sql='select  
 			hlp.id,
@@ -314,7 +328,7 @@ class Model_Gates extends Model {
 		 $sql='select hlm.text from hl_messages hlm
         where hlm.smalname=\'text1\'';
        
-	
+	$mess=array();
 	$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->get('TEXT');

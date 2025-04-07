@@ -6,6 +6,7 @@ class Model_Garage extends Model {
 	
 	public function getAllGarageInfo()
 	{
+		$res=array();
 		$garageList=$this->get_list_garage();
 		foreach ($garageList as $key=>$value)
 		{

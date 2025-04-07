@@ -54,6 +54,7 @@ echo Form::open('gate/control');
 				<?php
 				$i=0;
 				$checked=1;
+				
 				if($gate_list)
 				{
 					foreach($gate_list as $key=>$value)
@@ -124,7 +125,7 @@ echo Form::open('gate/control');
 
 			  </div>
 
-			</div>
+		</div>
 			
 		<div class="panel panel-primary">
 			  <div class="panel-heading">
@@ -207,8 +208,8 @@ echo Form::open('gate/control');
 						<tbody>
 							<?php
 							echo '<tr>';
-								echo '<td>'. Form::input('line_0_deltaX', Arr::get($value,'line_0_deltaX', 0), array('size'=>2)).'</td>';
-								echo '<td>'. Form::input('line_0_deltaY', Arr::get($value,'line_0_deltaY', 0), array('size'=>2)).'</td>';
+								//echo '<td>'. Form::input('line_0_deltaX', Arr::get($value,'line_0_deltaX', 0), array('size'=>2)).'</td>';
+								//echo '<td>'. Form::input('line_0_deltaY', Arr::get($value,'line_0_deltaY', 0), array('size'=>2)).'</td>';
 							echo '</tr>';	
 							?>
 						</tbody>
