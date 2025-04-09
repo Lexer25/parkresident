@@ -93,6 +93,15 @@ class Model_Parkdb extends Model {
 		
 	}
 	
+	//Добавление данных в указанную таблицу
+	public function addTableData($name)
+	{
+		//echo Debug::vars('99', $name.'.sql');exit;
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:c:\vnii\vnii.GDB -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\data\\'.$name.'.sql';
+		exec(iconv('UTF-8', 'CP1251', $ttt));
+		
+	}
+	
 	
 	
 	//31.03.2025 Добавление таблицы сводится к выполнению нескольких sql запросов, взятых из файла конфигурации.
@@ -101,7 +110,7 @@ class Model_Parkdb extends Model {
 		$this->makeQuery('DROP TABLE '. $tableName);
 		//выбираю набор команд для указанной таблицы
 		
-		$sqlarray=Arr::get(Kohana::$config->load('artonitparking_table'), $tableName, null);//выбираю набор команд для добавления таблицы.
+		/* $sqlarray=Arr::get(Kohana::$config->load('artonitparking_table'), $tableName, null);//выбираю набор команд для добавления таблицы.
 			if($sqlarray)
 			{
 				//выполняю команды в цикле
@@ -113,8 +122,11 @@ class Model_Parkdb extends Model {
 				
 				echo Debug::vars('102 нет данных для таблицы '. Arr::get($_POST, 'addTable'));//exit;
 			}
+			 */
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:c:\vnii\vnii.GDB -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$tableName.'.sql';
 			
-		
+			
+		 exec(iconv('UTF-8', 'CP1251', $ttt));
 	}
 	
 	public function delGenerator($name)
@@ -132,15 +144,6 @@ class Model_Parkdb extends Model {
 	
 	//31.03.2025 ДОбавление процедуры сводится к выполнению скрипта, взятого из файлов.
 	public function addProcedure($name)
-	{
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:c:\vnii\vnii.GDB -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
-			
-			
-		 exec(iconv('UTF-8', 'CP1251', $ttt));
-	}
-	
-	//07.04.2025 Добавить и удалить данные из таблиц.
-	public function addData($name)
 	{
 		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:c:\vnii\vnii.GDB -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
 			

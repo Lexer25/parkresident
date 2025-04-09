@@ -35,18 +35,29 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 							;
 					if($query->check())
 					{
-						$id_resident=Arr::get($query, 'id_resident'); // имеется номер ЖК, и надо показывать именно его
 						
-						
+						$id_parent=Arr::get($query, 'id_resident');
+						if($id_parent == 0)
+						{
+							
+							$id_parkingPlace=Model::factory('parkingPlace')->get_list();
+							echo Debug::vars('44', $id_parkingPlace);exit;
+						} else {
+							
+							$id_parkingPlace=Model::factory('parkingPlace')->get_list_for_parent($id_parent);
+						}
+									
 					} else 
 					{
-						$id_resident=0; // номер родительской паровки не указан. надо показывать все ЖК.
-						$id_resident=Model::factory('parkingPlace')->get_list();
+						
+						$id_parkingPlace=Model::factory('parkingPlace')->get_list();
 						
 					}
+					echo Debug::vars('47', $id_parent,  $id_parkingPlace);exit;
+					//показываю список площадок для указанной резиденции
 		$content = View::factory('parking/list', array(
 			
-			'id_resident'=>$id_resident,
+			'id_parkingPlace'=>$id_parkingPlace,
 			
 		
 		));

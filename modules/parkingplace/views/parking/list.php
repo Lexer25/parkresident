@@ -1,7 +1,8 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по парковочной системе
 //echo Debug::vars('3', $rubic_list);
-//echo Debug::vars('3', $id_resident);
+//echo Debug::vars('3', $id_parkingPlace);
+
 echo Form::open('ParkingPlace/control');
 ?>
 			
@@ -16,8 +17,8 @@ echo Form::open('ParkingPlace/control');
 
 		<tr>
 			<th><?echo Kohana::message('rubic','select');?></th>
-			<th><?echo __('ID парковочной плоащки');?></th>
-			<th><?echo __('Название парковочной плоащки');?></th>
+			<th><?echo __('ID парковочной площадки');?></th>
+			<th><?echo __('Название парковочной площадки');?></th>
 			<th><?echo __('is_active');?></th>
 			<th><?echo __('created');?></th>
 			<th><?echo __('modify');?></th>
@@ -39,21 +40,21 @@ echo Form::open('ParkingPlace/control');
 			$dis3='';
 							
 							
-		foreach($id_resident as $key=>$value)
+		foreach($id_parkingPlace as $key=>$value)
 		{
 			
-			$residence=new Parking(Arr::get($value, 'ID'));
+			$parkingPlace=new Parking(Arr::get($value, 'ID'));
 			echo '<tr>';
-				if($i==0) echo '<td>'.Form::radio('id', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
+				if($i==0) echo '<td>'.Debug::vars('53', $parkingPlace).' '.Form::radio('id', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
 				if($i>0) echo '<td>'.Form::radio('id', Arr::get($value,'ID'), FALSE).'</td>';
-				echo '<td>'.$residence->id.'</td>';
+				echo '<td>'.$parkingPlace->id.'</td>';
 				//echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , iconv('windows-1251','UTF-8', $residence->name)).'</td>';
-				echo '<td>'. iconv('windows-1251','UTF-8', $residence->name).'</td>';
-				echo '<td>'.$residence->is_active.'</td>';
-				echo '<td>'.$residence->created.'</td>';
-				echo '<td>'.$residence->modify.'</td>';
-				echo '<td>'.$residence->parent.'</td>';
-				echo '<td>'.$residence->count.'</td>';
+				echo '<td>'. iconv('windows-1251','UTF-8', $parkingPlace->name).'</td>';
+				echo '<td>'.$parkingPlace->is_active.'</td>';
+				echo '<td>'.$parkingPlace->created.'</td>';
+				echo '<td>'.$parkingPlace->modify.'</td>';
+				echo '<td>'.$parkingPlace->parent.'</td>';
+				echo '<td>'.$parkingPlace->count.'</td>';
 				
 				
 			echo '</tr>';	

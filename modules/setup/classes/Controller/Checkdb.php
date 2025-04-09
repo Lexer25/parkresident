@@ -17,7 +17,7 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			'HL_GARAGENAME',
 			'HL_ORGACCESS',
 			'HL_GARAGE',
-			
+			'HL_RESIDENT',
 			'HL_INSIDE',
 			'HL_MESSAGES',
 			'HL_COUNTERS',
@@ -37,8 +37,9 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			);
 			
 	public	$dataList=array(
-				'HL_EVENTCODE_DATA',
-				'HL_MESSAGES_DATA',
+				'HL_EVENTCODE',
+				'HL_MESSAGES',
+				'HL_RESIDENT',
 				
 			);
 			
@@ -192,7 +193,7 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			} catch (Exception $e) {
 				echo Debug::vars('99', $e->getMessage());
 			}	
-			exit;
+			//exit;
 			$this->redirect('/checkdb');
 		}
 		//31.03.2025 добавление процедур
@@ -223,17 +224,22 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			
 		}
 		
-		if(Arr::get($_POST, 'delData'))
-		{
-		echo Debug::vars('228', $_POST);exit;
-			$parkDB->delData(Arr::get($_POST, 'delProcedure'));
-			$this->redirect('/checkdb');
-		}
+		
 		
 		if(Arr::get($_POST, 'delTableData'))
 		{
 		//echo Debug::vars('235', $_POST);exit;
 			$parkDB->delTableData(Arr::get($_POST, 'delTableData'));
+			$this->redirect('/checkdb');
+		}
+		
+		/*9.04.2025 добавить данные в указанную таблицу
+		* будеть произведен поиск файла с именем таблицы в папке data
+		*/
+		if(Arr::get($_POST, 'addTableData'))
+		{
+			//echo Debug::vars('245', $_POST);exit;
+			$parkDB->addTableData(Arr::get($_POST, 'addTableData'));
 			$this->redirect('/checkdb');
 		}
 		

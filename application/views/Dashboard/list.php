@@ -53,8 +53,8 @@ echo Form::open('ResidentPlace/control');
 				//echo '<td>'.$residence->created.'</td>';
 				//echo '<td>'.$residence->modify.'</td>';
 				$parkinPlace=Model::factory('parking')->get_list_parking($residence->id);
-				echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
-				echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
+				echo '<td>'. HTML::anchor('parking/'.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
+				echo '<td>'. HTML::anchor('parking/'.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
 				
 			echo '</tr>';	
 			
