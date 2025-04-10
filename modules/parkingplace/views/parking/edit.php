@@ -33,6 +33,7 @@ if(Auth::Instance()->logged_in())
 		echo __('parent'). ' '. $parking->parent.'<br>';
 		echo __('parent').' '.Form::input('parent', $parking->parent).'<br>';
 		echo __('Дата создания'). ' '. $parking->created.'<br>';
+		echo __('Количество мест'). ' '.Form::input('count',  $parking->count).'<br>';
 		
 		?>
 			<?php

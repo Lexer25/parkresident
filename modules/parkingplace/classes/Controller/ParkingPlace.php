@@ -29,19 +29,22 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 	{
 		$id = $this->request->param('id');
 		//$_SESSION['menu_active']='rubic';
+		
 		$query=Validation::factory($this->request->query());
 					$query->rule('id_resident', 'not_empty')
 							->rule('id_resident', 'digit')
 							;
+					//echo Debug::vars('37', $query, Arr::get($query, 'id_resident'));exit;
+					$id_parent=Arr::get($query, 'id_resident');
 					if($query->check())
 					{
 						
-						$id_parent=Arr::get($query, 'id_resident');
+						
 						if($id_parent == 0)
 						{
 							
 							$id_parkingPlace=Model::factory('parkingPlace')->get_list();
-							echo Debug::vars('44', $id_parkingPlace);exit;
+							//echo Debug::vars('44', $id_parkingPlace);exit;
 						} else {
 							
 							$id_parkingPlace=Model::factory('parkingPlace')->get_list_for_parent($id_parent);
@@ -49,15 +52,16 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 									
 					} else 
 					{
-						
+						$id_parent=0;
 						$id_parkingPlace=Model::factory('parkingPlace')->get_list();
 						
 					}
-					echo Debug::vars('47', $id_parent,  $id_parkingPlace);exit;
+					//echo Debug::vars('47', $id_parent,  $id_parkingPlace);exit;
 					//показываю список площадок для указанной резиденции
 		$content = View::factory('parking/list', array(
 			
 			'id_parkingPlace'=>$id_parkingPlace,
+			'id_parent'=>$id_parent,
 			
 		
 		));
@@ -94,6 +98,17 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 						$_entity = new Parking();
 						$_entity->name=Arr::get($_data, 'name');
 						$_entity->is_active=1;
+						
+						if(filter_var(Arr::get($_data, 'id_parent'), FILTER_VALIDATE_BOOLEAN)) 
+					{
+						//$_entity->is_active=1;
+						$_entity->parent=Arr::get($_data, 'id_parent');
+					} else{
+						$_entity->parent=0;
+					}
+					
+					
+						
 						if ($_entity->add())
 						{
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' добавлено успешно')));
@@ -161,7 +176,7 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 					$this->template->content = $content;
 				} else 
 				{
-					echo Debug::vars('175');exit;
+					//echo Debug::vars('175');exit;
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 					$this->redirect('parkingplace');
 				}
@@ -180,8 +195,11 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 					$_entity = new Parking(Arr::get($_data, 'id'));
 					echo Debug::vars('170', $_entity);//exit;
 					$_entity->name=Arr::get($_data, 'name');
+					
 					$_entity->parent=Arr::get($_data, 'parent');
+					$_entity->count=Arr::get($_data, 'count');
 					if(is_null(Arr::get($_data, 'is_active'))) $_entity->is_active=0;
+					
 					if(filter_var(Arr::get($_data, 'is_active'), FILTER_VALIDATE_BOOLEAN)) 
 					{
 						$_entity->is_active=1;

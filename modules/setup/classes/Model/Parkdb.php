@@ -79,12 +79,31 @@ class Model_Parkdb extends Model {
 	}
 	
 	
+	public function aboutTable($tableName)
+	{
+		
+		$sql='select Rdb$Description from Rdb$Relations
+			where Rdb$Relation_Name=\''.$tableName.'\'';
+		//	echo Debug::vars('87', $sql);exit;
+		//$this->makeQuery($sql);
+		
+		$query = Arr::flatten(DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array());
+		return $query;
+		
+		
+	}
+	
 	public function delTable($tableName)
 	{
 		$this->delGenerator($tableName);
 		$this->makeQuery('DROP TABLE '. $tableName);
 		
 	}
+	
+	
+	
 	
 	public function delTableData($tableName)
 	{

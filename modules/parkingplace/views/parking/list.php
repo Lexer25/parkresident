@@ -1,14 +1,24 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по парковочной системе
 //echo Debug::vars('3', $rubic_list);
-//echo Debug::vars('3', $id_parkingPlace);
+echo Debug::vars('3', $id_parkingPlace);
+echo Debug::vars('4', $id_parent);
+
+if($id_parent > 0)
+{
+	$_parent=new Residence($id_parent);
+	$_title='Список парковочных площадок '. iconv('windows-1251','UTF-8', $_parent->name);
+} else {
+	
+	$_title='Список всех парковочных площадок';
+}
 
 echo Form::open('ParkingPlace/control');
 ?>
 			
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?echo __('Список парковочных площадок')?></h3>
+		<h3 class="panel-title"><?php echo $_title;?></h3>
 	</div>
 	<div class="panel-body">
 
@@ -53,7 +63,8 @@ echo Form::open('ParkingPlace/control');
 				echo '<td>'.$parkingPlace->is_active.'</td>';
 				echo '<td>'.$parkingPlace->created.'</td>';
 				echo '<td>'.$parkingPlace->modify.'</td>';
-				echo '<td>'.$parkingPlace->parent.'</td>';
+				$_residence=new Residence($parkingPlace->parent);
+				echo '<td>'.iconv('windows-1251','UTF-8', $_residence->name).'</td>';
 				echo '<td>'.$parkingPlace->count.'</td>';
 				
 				
@@ -90,7 +101,8 @@ echo Form::open('ParkingPlace/control');
 	  
 		<?
 		echo __('Добавить парковочную площадку');
-		echo Form::input('name', 'Новая парковочная площадка');
+		echo Form::hidden('id_parent',$id_parent);
+		echo Form::input('name',null , array('placeholder'=>'Новая парковочная площадка'));
 		echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
 		
 		?>	
