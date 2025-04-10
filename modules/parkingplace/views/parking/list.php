@@ -55,11 +55,19 @@ echo Form::open('ParkingPlace/control');
 			
 			$parkingPlace=new Parking(Arr::get($value, 'ID'));
 			echo '<tr>';
-				if($i==0) echo '<td>'.Debug::vars('53', $parkingPlace).' '.Form::radio('id', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
+				//if($i==0) echo '<td>'.Debug::vars('53', $parkingPlace).' '.Form::radio('id', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
+				if($i==0) echo '<td>'.Form::radio('id', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
 				if($i>0) echo '<td>'.Form::radio('id', Arr::get($value,'ID'), FALSE).'</td>';
 				echo '<td>'.$parkingPlace->id.'</td>';
 				//echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , iconv('windows-1251','UTF-8', $residence->name)).'</td>';
-				echo '<td>'. iconv('windows-1251','UTF-8', $parkingPlace->name).'</td>';
+				echo '<td>';
+					echo iconv('windows-1251','UTF-8', $parkingPlace->name);
+					echo ' ';
+					echo HTML::anchor('place/list/'.Arr::get($value,'ID'), 'List');
+					echo ' ';
+					echo HTML::anchor('place/matrix/'.Arr::get($value,'ID'), 'Matrix');
+					
+				echo '</td>';
 				echo '<td>'.$parkingPlace->is_active.'</td>';
 				echo '<td>'.$parkingPlace->created.'</td>';
 				echo '<td>'.$parkingPlace->modify.'</td>';

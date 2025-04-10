@@ -26,10 +26,13 @@ if(Auth::Instance()->logged_in())
 	<div class="panel-body">
 		
 		<?php 
-		echo __('Номер машиноместа').Form::input('placenumber', $place->placenumber).'<br>';
+		//echo __('Номер машиноместа').Form::input('placenumber', $place->placenumber).'<br>';
+		echo __('Номер машиноместа: ').$place->placenumber.'<br>';
 		echo __('Название машиноместа').Form::input('name', iconv('windows-1251','UTF-8', $place->name), array('maxlength'=>50)).'<br>';
 		echo __('Статус').Form::input('status', iconv('windows-1251','UTF-8', $place->status), array('maxlength'=>50)).'<br>';
-		echo __('ID паркинга').Form::input('id_parking', $place->id_parking).'<br>';
+		echo __('ID паркинга ').$place->id_parking.'<br>';
+		echo Form::hidden('id_parking', $place->id_parking);
+		echo Form::hidden('placenumber', $place->placenumber);
 		echo __('Описание').Form::input('description', iconv('windows-1251','UTF-8', $place->description), array('maxlength'=>50)).'<br>';
 		echo __('Описание2').Form::input('note', iconv('windows-1251','UTF-8', $place->note), array('maxlength'=>50)).'<br>';
 			
@@ -37,7 +40,7 @@ if(Auth::Instance()->logged_in())
 		
 		?>
 			<?php
-		echo Form::button('todo', Kohana::message('rubic','rubic_change_config'), array('value'=>'update','class'=>'btn btn-success', 'type' => 'submit'));	
+		echo Form::button('todo', Kohana::message('rubic','rubic_change_config'), array('value'=>'updateNP','class'=>'btn btn-success', 'type' => 'submit'));	
 		?>
 	</div>
 </div>

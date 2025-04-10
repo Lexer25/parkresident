@@ -1,6 +1,6 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по машноместам
-//echo Debug::vars('3', $id_place);
+echo Debug::vars('3', $id_place);
 echo Form::open('place/control');
 ?>
 <script type="text/javascript">
@@ -134,11 +134,85 @@ echo Form::open('place/control');
 		</nav>
 <?php 
 }
+echo Form::close();
 ?>	
 </div>
 </div>
+<?php
+	$_parking=Arr::get(Arr::flatten($id_place), 'ID');
+	$_place=new Parking($_parking);
+	echo 'Матричное представление парковочного пространства для парковки "'. iconv('windows-1251','UTF-8', $_place->name).'" ('.$_parking.')';
+?>
+<table class="table table-hover">
+<thead>
+</thead>
 
-<?echo Form::close();?>
+
+<tbody>
+<?php
+$count=225;//общее количество мест
+
+for($y=0; $y<10; $y++)
+{
+	 
+	echo '<tr>';
+		for($x=1; $x<11;$x++)
+		{
+			
+				//echo $x.' '.$y;
+				$_place = new PlaceNP(($y*10+$x), $_parking);
+				//echo Debug::vars('154', $_place);//exit;
+				//echo Debug::vars($_place) .' '.$_parking;
+				$_mess='--';
+				switch($_place->status)
+				{
+					case 0:
+						$_class='active';//серый
+						$_mess='Не настроен';
+					break;
+					case 1:
+						$_class='success';//зеленый
+						$_mess='OK';
+					break;
+					case 2:
+						$_class='info';//голубой
+					break;
+					case 3:
+						$_class='warning';//желтый
+						$_mess='Заблокирован';
+					break;
+					case 4:
+						$_class='danger';//красный
+					break;
+					default:
+						$_class='active';
+					break;
+				}
+				
+					
+					echo '<td class="'.$_class.'">';					
+									
+					//echo HTML::anchor('place/edit/'.($y*10+$x).'/'.$_parking, 'Место '.($y*10+$x));
+					echo ($y*10+$x).' '.$_mess;
+					echo Form::open('place/control');
+						echo Form::hidden('place', ($y*10+$x));
+						echo Form::hidden('parking', $_parking);
+						echo Form::submit('todo', 'editMatrix');
+					echo Form::close();
+					echo '</td>';
+				
+			
+		}
+	
+	echo '</tr>';
+}
+
+?>
+</tbody>
+</table>
+
+
+
 	
   
 

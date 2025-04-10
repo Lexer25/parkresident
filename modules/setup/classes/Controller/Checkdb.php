@@ -40,6 +40,7 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 				'HL_EVENTCODE',
 				'HL_MESSAGES',
 				'HL_RESIDENT',
+				'HL_GARAGE',
 				
 			);
 			

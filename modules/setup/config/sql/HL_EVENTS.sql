@@ -79,3 +79,5 @@ SET TERM ; ^
 
 /* Privileges of procedures */
 GRANT INSERT ON HL_EVENTS TO PROCEDURE REGISTERPASS_HL_2;
+
+

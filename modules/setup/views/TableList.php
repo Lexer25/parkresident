@@ -115,33 +115,7 @@ echo Form::open('Checkdb/worker');
 		?>
 		</tbody>
 	</table>		
-		
-	<h2>Добавить данные в таблицы</h2>
-		<table id="tablesorter_ge" class="table table-striped table-hover table-condensed tablesorter">
-		<thead allign="center">
-			<tr>
-				<th><?echo __('№ п/п');?></th>
-				<th><?echo __('Таблица');?></th>
-				<th><?echo __('Записать.');?></th>
-				<th><?echo __('Удалить');?></th>
-			</tr>
-		</thead>
-		<tbody>
-		<?php 
-		$i=0;
-		foreach($dataList as $key=>$value)
-		{
-		echo '<tr>';
-				echo '<td>'.++$i.'</td>';
-				echo '<td>'.$value.'</td>';
-				echo '<td>'.Form::button('addData', 'Записать данные', array('value'=>$value)).'</td>';
-				echo '<td>'.Form::button('delData', 'Удалить данные', array('value'=>$value)).'</td>';
-				
-			echo '</tr>';	
-		}	
-		?>
-		</tbody>
-	</table>		
+	
 		
 		
 	<?php
