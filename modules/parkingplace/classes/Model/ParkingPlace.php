@@ -34,6 +34,22 @@ class Model_ParkingPlace extends Model {
 		return $query;	
 	}
 	
+	public function getCount($parent)// получить количество машиномест для указанной парковки
+	{
+		$res=array();
+				
+		$sql='select hlr.id from hl_parking hlr
+		where hlr.parent='.$parent;
+		
+		
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+	//echo Debug::vars('11',$sql, $query); exit;
+		
+		return $query;	
+	}
+	
 	
 	
 }

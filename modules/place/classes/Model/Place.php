@@ -34,7 +34,7 @@ class Model_Place extends Model {
 		return $res;
 	}
 	
-	// получить наследников
+	// получить список id машиномест для указанной парковки
 	public function getChild($parent)
 	{
 		$sql='select hlp.id from hl_place hlp
@@ -63,22 +63,23 @@ class Model_Place extends Model {
 	
 	
 	
-	public function _getResidentPlaceInfo($id_rp)// получить информацию о жилом комплексе
-	{
-		$sql='select hlp.id, hlp.name, hlp.enabled, hlp.created, hlp.maxcount, hlp.parent from hl_parking hlp where hlp.id='. $id_rp;
-	//echo Debug::vars('8', $sql);
-		$query = DB::query(Database::SELECT, $sql)
-			->execute(Database::instance('fb'))
-			->as_array();
-		
-		Foreach ($query as $key => $value)
+	/*11.04.2025 Проверка номера машиноместа в указанной парковке на уникальность
+	*/	
+	//public static function unique_numberPlace($placenumber, $id_parking)
+	public static function unique_numberPlace($data)
 		{
-			$res['ID']=Arr::get(Arr::get($query, 0), 'ID');
-			$res['NAME']=iconv('windows-1251','UTF-8',Arr::get(Arr::get($query, 0), 'NAME'));
-			$res['AS_ACTIVE']=Arr::get(Arr::get($query, 0), 'ENABLED');
+		//echo Debug::vars('68', $data);exit; 
+		 // Check if the username already exists in the database
+			$sql='select * from hl_place hlp
+					where hlp.placenumber=2
+					and hlp.id_parking=1';
+			return ! DB::select(array(DB::expr('COUNT(id)'), 'total'))
+				->from('hl_place')
+				->where('placenumber', '=', $placenumber)
+				->and_where('id_parking', '=', $id_parking)
+				->execute()
+				->get('total');
 		}
-		
-		return Arr::flatten($query);	
-		
-	}
+	
+	
 }

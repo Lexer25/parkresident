@@ -110,13 +110,10 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						
 					} else 
 					{
-						//echo Debug::vars('75');exit;
-						//$id_parking=0; // номер родительской паровки не указан. надо показывать все ЖК.
-						//$id_parking=Model::factory('ParkingPlace')->get_list();
-						$id_place=Model::factory('place')->getAll();
+						$this->redirect('parkingPlace');
 						
 					}
-		$id_place[]=array('ID'=>$id);
+		//$id_place[]=array('ID'=>$id);
 		$content = View::factory('place/matrix', array(
 			
 			'id_place'=>$id_place,
@@ -131,7 +128,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	
 	public function action_control()
 	{
-		//echo Debug::vars('95', $_POST);exit;
+		//echo Debug::vars('134', $_POST);exit;
 		$post=Validation::factory($this->request->post());
 					$post->rule('todo', 'not_empty')
 							
@@ -209,7 +206,8 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 						
 					}
-					$this->redirect('place/list');
+					//$this->redirect('place/list');
+					$this->redirect('place/matrix/'.Arr::get($_data, 'id_parking'));
 			break;
 			
 			case 'edit'://просмотр и редакция парковки. Переход на форму редактирования
@@ -229,7 +227,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 					$this->template->content = $content;
 				} else 
 				{
-					echo Debug::vars('193');exit;
+					//echo Debug::vars('232');exit;
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 					$this->redirect('place/list');
 				}
@@ -238,7 +236,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 			
 			
 			case 'editMatrix'://редактирование машиноместа при вызове его из таблицы
-			//echo Debug::vars('174', $_GET, $_POST); exit;
+			//echo Debug::vars('241', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('place', 'not_empty')
 						->rule('place', 'digit')
@@ -262,7 +260,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 					$this->template->content = $content;
 				} else 
 				{
-					echo Debug::vars('193');exit;
+					echo Debug::vars('265');exit;
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 					$this->redirect('place/list');
 				}
@@ -360,7 +358,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 					echo Debug::vars('336');exit;
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 				}
-				$this->redirect('place/list');
+				$this->redirect('place/matrix/'.Arr::get($_data, 'id_parking'));
 			break;
 			
 			
@@ -386,8 +384,11 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						->rule('place', 'digit')
 						->rule('parking', 'not_empty')
 						->rule('parking', 'digit')
+						//->rule(array('place','parking'), 'User_Model::unique_numberPlace');
 						
 						;
+						
+				
 				if($_data->check())
 				{
 					//echo Debug::vars('208', $_data);//exit;
@@ -415,12 +416,13 @@ class Controller_Place extends Controller_Template { // класс описыв�
 					
 				} else 
 				{
-					echo Debug::vars('394');exit;
+					//echo Debug::vars('394');exit;
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 					
 				}
 				$this->redirect('place/list');
 			
 		}
-	
+		
+
 } 

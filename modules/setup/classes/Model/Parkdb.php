@@ -2,7 +2,24 @@
 
 class Model_Parkdb extends Model {
 	
-	
+	/*11.04.2025 информация по подключенной базе данных
+	*/
+	public function aboutDB($sourcename)
+	{
+		$_fbinfo=Kohana::$config->load('database')->$sourcename;
+		$_connection=Arr::get($_fbinfo, 'connection');
+		$_dsn=Arr::get($_connection, 'dsn');
+		//echo Debug::vars('13', Arr::get(explode(":", $_dsn), 1));
+
+		//$reg=shell_exec('C:\Windows\system32\reg.exe query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\SDuo" /v "Database"');
+		$reg=shell_exec('C:\Windows\system32\reg.exe query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\\'.Arr::get(explode(":", $_dsn), 1).'" /v "Database"');
+		$_aaa=explode("REG_SZ", $reg);
+		return array('connectName'=>$sourcename,
+				'dsn'=>$_dsn,
+				'pathDB'=>trim(Arr::get($_aaa, 1))
+				);
+		
+	}
 	
 	/*
 	20.03.2025 Проверка наличия указанных таблицы

@@ -15,6 +15,35 @@ echo Form::open('Checkdb/worker');
 <div class="panel panel-primary">
 	
 	<div class="panel-body">
+	Подключение к базе данных:
+<?php
+	$_connectName='fb';
+	$about=Model::factory('Parkdb')->aboutDB($_connectName);
+	//echo Debug::vars('22', $about);
+	
+?>
+<table class="table table-striped table-hover table-condensed tablesorter">
+<thead>
+	<tr></tr>
+</thead>
+<tbody>
+	<tr>
+		<td>Имя подключения</td>
+		<td><?php echo iconv('CP1251','UTF-8',  Arr::get($about, 'connectName')); ?></td>
+	</tr>
+	<tr>
+		<td>Тип подключения</td>
+		<td><?php echo iconv('CP1251','UTF-8', Arr::get($about, 'dsn')); ?></td>
+	</tr>
+	<tr>
+		<td>Путь к базе данных</td>
+		<td><?php echo iconv('CP1251','UTF-8//IGNORE', Arr::get($about, 'pathDB')); ?></td>
+	</tr>
+	
+	
+</tbody>
+</table>
+
 
 	Таблицы
 		<table id="tablesorter_ge" class="table table-striped table-hover table-condensed tablesorter">

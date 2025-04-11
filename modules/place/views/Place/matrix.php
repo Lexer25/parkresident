@@ -1,7 +1,26 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по машноместам
-echo Debug::vars('3', $id_place);
-echo Form::open('place/control');
+//echo Debug::vars('3', $id_place);
+$_parking=new Parking(Arr::get(Arr::flatten($id_place), 'ID'));//информация о парковочной площадке
+$placeList=Model::factory('Place')->getChild($_parking->id);//список машиномест на этой парковочной площадке
+//echo Debug::vars('5', $_parking);//exit;
+
+$titleAddPlace=__('Регистрация машиноместа для парковочной площадки ":name". Зарегистрировано :regPlace. Количество мест на площадке :countPlace',
+			array(
+				':name'=>iconv('windows-1251','UTF-8',$_parking->name),
+				':regPlace'=> count($placeList),
+				':countPlace'=>$_parking->count
+				));
+				
+
+$title=__('Список машиномест для парковочной площадки ":name". Зарегистрировано :regPlace. Количество мест на площадке :countPlace',
+			array(
+				':name'=>iconv('windows-1251','UTF-8',$_parking->name),
+				':regPlace'=> count($placeList),
+				':countPlace'=>$_parking->count
+				));
+				
+				
 ?>
 <script type="text/javascript">
      
@@ -10,12 +29,15 @@ echo Form::open('place/control');
   	});	
 	
 </script> 
-<?php if(Auth::Instance()->logged_in())
+<?php 
+echo '<!--';
+echo Form::open('place/control');
+if(Auth::Instance()->logged_in())
 {
 	?>
 	<div class="panel panel-primary">
 		  <div class="panel-heading">
-			<h3 class="panel-title"><?php echo __('Регистрация парковочного места');?></h3>
+			<h3 class="panel-title"><?php echo $titleAddPlace;?></h3>
 		  </div>
 		  <div class="panel-body">
 			<div id="my-alert" class="alert alert-success alert-dismissible" role="alert">
@@ -27,9 +49,9 @@ echo Form::open('place/control');
 			</div>
 			<?
 			echo __('Регистрация парковочного места').'<br>';
-			echo Form::input('placenumber','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required')).'<br>';
-			//echo Form::input('new_place_name', 'Название машиноместа').'<br>';
-			echo Form::button('todo', 'Зарегистрировать новое машиноместо', array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
+			echo Form::input('place','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required')).'<br>';
+			echo Form::hidden('parking', $_parking->id);
+			echo Form::button('todo', 'Зарегистрировать новое машиноместо', array('value'=>'editMatrix','class'=>'btn btn-success', 'type' => 'submit'));	
 			
 			?>	
 
@@ -38,13 +60,16 @@ echo Form::open('place/control');
 	</div>
 <?php
 }
+
+
 echo Form::close();
+echo '-->';
 echo Form::open('place/control');
 ?>
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?echo __('Список машиномест. Зарегистрировано count машиномест.', array('count'=>count($id_place)))?></h3>
+		<h3 class="panel-title"><?echo $title;?></h3>
 	</div>
 	<div class="panel-body">
 		<?php
@@ -71,8 +96,8 @@ echo Form::open('place/control');
 		<?php 
 		$i=0;
 		$checked='no';
-		//вывод списка машиномест для указанных 
-		foreach($id_place as $key=>$value)
+		//вывод списка машиномест для указанных парковочных площадок
+		foreach($placeList as $key=>$value)
 		{
 			$place=new Place(Arr::get($value, 'ID'));
 			//echo Debug::vars('68', $key, $value, $place); exit;
@@ -87,7 +112,7 @@ echo Form::open('place/control');
 
 		if(Auth::Instance()->logged_in())
 		{				
-						echo '<td>'.HTML::anchor('place/edit/'.$place->id,
+						echo '<td>'.HTML::anchor('place/edit/'.$place->id.'/'.$_parking->id,
 									$place->placenumber)
 									.'</td>';
 		} else 
@@ -99,7 +124,7 @@ echo Form::open('place/control');
 				echo '<td>'.iconv('windows-1251','UTF-8',$place->description).'</td>';
 				echo '<td>'.iconv('windows-1251','UTF-8',$place->note).'</td>';
 				$_parking = new Parking($place->id_parking);
-				echo '<td>'. iconv('windows-1251','UTF-8', $place->id_parking). iconv('windows-1251','UTF-8',$_parking->name).'</td>';
+				echo '<td>'. iconv('windows-1251','UTF-8',$_parking->name).'</td>';
 				echo '<td>'.HTML::anchor('garage/edit_garage/'.Arr::get($value,'ID_GARAGE'),  iconv('windows-1251','UTF-8', Arr::get($value,'GARAGE_NAME'))).' </td>';
 				
 			echo '</tr>';	
@@ -126,7 +151,7 @@ echo Form::open('place/control');
 
 				<?php
 					echo Form::button('todo', __('place_edit'), array('value'=>'edit','class'=>'btn btn-success', 'type' => 'submit'));	
-					//echo Form::button('todo', __('place_del'), array('disabled'=>'disabled','value'=>'del','class'=>'btn btn-danger', 'type' => 'submit', 'onclick'=>'return confirm(\''.__('delete').'?\') ? true : false;'));
+					echo Form::hidden('parking', $_parking->id);
 					echo Form::button('todo', __('place_del'), array('value'=>'del','class'=>'btn btn-danger', 'type' => 'submit', 'onclick'=>'return confirm(\''.__('delete').'?\') ? true : false;'));
 				?>
 			
@@ -138,10 +163,19 @@ echo Form::close();
 ?>	
 </div>
 </div>
-<?php
-	$_parking=Arr::get(Arr::flatten($id_place), 'ID');
-	$_place=new Parking($_parking);
-	echo 'Матричное представление парковочного пространства для парковки "'. iconv('windows-1251','UTF-8', $_place->name).'" ('.$_parking.')';
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<h3 class="panel-title"><?echo $title;?></h3>
+	</div>
+	<div class="panel-body">
+		<?php
+			echo __('Список машиномест');
+			//echo Debug::vars('123', $card_list);
+
+	//$_parking=Arr::get(Arr::flatten($id_place), 'ID');
+	
+	//echo Debug::vars('117', $_parking);exit;
+	echo 'Матричное представление парковочного пространства для парковки "'. iconv('windows-1251','UTF-8', $_parking->name).'" ('.$_parking->id.')';
 ?>
 <table class="table table-hover">
 <thead>
@@ -150,57 +184,39 @@ echo Form::close();
 
 <tbody>
 <?php
-$count=225;//общее количество мест
-
-for($y=0; $y<10; $y++)
+$countTotal=$_parking->count;//общее количество мест
+$rowMax=5;//количество строк для показа всех машиномест
+$currentPlace=1;//номер машиноместа, по которому выводится информация.
+$rowCount=10;//количество машиномест в строке
+$y=0;
+While($currentPlace<$countTotal)
 {
-	 
+	
 	echo '<tr>';
-		for($x=1; $x<11;$x++)
+		for($x=1; $x<$rowCount+1;$x++)
 		{
-			
-				//echo $x.' '.$y;
-				$_place = new PlaceNP(($y*10+$x), $_parking);
-				//echo Debug::vars('154', $_place);//exit;
-				//echo Debug::vars($_place) .' '.$_parking;
-				$_mess='--';
-				switch($_place->status)
-				{
-					case 0:
+			if($currentPlace<$countTotal+1)
+			{
+				$_place = new PlaceNP($currentPlace, $_parking->id);
+				$_mess='';
+					if($_place->id>0 )
+					{
+						$_class='success';//желтый
+						
+					} else {
 						$_class='active';//серый
-						$_mess='Не настроен';
-					break;
-					case 1:
-						$_class='success';//зеленый
-						$_mess='OK';
-					break;
-					case 2:
-						$_class='info';//голубой
-					break;
-					case 3:
-						$_class='warning';//желтый
-						$_mess='Заблокирован';
-					break;
-					case 4:
-						$_class='danger';//красный
-					break;
-					default:
-						$_class='active';
-					break;
-				}
-				
-					
-					echo '<td class="'.$_class.'">';					
-									
-					//echo HTML::anchor('place/edit/'.($y*10+$x).'/'.$_parking, 'Место '.($y*10+$x));
-					echo ($y*10+$x).' '.$_mess;
-					echo Form::open('place/control');
-						echo Form::hidden('place', ($y*10+$x));
-						echo Form::hidden('parking', $_parking);
-						echo Form::submit('todo', 'editMatrix');
-					echo Form::close();
-					echo '</td>';
-				
+					}
+						echo '<td class="'.$_class.'">';					
+										
+							echo $currentPlace.' '.$_mess;
+						echo Form::open('place/control');
+							echo Form::hidden('place', $currentPlace);
+							echo Form::hidden('parking', $_parking->id);
+							echo Form::submit('todo', 'editMatrix');
+						echo Form::close();
+						echo '</td>';
+			}
+			$currentPlace++;
 			
 		}
 	
@@ -210,6 +226,8 @@ for($y=0; $y<10; $y++)
 ?>
 </tbody>
 </table>
+</div>
+</div>
 
 
 
