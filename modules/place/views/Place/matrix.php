@@ -112,7 +112,7 @@ echo Form::open('place/control');
 
 		if(Auth::Instance()->logged_in())
 		{				
-						echo '<td>'.HTML::anchor('place/edit/'.$place->id.'/'.$_parking->id,
+						echo '<td>'.HTML::anchor('place/edit/'.$place->id,
 									$place->placenumber)
 									.'</td>';
 		} else 
@@ -177,7 +177,7 @@ echo Form::close();
 	//echo Debug::vars('117', $_parking);exit;
 	echo 'Матричное представление парковочного пространства для парковки "'. iconv('windows-1251','UTF-8', $_parking->name).'" ('.$_parking->id.')';
 ?>
-<table class="table table-hover">
+<table class="table table-striped table-hover table-condensed tablesorter">
 <thead>
 </thead>
 
@@ -197,23 +197,35 @@ While($currentPlace<$countTotal)
 		{
 			if($currentPlace<$countTotal+1)
 			{
-				$_place = new PlaceNP($currentPlace, $_parking->id);
+				//$_place = new Place($currentPlace, $_parking->id);
+				$_place = new Place();
+				$_place->getFromNumberPlaceAndIdParking($currentPlace, $_parking->id);
+				//echo Debug::vars('203', $currentPlace, $_parking->id, $_place);exit;
 				$_mess='';
-					if($_place->id>0 )
+					if($_place->placenumber>0 )//если мм уже есть, то предлагаю его отредактировать или удалить
 					{
 						$_class='success';//желтый
+						echo '<td class="'.$_class.'">';		
+						echo $currentPlace.' '.$_mess;
+						echo Form::open('place/control');
+							echo Form::hidden('id', $_place->id);
+							echo Form::submit('todo', 'edit');
+							echo Form::submit('todo', 'del');
+						echo Form::close();
 						
 					} else {
 						$_class='active';//серый
-					}
-						echo '<td class="'.$_class.'">';					
-										
-							echo $currentPlace.' '.$_mess;
+						echo '<td class="'.$_class.'">';		
+						echo $currentPlace.' '.$_mess;
 						echo Form::open('place/control');
 							echo Form::hidden('place', $currentPlace);
 							echo Form::hidden('parking', $_parking->id);
-							echo Form::submit('todo', 'editMatrix');
+							echo Form::submit('todo', 'add');
 						echo Form::close();
+					}
+									
+										
+						
 						echo '</td>';
 			}
 			$currentPlace++;

@@ -29,13 +29,14 @@ class Place
     {
        if(!is_null($id))//если указан id, то создаю экземпляр класса с данными из БД.
 	   {
-	   $this->id = $id;
-		$sql='select hlr.id, hlr.placenumber, hlr.description, hlr.note, hlr.status, hlr.name, hlr.id_parking, hlr.created from hl_place hlr where hlr.id ='.$this->id;
+	   
+		$sql='select hlr.id, hlr.placenumber, hlr.description, hlr.note, hlr.status, hlr.name, hlr.id_parking, hlr.created from hl_place hlr where hlr.id ='.$id;
 		try
 		{
 			$query = Arr::flatten(DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array());
+			$this->id=Arr::get($query, 'ID');
 			$this->name=Arr::get($query, 'NAME');
 			$this->description=Arr::get($query, 'DESCRIPTION');
 			$this->note=Arr::get($query, 'NOTE');
@@ -53,21 +54,22 @@ class Place
 			Log::instance()->add(Log::DEBUG, 'Line 40 '. $e->getMessage());
 		
 		}
-	   } else { // если не указан id, то создаю пустой экземпляр класса
+	   } else { // если не указан id, то создаётся пустой экземпляр класса
 			
 	   }
 	}
 	
+	
+		
 	/*
-	26.08.2023
-	Сохранение данных
+	26.08.2023 добавление машиноместа
+	*@input 
 	*/
 	
 	public function add()
 	{
-		//echo Debug::vars('61', $this->name);exit;
-		$sql='INSERT INTO HL_place (NAME)
-			values (\''.$this->name.'\')';
+		$sql='INSERT INTO HL_place (PLACENUMBER, ID_PARKING)
+			values ('.$this->placenumber .', '.$this->id_parking .')';
 			
 			
 		//echo Debug::vars('783', $sql);exit;
@@ -143,6 +145,16 @@ class Place
 			}
 	}
 	
-	
+	public function getFromNumberPlaceAndIdParking($numberplace, $id_parking)
+	{
+		$sql='select hlp.id from hl_place hlp
+			where hlp.placenumber ='.$numberplace.'
+			and hlp.id_parking='.$id_parking;
+		$id = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->get('ID');
+		
+		return $this->__construct($id);
+	}
    
 }

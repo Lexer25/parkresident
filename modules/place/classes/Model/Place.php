@@ -47,7 +47,7 @@ class Model_Place extends Model {
 	}
 	
 	
-	// получить всех
+	// получить id всех машиномест
 	public function getAll()
 	{
 		$sql='select hlp.id from hl_place hlp';
@@ -58,7 +58,6 @@ class Model_Place extends Model {
 			->as_array();
 		return $query;
 	}
-	
 	
 	
 	

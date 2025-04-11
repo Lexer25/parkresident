@@ -52,6 +52,21 @@ class Controller_Place extends Controller_Template { // класс описыв�
         $this->template->content = $content;
 	}
 	
+	/*11.04.2025 редактирование машиноместа
+	*&input - надо указать id машиноместа
+	*/
+	public function action_edit()
+	{
+		
+		$entity = new Place($this->request->param('id'));
+					//echo Debug::vars('183', $entity);exit;
+		$content = View::factory('place/edit', array(
+					'place'=>$entity,
+							));
+		$this->template->content = $content;
+		
+		
+	}
 	
 	/** 4.04.2025 	Показываю список машиномест для указанных паркингов
 	*если паркинг указан, то показываю места именно этого паркинга
@@ -149,24 +164,27 @@ class Controller_Place extends Controller_Template { // класс описыв�
 			case 'add'://добавление нового машиноместа
 
 				$_data=Validation::factory($this->request->post());
-				$_data->rule('placenumber', 'not_empty')
+				$_data->rule('place', 'not_empty')
+						->rule('place', 'digit')
+						->rule('parking', 'not_empty')
+						->rule('parking', 'digit')
 							;
 					if($_data->check())
 					{
 						
 						$entity = new Place();
-						$entity->name='Новое машиноместо_'.Arr::get($_data, 'placenumber');
-						$entity->placenumber=Arr::get($_data, 'placenumber');
-						$entity->id_parking=0;
+						$entity->name='Новое машиноместо_'.Arr::get($_data, 'place');
+						$entity->placenumber=Arr::get($_data, 'place');
+						$entity->id_parking=Arr::get($_data, 'parking');
 						$entity->description="";
 						$entity->note="";
 						$entity->status=0;
 						if ($entity->add())
 						{
-							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' добавлено успешно')));
+							Session::instance()->set('ok_mess', array('ok_mess' => __('Машиноместо :placenum добавлено успешно.', array(':placenum'=>Arr::get($_data, 'place')))));
 							
 						} else {
-							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' ошибка при добавлении')));
+							Session::instance()->set('err_mess', array('err_mess' => __('Машиноместо :placenum НЕ добавлено. Ошибка.', array(':placenum'=>Arr::get($_data, 'place')))));
 							
 						}
 						
@@ -177,7 +195,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 						
 					}
-				$this->redirect('place/list');
+				$this->redirect('place/matrix/'.Arr::get($_data, 'parking'));
 			break;
 			
 			case 'del'://удаление Жилого комплекса из списка
@@ -186,17 +204,19 @@ class Controller_Place extends Controller_Template { // класс описыв�
 				$_data->rule('id', 'not_empty')
 							->rule('id', 'digit')
 							;
+							//echo Debug::vars('192', $_data, Arr::get($_data, 'id'));exit;
 					if($_data->check())
 					{
-						$entity = new Place();
-						
+						$entity = new Place(Arr::get($_data, 'id'));
+						//echo Debug::vars('196', $entity);exit;
+						$id_parking=$entity->id_parking;
 						$entity->id=Arr::get($_data, 'id');
 						if($entity->del())
 						{
-							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' удален успешно')));
+							Session::instance()->set('ok_mess', array('ok_mess' => __('Машиноместо :placenum уделено успешно.', array(':placenum'=>$entity->placenumber))));
 							
 						} else {
-							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' ошибка при удалении')));
+							Session::instance()->set('err_mess', array('err_mess' => __('Ошибка при удалении машиноместа :placenum.', array(':placenum'=>$entity->placenumber))));
 							
 						}
 						
@@ -207,7 +227,8 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						
 					}
 					//$this->redirect('place/list');
-					$this->redirect('place/matrix/'.Arr::get($_data, 'id_parking'));
+					//echo Debug::vars('213', $id_parking);exit;
+					$this->redirect('place/matrix/'.$id_parking);
 			break;
 			
 			case 'edit'://просмотр и редакция парковки. Переход на форму редактирования
@@ -235,7 +256,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 			
 			
 			
-			case 'editMatrix'://редактирование машиноместа при вызове его из таблицы
+			case 'editMatrix_'://редактирование машиноместа при вызове его из таблицы
 			//echo Debug::vars('241', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('place', 'not_empty')
@@ -374,8 +395,9 @@ class Controller_Place extends Controller_Template { // класс описыв�
 
 
 		/*10.04.2025 редактирование машиноместа из таблицы
+		*можно удалять удалить
 		*/
-		public function action_addMatrix()
+		public function _action_addMatrix()
 		{
 			
 			echo Debug::vars('297', $_POST, $this->request->param('id'));exit;
