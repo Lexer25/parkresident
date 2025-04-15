@@ -1,8 +1,8 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по парковочной системе
 //echo Debug::vars('3', $rubic_list);
-echo Debug::vars('3', $id_parkingPlace);
-echo Debug::vars('4', $id_parent);
+//echo Debug::vars('3', $id_parkingPlace);
+//echo Debug::vars('4', $id_parent);
 
 if($id_parent > 0)
 {
@@ -109,9 +109,22 @@ echo Form::open('ParkingPlace/control');
 	  
 		<?
 		echo __('Добавить парковочную площадку');
-		echo Form::hidden('id_parent',$id_parent);
+		//echo Form::hidden('id_parent',$id_parent);
 		echo Form::input('name',null , array('placeholder'=>'Новая парковочная площадка'));
 		echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
+		
+		
+		$residenceList=Model::factory('ResidentPlace')->get_list();//получил список id жилых комплексов
+		//echo Debug::vars('35', $residenceList);//exit;
+		$selectList=array();
+		
+		foreach ($residenceList as $key=>$value)
+		{
+			$residence=new Residence(Arr::get($value, 'ID'));
+			$selectList[Arr::get($value, 'ID')]=iconv('windows-1251','UTF-8', $residence->name);
+			
+		}
+		echo 'Жилой комплекс: '.Form::select('parent', $selectList);
 		
 		?>	
 

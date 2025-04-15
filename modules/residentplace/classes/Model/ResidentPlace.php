@@ -20,22 +20,15 @@ class Model_ResidentPlace extends Model {
 	
 	
 	
-	public function _getResidentPlaceInfo($id_rp)// получить информацию о жилом комплексе
+	public function getResidentPlaceSelect($id_rp)// вспомогательная функция для построения select жилых комлексов.
 	{
-		$sql='select hlp.id, hlp.name, hlp.enabled, hlp.created, hlp.maxcount, hlp.parent from hl_parking hlp where hlp.id='. $id_rp;
+		$sql='select hlp.id, hlp.name from hl_parking hlp';
 	//echo Debug::vars('8', $sql);
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array();
 		
-		Foreach ($query as $key => $value)
-		{
-			$res['ID']=Arr::get(Arr::get($query, 0), 'ID');
-			$res['NAME']=iconv('windows-1251','UTF-8',Arr::get(Arr::get($query, 0), 'NAME'));
-			$res['AS_ACTIVE']=Arr::get(Arr::get($query, 0), 'ENABLED');
-		}
-		
-		return Arr::flatten($query);	
+		return $query;	
 		
 	}
 }

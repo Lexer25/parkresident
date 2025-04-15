@@ -89,8 +89,11 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 			
 			
 			case 'add'://добавление парковочной площадки
+			echo Debug::vars('92', $_POST);//exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('name', 'not_empty')
+						->rule('parent', 'not_empty')
+						->rule('parent', 'digit')
 							;
 					if($_data->check())
 					{
@@ -98,15 +101,17 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 						$_entity = new Parking();
 						$_entity->name=Arr::get($_data, 'name');
 						$_entity->is_active=1;
+						$_entity->parent=Arr::get($_data, 'parent');
+						$_entity->count=0;
 						
-						if(filter_var(Arr::get($_data, 'id_parent'), FILTER_VALIDATE_BOOLEAN)) 
+					/* 	if(filter_var(Arr::get($_data, 'id_parent'), FILTER_VALIDATE_BOOLEAN)) 
 					{
 						//$_entity->is_active=1;
 						$_entity->parent=Arr::get($_data, 'id_parent');
 					} else{
 						$_entity->parent=0;
 					}
-					
+					 */
 					
 						
 						if ($_entity->add())
@@ -182,8 +187,8 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 				}
 			break;
 			
-			case 'update'://обновление данных о жилом комплексе. Примем данных и обновление данных о ЖК.
-			//echo Debug::vars('185', $_GET, $_POST); exit;
+			case 'update'://обновление данных о парковочной площадке. Примем данных и обновление данных о родителе.
+			//echo Debug::vars('187', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('id', 'not_empty')
 						->rule('id', 'digit')

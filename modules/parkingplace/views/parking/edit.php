@@ -27,11 +27,25 @@ if(Auth::Instance()->logged_in())
 		
 		<?php 
 	
-		echo __('Название').' '.Form::input('name', iconv('windows-1251','UTF-8', $parking->name), array('maxlength'=>50)).'<br>';
-		echo __('Активен ').Form::checkbox( 'is_active', 1, $parking->is_active == 1).'<br>';
+		echo __('Название парковочной площадки').' '.Form::input('name', iconv('windows-1251','UTF-8', $parking->name), array('maxlength'=>50)).'<br>';
+		echo __('Активен ').Form::checkbox( 'is_active', 1, $parking->is_active == 1, array('disabled'=>'disabled')).'<br>';
 		echo __('ID'). ' '. $parking->id.'<br>';
-		echo __('parent'). ' '. $parking->parent.'<br>';
-		echo __('parent').' '.Form::input('parent', $parking->parent).'<br>';
+		//echo __('parent'). ' '. $parking->parent.'<br>';
+		$residenceList=Model::factory('ResidentPlace')->get_list();//получил список id жилых комплексов
+		//echo Debug::vars('35', $residenceList);//exit;
+		$selectList=array();
+		
+		foreach ($residenceList as $key=>$value)
+		{
+			$residence=new Residence(Arr::get($value, 'ID'));
+			$selectList[Arr::get($value, 'ID')]=iconv('windows-1251','UTF-8', $residence->name);
+			
+		}
+		
+		//echo Debug::vars('44', $selectList, $parking->parent);
+		echo 'Жилой комплекс: '.Form::select('parent', $selectList, $parking->parent);
+		//echo __('parent').' '.Form::input('parent', $parking->parent).'<br>';
+		echo '<br>';
 		echo __('Дата создания'). ' '. $parking->created.'<br>';
 		echo __('Количество мест'). ' '.Form::input('count',  $parking->count).'<br>';
 		

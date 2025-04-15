@@ -1,7 +1,24 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по машноместам
 //echo Debug::vars('3', $id_place);
+$_parking=new Parking(Arr::get(Arr::flatten($id_place), 'ID'));//информация о парковочной площадке
+$placeList=Model::factory('Place')->getChild($_parking->id);//список машиномест на этой парковочной площадке
 echo Form::open('place/control');
+$titleAddPlace=__('Регистрация машиноместа для парковочной площадки ":name". Зарегистрировано :regPlace. Количество мест на площадке :countPlace',
+			array(
+				':name'=>iconv('windows-1251','UTF-8',$_parking->name),
+				':regPlace'=> count($placeList),
+				':countPlace'=>$_parking->count
+				));
+				
+
+$title=__('Список машиномест для парковочной площадки ":name". Зарегистрировано :regPlace. Количество мест на площадке :countPlace',
+			array(
+				':name'=>iconv('windows-1251','UTF-8',$_parking->name),
+				':regPlace'=> count($placeList),
+				':countPlace'=>$_parking->count
+				));
+				
 ?>
 <script type="text/javascript">
      
@@ -15,7 +32,7 @@ echo Form::open('place/control');
 	?>
 	<div class="panel panel-primary">
 		  <div class="panel-heading">
-			<h3 class="panel-title"><?php echo __('Регистрация парковочного места');?></h3>
+			<h3 class="panel-title"><?php echo $titleAddPlace;?></h3>
 		  </div>
 		  <div class="panel-body">
 			<div id="my-alert" class="alert alert-success alert-dismissible" role="alert">
@@ -27,9 +44,9 @@ echo Form::open('place/control');
 			</div>
 			<?
 			echo __('Регистрация парковочного места').'<br>';
-			echo Form::input('placenumber','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required')).'<br>';
+			echo Form::input('placenumber','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'disabled'=>'disabled')).'<br>';
 			//echo Form::input('new_place_name', 'Название машиноместа').'<br>';
-			echo Form::button('todo', 'Зарегистрировать новое машиноместо', array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
+			echo Form::button('todo', 'Зарегистрировать новое машиноместо', array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit','disabled'=>'disabled'));	
 			
 			?>	
 

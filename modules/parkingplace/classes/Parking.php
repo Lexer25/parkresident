@@ -62,8 +62,8 @@ class Parking
 	public function add()
 	{
 		//echo Debug::vars('61', $this->name);exit;
-		$sql='INSERT INTO HL_parking (NAME, PARENT)
-			values (\''.$this->name.'\', '.$this->parent.')';
+		$sql='INSERT INTO HL_parking (NAME, PARENT, ENABLED, MAXCOUNT)
+			values (\''.$this->name.'\', '.$this->parent.', '.$this->is_active.', '.$this->count.')';
 			
 			
 		//echo Debug::vars('783', $sql);exit;

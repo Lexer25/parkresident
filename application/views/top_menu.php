@@ -14,6 +14,7 @@
 	<div class="navbar-collapse collapse">
 		
 				<ul class="nav navbar-nav">
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='garage') echo 'class="active"';?>><?php echo  HTML::anchor('parkingPlace', __('Паркинг'), array('class'=>'active')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='placeList') echo 'class="active"';?>><?php  echo  HTML::anchor('place/list', __('Машиноместа'));?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='garage') echo 'class="active"';?>><?php echo  HTML::anchor('garage', __('Гараж'), array('class'=>'active')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='event') echo 'class="active"';?>><?php  echo  HTML::anchor('rubic/event', __('События')); ?></li>

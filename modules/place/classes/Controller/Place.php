@@ -82,23 +82,15 @@ class Controller_Place extends Controller_Template { // класс описыв�
 							;
 					if($query->check())
 					{
-
-						$id_place=Model::factory('place')->getChild(Arr::get($query, 'id'));
-						
+						//$id_place=Model::factory('place')->getChild(Arr::get($query, 'id'));
+						$id_place[]=array('ID'=>$id);
 					} else 
 					{
-						//echo Debug::vars('75');exit;
-						//$id_parking=0; // номер родительской паровки не указан. надо показывать все ЖК.
-						//$id_parking=Model::factory('ParkingPlace')->get_list();
 						$id_place=Model::factory('place')->getAll();
-						
 					}
-		
+		//echo Debug::vars('90',$id_place );exit;
 		$content = View::factory('place/list', array(
-			
 			'id_place'=>$id_place,
-			
-		
 		));
         $this->template->content = $content;
 	}
@@ -106,7 +98,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	
 	/** 10.04.2025 	Показываю список машиномест для указанного паркинга
 	*в виде матрицы
-	*если паркинг НЕ указан, то ничего не показываю..
+	*если паркинг НЕ указан, то ничего не показываю - в этом отличие от list
 	*/
 	public function action_matrix()//
 	{
@@ -118,22 +110,14 @@ class Controller_Place extends Controller_Template { // класс описыв�
 							;
 					if($query->check())
 					{
-
-						//$id_place=Model::factory('place')->getChild(Arr::get($query, 'id'));
 						$id_place[]=array('ID'=>$id);
-						
-						
 					} else 
 					{
 						$this->redirect('parkingPlace');
-						
 					}
-		//$id_place[]=array('ID'=>$id);
-		$content = View::factory('place/matrix', array(
-			
-			'id_place'=>$id_place,
-			
 		
+		$content = View::factory('place/matrix', array(
+			'id_place'=>$id_place,
 		));
         $this->template->content = $content;
 	}
@@ -291,7 +275,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 			
 			
 			case 'update'://обновление данных о жилом комплексе. Примем данных и обновление данных о ЖК.
-			echo Debug::vars('185', $_GET, $_POST); exit;
+			//echo Debug::vars('278', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('id', 'not_empty')
 						->rule('id', 'digit')
@@ -342,8 +326,8 @@ class Controller_Place extends Controller_Template { // класс описыв�
 				{
 					
 					
-					//echo Debug::vars('208', $_data);//exit;
-					$entity = new PlaceNP (Arr::get($_data, 'placenumber'), Arr::get($_data, 'id_parking'));
+					echo Debug::vars('208', $_data);exit;
+					$entity = new Place (Arr::get($_data, 'placenumber'), Arr::get($_data, 'id_parking'));
 					$entity->placenumber=Arr::get($_data, 'placenumber');
 					$entity->name=Arr::get($_data, 'name');
 					$entity->id_parking=Arr::get($_data, 'id_parking');
