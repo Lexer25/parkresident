@@ -128,6 +128,8 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	public function action_control()
 	{
 		//echo Debug::vars('134', $_POST);exit;
+		//echo Debug::vars('131',  $this->request->referrer());exit;
+		$requestFrom=$this->request->referrer();
 		$post=Validation::factory($this->request->post());
 					$post->rule('todo', 'not_empty')
 							
@@ -179,7 +181,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 						
 					}
-				$this->redirect('place/matrix/'.Arr::get($_data, 'parking'));
+				$this->redirect($requestFrom);
 			break;
 			
 			case 'del'://удаление Жилого комплекса из списка
@@ -212,7 +214,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 					}
 					//$this->redirect('place/list');
 					//echo Debug::vars('213', $id_parking);exit;
-					$this->redirect('place/matrix/'.$id_parking);
+					$this->redirect($requestFrom);
 			break;
 			
 			case 'edit'://просмотр и редакция парковки. Переход на форму редактирования
@@ -311,62 +313,6 @@ class Controller_Place extends Controller_Template { // класс описыв�
 				}
 				$this->redirect('place/list');
 			break;
-			
-			
-			case 'updateNP'://обновление данных о жилом комплексе. Примем данных и обновление данных о ЖК.
-			//echo Debug::vars('306', $_GET, $_POST); exit;
-				$_data=Validation::factory($this->request->post());
-				$_data->rule('placenumber', 'not_empty')
-						->rule('placenumber', 'digit')
-						->rule('id_parking', 'not_empty')
-						->rule('id_parking', 'digit')
-						
-						;
-				if($_data->check())
-				{
-					
-					
-					echo Debug::vars('208', $_data);exit;
-					$entity = new Place (Arr::get($_data, 'placenumber'), Arr::get($_data, 'id_parking'));
-					$entity->placenumber=Arr::get($_data, 'placenumber');
-					$entity->name=Arr::get($_data, 'name');
-					$entity->id_parking=Arr::get($_data, 'id_parking');
-					$entity->description=Arr::get($_data, 'description');
-					$entity->note=Arr::get($_data, 'note');
-					$entity->status=Arr::get($_data, 'status');
-					
-					if(Arr::get($_data, 'status') == '') $entity->status=0;
-					if(Arr::get($_data, 'id_parking') == '') $entity->id_parking=0;
-					//echo Debug::vars('211', $entity, is_null($entity->id));exit;
-					if(is_null($entity->id))
-					{
-						//нет такого машиноместа, надо добавлять.
-						//echo Debug::vars('339');exit;
-						if($entity->add())
-						{
-							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' обновлен успешно')));
-						} else {
-							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
-						}
-						
-					} else { //есть такое машиноместо. Надо обновлять.
-					//echo Debug::vars('348');exit;
-						if($entity->update())
-							{
-								Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' обновлен успешно')));
-							} else {
-								Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
-							}
-					}
-				} else 
-				{
-					echo Debug::vars('336');exit;
-					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
-				}
-				$this->redirect('place/matrix/'.Arr::get($_data, 'id_parking'));
-			break;
-			
-			
 			
 			default:
 				//echo Debug::vars('755', $_GET, $_POST); exit;

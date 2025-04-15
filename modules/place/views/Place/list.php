@@ -1,24 +1,43 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по машноместам
 //echo Debug::vars('3', $id_place);
-$_parking=new Parking(Arr::get(Arr::flatten($id_place), 'ID'));//информация о парковочной площадке
-$placeList=Model::factory('Place')->getChild($_parking->id);//список машиномест на этой парковочной площадке
-echo Form::open('place/control');
-$titleAddPlace=__('Регистрация машиноместа для парковочной площадки ":name". Зарегистрировано :regPlace. Количество мест на площадке :countPlace',
-			array(
-				':name'=>iconv('windows-1251','UTF-8',$_parking->name),
-				':regPlace'=> count($placeList),
-				':countPlace'=>$_parking->count
-				));
-				
+if(count($id_place) == 1)
+{
+	$_parking=new Parking(Arr::get(Arr::flatten($id_place), 'ID'));//информация о парковочной площадке
+	$placeList=Model::factory('Place')->getChild($_parking->id);//список машиномест на этой парковочной площадке
+	echo Form::open('place/control');
+	$titleAddPlace=__('Регистрация машиноместа для парковочной площадки ":name". Зарегистрировано :regPlace. Количество мест на площадке :countPlace',
+				array(
+					':name'=>iconv('windows-1251','UTF-8',$_parking->name),
+					':regPlace'=> count($placeList),
+					':countPlace'=>$_parking->count
+					));
+					
 
-$title=__('Список машиномест для парковочной площадки ":name". Зарегистрировано :regPlace. Количество мест на площадке :countPlace',
-			array(
-				':name'=>iconv('windows-1251','UTF-8',$_parking->name),
-				':regPlace'=> count($placeList),
-				':countPlace'=>$_parking->count
-				));
-				
+	$title=__('Список машиномест для парковочной площадки ":name". Зарегистрировано :regPlace. Количество мест на площадке :countPlace',
+				array(
+					':name'=>iconv('windows-1251','UTF-8',$_parking->name),
+					':regPlace'=> count($placeList),
+					':countPlace'=>$_parking->count
+					));
+} else {
+	
+		$placeList=Model::factory('Place')->getAll();//список машиномест на этой парковочной площадке
+		
+		$titleAddPlace=__('Регистрация машиноместа для парковочных площадок. Общее количество мест на площадке :countPlace',
+					array(
+						
+						':regPlace'=> count($placeList),
+						':countPlace'=>count($placeList)
+						));
+						
+
+		$title=__('Список машиномест для всех парковочных площадок. Парковочных площадок :regPlace. Зарегистрировано машиномест на площадках :countPlace',
+					array(
+						':regPlace'=> count($id_place),
+						':countPlace'=>count($placeList)
+						));
+}	
 ?>
 <script type="text/javascript">
      
@@ -27,7 +46,7 @@ $title=__('Список машиномест для парковочной пл�
   	});	
 	
 </script> 
-<?php if(Auth::Instance()->logged_in())
+<?php if(Auth::Instance()->logged_in() and false)
 {
 	?>
 	<div class="panel panel-primary">
@@ -61,7 +80,7 @@ echo Form::open('place/control');
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?echo __('Список машиномест. Зарегистрировано count машиномест.', array('count'=>count($id_place)))?></h3>
+		<h3 class="panel-title"><?echo $title;?></h3>
 	</div>
 	<div class="panel-body">
 		<?php
@@ -88,8 +107,9 @@ echo Form::open('place/control');
 		<?php 
 		$i=0;
 		$checked='no';
-		//вывод списка машиномест для указанных 
-		foreach($id_place as $key=>$value)
+		//вывод списка машиномест для указанного паркинга
+		
+		foreach($placeList as $key=>$value)
 		{
 			$place=new Place(Arr::get($value, 'ID'));
 			//echo Debug::vars('68', $key, $value, $place); exit;
@@ -102,21 +122,21 @@ echo Form::open('place/control');
 				echo '</td>';
 				echo '<td>'.Form::radio( 'id', $place->id, Arr::get($value, 'is_active' == 1)).' '.$place->id.' '.$place->created.'</td>';
 
-		if(Auth::Instance()->logged_in())
-		{				
-						echo '<td>'.HTML::anchor('place/edit/'.$place->id,
-									$place->placenumber)
-									.'</td>';
-		} else 
-		{
-						echo '<td>'.$place->placenumber.'</td>';
-			
-}
+				if(Auth::Instance()->logged_in())
+				{				
+					echo '<td>'.HTML::anchor('place/edit/'.$place->id,
+							$place->placenumber)
+							.'</td>';
+				} else 
+				{
+					echo '<td>'.$place->placenumber.'</td>';
+					
+				}
 				echo '<td>'.iconv('windows-1251','UTF-8', $place->name). '</td>';
 				echo '<td>'.iconv('windows-1251','UTF-8',$place->description).'</td>';
 				echo '<td>'.iconv('windows-1251','UTF-8',$place->note).'</td>';
 				$_parking = new Parking($place->id_parking);
-				echo '<td>'. iconv('windows-1251','UTF-8', $place->id_parking). iconv('windows-1251','UTF-8',$_parking->name).'</td>';
+				echo '<td>'. iconv('windows-1251','UTF-8',$_parking->name).'</td>';
 				echo '<td>'.HTML::anchor('garage/edit_garage/'.Arr::get($value,'ID_GARAGE'),  iconv('windows-1251','UTF-8', Arr::get($value,'GARAGE_NAME'))).' </td>';
 				
 			echo '</tr>';	

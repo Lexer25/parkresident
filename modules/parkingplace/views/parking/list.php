@@ -29,11 +29,9 @@ echo Form::open('ParkingPlace/control');
 			<th><?echo Kohana::message('rubic','select');?></th>
 			<th><?echo __('ID парковочной площадки');?></th>
 			<th><?echo __('Название парковочной площадки');?></th>
-			<th><?echo __('is_active');?></th>
-			<th><?echo __('created');?></th>
-			<th><?echo __('modify');?></th>
-			<th><?echo __('parent');?></th>
+			<th><?echo __('Жилокй комплекс');?></th>
 			<th><?echo __('Количество машиномест');?></th>
+			<th><?echo __('Зарегистрировано машиномест');?></th>
 			
 		</tr>
 		<?php 
@@ -68,12 +66,15 @@ echo Form::open('ParkingPlace/control');
 					echo HTML::anchor('place/matrix/'.Arr::get($value,'ID'), 'Matrix');
 					
 				echo '</td>';
-				echo '<td>'.$parkingPlace->is_active.'</td>';
-				echo '<td>'.$parkingPlace->created.'</td>';
-				echo '<td>'.$parkingPlace->modify.'</td>';
+				//echo '<td>'.$parkingPlace->is_active.'</td>';
+				//echo '<td>'.$parkingPlace->created.'</td>';
+				//echo '<td>'.$parkingPlace->modify.'</td>';
 				$_residence=new Residence($parkingPlace->parent);
 				echo '<td>'.iconv('windows-1251','UTF-8', $_residence->name).'</td>';
 				echo '<td>'.$parkingPlace->count.'</td>';
+				//Подсчет количества зарегистрированных машиномест
+				$placeList=Model::factory('Place')->getChild($parkingPlace->id);
+				echo '<td>'.count($placeList).'</td>';
 				
 				
 			echo '</tr>';	
@@ -108,14 +109,11 @@ echo Form::open('ParkingPlace/control');
 	  <div class="panel-body">
 	  
 		<?
-		echo __('Добавить парковочную площадку');
-		//echo Form::hidden('id_parent',$id_parent);
-		echo Form::input('name',null , array('placeholder'=>'Новая парковочная площадка'));
-		echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
+		
 		
 		
 		$residenceList=Model::factory('ResidentPlace')->get_list();//получил список id жилых комплексов
-		//echo Debug::vars('35', $residenceList);//exit;
+		
 		$selectList=array();
 		
 		foreach ($residenceList as $key=>$value)
@@ -125,6 +123,15 @@ echo Form::open('ParkingPlace/control');
 			
 		}
 		echo 'Жилой комплекс: '.Form::select('parent', $selectList);
+		
+		echo '<br>';
+		echo __('Название парковочной площадки');
+		//echo Form::hidden('id_parent',$id_parent);
+		echo Form::input('name',null , array('placeholder'=>'Новая парковочная площадка'));
+		echo '<br>';
+		echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
+		
+		
 		
 		?>	
 
