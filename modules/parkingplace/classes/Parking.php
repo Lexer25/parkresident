@@ -131,7 +131,7 @@ class Parking
 			} catch (Exception $e) {
 				Log::instance()->add(Log::DEBUG, 'Line 139 '. $e->getMessage());
 				$this->mess=$e->getMessage();	
-				return true;				
+				return false;				
 			}
 	}
 	

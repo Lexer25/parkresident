@@ -7,7 +7,7 @@
 if($id_parent > 0)
 {
 	$_parent=new Residence($id_parent);
-	$_title='Список парковочных площадок '. iconv('windows-1251','UTF-8', $_parent->name);
+	$_title='Список парковочных площадок жилого комлпекса "'. iconv('windows-1251','UTF-8', $_parent->name).'"';
 } else {
 	
 	$_title='Список всех парковочных площадок';
@@ -41,11 +41,7 @@ echo Form::open('ParkingPlace/control');
 		$total_occup=0;
 		$total_vacant=0;
 		
-			$dis1='';
-			$dis1_arr='';
-			$dis2='';
-			$dis2_lighten='';
-			$dis3='';
+		
 							
 							
 		foreach($id_parkingPlace as $key=>$value)
@@ -100,47 +96,60 @@ echo Form::open('ParkingPlace/control');
 
 
 
-<?php if(Auth::Instance()->logged_in())
-		{?>
-	<div class="panel panel-primary">
-	  <div class="panel-heading">
-		<h3 class="panel-title"><?echo __('Добавить парковочную площадку')?></h3>
-	  </div>
-	  <div class="panel-body">
-	  
-		<?
-		
-		
-		
-		$residenceList=Model::factory('ResidentPlace')->get_list();//получил список id жилых комплексов
-		
-		$selectList=array();
-		
-		foreach ($residenceList as $key=>$value)
-		{
-			$residence=new Residence(Arr::get($value, 'ID'));
-			$selectList[Arr::get($value, 'ID')]=iconv('windows-1251','UTF-8', $residence->name);
+<?php 
+
+if($id_parent > 0)
+{
+
+	
+	
+
+if(Auth::Instance()->logged_in())
+			{?>
+		<div class="panel panel-primary">
+		  <div class="panel-heading">
+			<h3 class="panel-title"><?echo __('Добавить парковочную площадку')?></h3>
+		  </div>
+		  <div class="panel-body">
+		  
+			<?
 			
-		}
-		echo 'Жилой комплекс: '.Form::select('parent', $selectList);
-		
-		echo '<br>';
-		echo __('Название парковочной площадки');
-		//echo Form::hidden('id_parent',$id_parent);
-		echo Form::input('name',null , array('placeholder'=>'Новая парковочная площадка'));
-		echo '<br>';
-		echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
-		
-		
-		
-		?>	
+			
+			
+			$residenceList=Model::factory('ResidentPlace')->get_list();//получил список id жилых комплексов
+			
+			$selectList=array();
+			
+			foreach ($residenceList as $key=>$value)
+			{
+				$residence=new Residence(Arr::get($value, 'ID'));
+				$selectList[Arr::get($value, 'ID')]=iconv('windows-1251','UTF-8', $residence->name);
+				
+			}
+			echo 'Жилой комплекс: '.Form::select('parent', $selectList, $id_parent);
+			
+			echo '<br>';
+			echo __('Название парковочной площадки');
+			//echo Form::hidden('id_parent',$id_parent);
+			echo Form::input('name',null , array('placeholder'=>'Новая парковочная площадка'));
+			echo '<br>';
+			echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
+			
+			
+			
+			?>	
 
-	  </div>
+		  </div>
 
-	</div>
+		</div>
 
 
-<?php }?>
+	<?php }
+
+} else {
+//ничего не показывать, т.к. площадок много, и добавлять ничего не надо.	
+	
+} ?>
 
 
 

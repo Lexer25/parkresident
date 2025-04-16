@@ -56,15 +56,32 @@ class Residence
 	public function add()
 	{
 		//echo Debug::vars('61', $this->name);exit;
-		$sql='INSERT INTO HL_resident (NAME)
-			values (\''.$this->name.'\')';
+		//получаю id вновь добавляемого жилого комплекса
+		$sql='select gen_id(gen_HL_resident_id,1)
+			from RDB$DATABASE';
+			
+			try{
+			$id = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->get('GEN_ID');
+				$this->id=$id;
+				
+				
+			} catch (Exception $e) {
+					Log::instance()->add(Log::NOTICE, '794 '. $e->getMessage());
+					return false;
+		}	
+		
+		$sql='INSERT INTO HL_resident (ID, NAME)
+			values ('.$this->id.', \''.$this->name.'\')';
 			
 			
-		//echo Debug::vars('783', $sql);exit;
+		
 		try
 				{
 				$query = DB::query(Database::INSERT, iconv('UTF-8','windows-1251',$sql))
 				->execute(Database::instance('fb'));
+				
 				return true;
 				} catch (Exception $e) {
 					Log::instance()->add(Log::NOTICE, '794 '. $e->getMessage());
@@ -123,7 +140,7 @@ class Residence
 			} catch (Exception $e) {
 				Log::instance()->add(Log::DEBUG, 'Line 139 '. $e->getMessage());
 				$this->mess=$e->getMessage();	
-				return true;				
+				return false;				
 			}
 	}
 	

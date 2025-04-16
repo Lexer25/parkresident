@@ -18,11 +18,12 @@ echo Form::open('ResidentPlace/control');
 			<th><?echo Kohana::message('rubic','select');?></th>
 			<th><?echo Kohana::message('rubic','rp_id');?></th>
 			<th><?echo Kohana::message('rubic','rp_name');?></th>
-			<th><?echo __('is_active');?></th>
+			<!--<th><?echo __('is_active');?></th>
 			<th><?echo __('created');?></th>
-			<th><?echo __('modify');?></th>
-			<!--<th><?echo __('parking_count');?></th>
-			<th><?echo __('Общее количество машиномест');?></th>-->
+			<th><?echo __('modify');?></th>-->
+			<th><?echo __('Количество парковочных<br>площадок');?></th>
+			<th><?echo __('Общее количество машиномест<br>в жилом комплексе');?></th>
+			<th><?echo __('Общее зарегистрированных машиномест<br>в жилом комплексе');?></th>
 			
 		</tr>
 		<?php 
@@ -44,18 +45,32 @@ echo Form::open('ResidentPlace/control');
 			
 			$residence=new Residence(Arr::get($value, 'ID'));
 			echo '<tr>';
-				if($i==0) echo '<td>'.Form::radio('id_rp', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
-				if($i>0) echo '<td>'.Form::radio('id_rp', Arr::get($value,'ID'), FALSE).'</td>';
+				if($i==0) echo '<td>'.Form::radio('id', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
+				if($i>0) echo '<td>'.Form::radio('id', Arr::get($value,'ID'), FALSE).'</td>';
 				echo '<td>'.$residence->id.'</td>';
-				//echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , iconv('windows-1251','UTF-8', $residence->name)).'</td>';
-				echo '<td>'. iconv('windows-1251','UTF-8', $residence->name).'</td>';
-				echo '<td>'.$residence->is_active.'</td>';
-				echo '<td>'.$residence->created.'</td>';
-				echo '<td>'.$residence->modify.'</td>';
-				//$parkinPlace=Model::factory('parking')->get_list_parking($residence->id);
-				//echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
-				//echo '<td>'. HTML::anchor('parking?id_resident='.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
+				echo '<td>'. HTML::anchor('parkingPlace?id_resident='.Arr::get($value,'ID', 0) , iconv('windows-1251','UTF-8', $residence->name)).'</td>';
 				
+				$parkinPlace=Model::factory('ParkingPlace')->get_list_for_parent($residence->id);//список парковок в этом жилом комплексе
+				//echo Debug::vars('56', $parkinPlace);//exit;
+				$placeCount=0;
+				$registerPlaceCount=0;
+				foreach($parkinPlace as $key2=>$value2)
+				{
+					//echo Debug::vars('59', $value);//exit;
+					$parloin=new Parking(Arr::get($value2, 'ID'));
+					$placeCount=$placeCount + $parloin->count;//количество машиномест на парковке
+					
+					$registerPlace= count(Model::factory('Place')->getChild($parloin->id));
+					$registerPlaceCount = $registerPlaceCount + $registerPlace;
+					
+				}
+				//echo Debug::vars('64', $placeCount);//exit;
+				echo '<td>'. HTML::anchor('parkingPlace?id_resident='.Arr::get($value,'ID', 0) , count($parkinPlace)).'</td>';
+				//подсчет количества мест в каждой парковке
+				
+				echo '<td>'. $placeCount.'</td>';
+				//подсчет количества зарегистрированных машиномест
+				echo '<td>'. $registerPlaceCount.'</td>';
 			echo '</tr>';	
 			
 		}
@@ -89,7 +104,7 @@ echo Form::open('ResidentPlace/control');
 	  
 		<?
 		echo Kohana::message('rubic','rp_add_rubic');
-		echo Form::input('add_rp_name', 'Новый жилой комплекс');
+		echo Form::input('name',null , array('placeholder'=>'Новый жилой комплекс'));
 		echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
 		
 		?>	

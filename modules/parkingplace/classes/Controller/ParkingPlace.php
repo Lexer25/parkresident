@@ -119,7 +119,7 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' добавлено успешно')));
 							
 						} else {
-							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при добавлении')));
+							Session::instance()->set('e_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при добавлении')));
 							
 						}
 						
@@ -140,15 +140,16 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 							;
 					if($_data->check())
 					{
-						$_entity = new Parking();
+						$_entity = new Parking(Arr::get($_data, 'id'));
 						
-						$_entity->id=Arr::get($_data, 'id');
+						//echo Debug::vars('151',Arr::get($_data, 'id'),  $_entity );exit;
 						if($_entity->del())
 						{
-							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' удален успешно')));
+							Session::instance()->set('ok_mess', array('ok_mess' => __('Парковочная площадка :placeName удалена успешно', array(':placeName'=>iconv('windows-1251','UTF-8', $_entity->name)))));
 							
 						} else {
-							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' ошибка при удалении')));
+							
+							Session::instance()->set('e_mess', array('ok_mess' => __('Ошибка при удалении парковочной площадки :placeName. Парковочные места должны быть удалены заранее.', array(':placeName'=>iconv('windows-1251','UTF-8', $_entity->name)))));
 							
 						}
 						
@@ -217,7 +218,7 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' обновлен успешно')));
 							
 						} else {
-							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
+							Session::instance()->set('e_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
 							
 						}
 						

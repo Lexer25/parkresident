@@ -41,7 +41,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 						$id_resident=Model::factory('residentPlace')->get_list();
 						
 					}
-		$content = View::factory('list', array(
+		$content = View::factory('residentplace/list', array(
 			
 			'id_resident'=>$id_resident,
 			
@@ -70,22 +70,24 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 			
 			
 			
-			case 'add'://добавление нового жилого комлпекса add_rp_name
+			case 'add'://добавление нового жилого комлпекса name
 				$_data=Validation::factory($this->request->post());
-				$_data->rule('add_rp_name', 'not_empty')
+				$_data->rule('name', 'not_empty')
 							;
 					if($_data->check())
 					{
-						//echo Debug::vars('113', Arr::get($_data, 'add_rp_name'));exit;
-						$residence = new Residence();
-						$residence->name=Arr::get($_data, 'add_rp_name');
-						$residence->is_active=1;
-						if ($residence->add())
+						//echo Debug::vars('113', Arr::get($_data, 'name'));exit;
+						$_entity = new Residence();
+						$_entity->name=Arr::get($_data, 'name');
+						$_entity->is_active=1;
+						
+						if ($_entity->add())
 						{
-							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' добавлено успешно')));
+							
+							Session::instance()->set('ok_mess', array('ok_mess' => __('Жилой комплекс ":name" добавлено успешно', array(':name'=>$_entity->name))));
 							
 						} else {
-							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' ошибка при добавлении')));
+							Session::instance()->set('e_mess', array('ok_mess' => __('Ошибка при добавлении жилого комлпекса ":name"'), array(':name'=>(Arr::get($_data, 'name')))));
 							
 						}
 						
@@ -101,24 +103,32 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 			case 'del'://удаление Жилого комплекса из списка
 				//echo Debug::vars('301', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
-				$_data->rule('id_rp', 'not_empty')
-							->rule('id_rp', 'digit')
+				$_data->rule('id', 'not_empty')
+						->rule('id', 'digit')
 							;
 					if($_data->check())
 					{
-						$residence = new Residence();
+						$_entity = new Residence(Arr::get($_data, 'id'));
+							
+						// определить: есть ли парковочные площади? Если есть, то запретить удаления.
+						$parkingPlaceCount=Model::factory('ParkingPlace')->getCount($_entity->id);
+						//echo Debug::vars('115', $parkingPlaceCount);exit;
 						
-						$residence->id=Arr::get($_data, 'id_rp');
-						if($residence->del())
+						if(!count(Model::factory('ParkingPlace')->getCount($_entity->id)))
 						{
-							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' удален успешно')));
-							
+							if($_entity->del())
+							{
+								Session::instance()->set('ok_mess', array('ok_mess' => __('Жилой комплкс ":name" удален успешно', array(':name'=>iconv('windows-1251','UTF-8',$_entity->name)))));
+								
+							} else {
+								Session::instance()->set('e_mess', array('ok_mess' => __('Не могу удалить жилой комплекс ":name".', array(':name'=>iconv('windows-1251','UTF-8',$_entity->name), ':mess'=>$_entity->mess))));
+								
+							}
+						
 						} else {
-							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' ошибка при удалении')));
-							
-						}
-						
-						
+
+								Session::instance()->set('e_mess', array('ok_mess' => __('Не могу удалить жилой комплекс ":name". Необходимо удалить парковочные площадки, входящие в этот жилой комплекс.', array(':name'=>iconv('windows-1251','UTF-8',$_entity->name)))));
+						}							
 						
 					} else {
 						Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
@@ -130,15 +140,15 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 			case 'edit'://просмотр и редакция парковки. Переход на форму редактирования
 			//echo Debug::vars('235', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
-				$_data->rule('id_rp', 'not_empty')
-						->rule('id_rp', 'digit')
+				$_data->rule('id', 'not_empty')
+						->rule('id', 'digit')
 						;
 				if($_data->check())
 				{
-					//echo Debug::vars('167', $_data, Arr::get($_data, 'id_rp'));//exit;
-					$residence = new Residence(Arr::get($_data, 'id_rp'));
+					//echo Debug::vars('167', $_data, Arr::get($_data, 'id'));//exit;
+					$residence = new Residence(Arr::get($_data, 'id'));
 					//echo Debug::vars('169', $residence);exit;
-					$content = View::factory('edit', array(
+					$content = View::factory('residentplace/edit', array(
 							'residence'=>$residence,
 							));
 					$this->template->content = $content;
@@ -153,14 +163,14 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 			case 'update'://обновление данных о жилом комплексе. Примем данных и обновление данных о ЖК.
 			//echo Debug::vars('185', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
-				$_data->rule('id_rp', 'not_empty')
-						->rule('id_rp', 'digit')
+				$_data->rule('id', 'not_empty')
+						->rule('id', 'digit')
 						->rule('name', 'not_empty')
 						
 						;
 				if($_data->check())
 				{
-					$residence = new Residence(Arr::get($_data, 'id_rp'));
+					$residence = new Residence(Arr::get($_data, 'id'));
 					$residence->name=Arr::get($_data, 'name');
 					if(is_null(Arr::get($_data, 'is_active'))) $residence->is_active=0;
 					if(filter_var(Arr::get($_data, 'is_active'), FILTER_VALIDATE_BOOLEAN)) 
@@ -174,7 +184,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' обновлен успешно')));
 							
 						} else {
-							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
+							Session::instance()->set('e_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
 							
 						}
 						

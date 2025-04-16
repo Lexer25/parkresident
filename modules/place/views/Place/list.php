@@ -120,12 +120,13 @@ echo Form::open('place/control');
 					echo ($i+1);
 					//echo ' '. Debug::vars('82', $place);
 				echo '</td>';
-				echo '<td>'.Form::radio( 'id', $place->id, Arr::get($value, 'is_active' == 1)).' '.$place->id.' '.$place->created.'</td>';
+				echo '<td>'.Form::radio( 'id', $place->id, Arr::get($value, 'is_active' == 1)).' '.$place->id.'</td>';
 
 				if(Auth::Instance()->logged_in())
 				{				
 					echo '<td>'.HTML::anchor('place/edit/'.$place->id,
 							$place->placenumber)
+							.' ('.$place->id.')'
 							.'</td>';
 				} else 
 				{

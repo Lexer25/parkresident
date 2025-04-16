@@ -211,7 +211,7 @@ class Controller_Cvstest extends Controller_Template { // класс описы�
 		} catch (Kohana_Request_Exception $e) {
 			//echo  Debug::vars('195', $e->getMessage()); exit;
 			
-				Session::instance()->set('err_mess', array ('status'=>0, 'res'=>$e->getMessage()));
+				Session::instance()->set('e_mess', array ('status'=>0, 'res'=>$e->getMessage()));
 				$this->redirect('grz');
 		}
 		

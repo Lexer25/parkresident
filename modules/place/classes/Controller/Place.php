@@ -170,7 +170,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 							Session::instance()->set('ok_mess', array('ok_mess' => __('Машиноместо :placenum добавлено успешно.', array(':placenum'=>Arr::get($_data, 'place')))));
 							
 						} else {
-							Session::instance()->set('err_mess', array('err_mess' => __('Машиноместо :placenum НЕ добавлено. Ошибка.', array(':placenum'=>Arr::get($_data, 'place')))));
+							Session::instance()->set('e_mess', array('err_mess' => __('Машиноместо :placenum НЕ добавлено. Ошибка.', array(':placenum'=>Arr::get($_data, 'place')))));
 							
 						}
 						
@@ -202,7 +202,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 							Session::instance()->set('ok_mess', array('ok_mess' => __('Машиноместо :placenum уделено успешно.', array(':placenum'=>$entity->placenumber))));
 							
 						} else {
-							Session::instance()->set('err_mess', array('err_mess' => __('Ошибка при удалении машиноместа :placenum.', array(':placenum'=>$entity->placenumber))));
+							Session::instance()->set('e_mess', array('err_mess' => __('Ошибка при удалении машиноместа :placenum.', array(':placenum'=>$entity->placenumber))));
 							
 						}
 						
@@ -304,7 +304,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						{
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' обновлен успешно')));
 						} else {
-							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
+							Session::instance()->set('e_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
 						}
 				} else 
 				{
@@ -361,7 +361,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' обновлен успешно')));
 							
 						} else {
-							Session::instance()->set('err_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
+							Session::instance()->set('e_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
 							
 						}
 						
