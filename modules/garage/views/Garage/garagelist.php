@@ -3,6 +3,7 @@
 //echo Debug::vars('2', $get_stat_garage_place);
 echo Form::open('garage/control');
 ?>
+
 <script type="text/javascript">
      
   	$(function() {		

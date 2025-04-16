@@ -118,7 +118,7 @@ $(function() {
 /* echo Debug::vars('11', 
 	$garage_info);  */
 // страница отображения данных по гаражу
-//echo Debug::vars('5', $_SESSION);
+//echo Debug::vars('5', $place_list);
 echo Form::open('garage/control');
 
 //if(Auth::Instance()->logged_in())
@@ -188,10 +188,14 @@ echo Form::open('garage/control');
 		<h3 class="panel-title"><?echo __('Список машиномест, входящих в гараж.');?></h3>
 	</div>
 	<div class="panel-body">
-
-		<table id="tab0" class="table table-striped table-hover table-condensed tablesorter">
-
-
+	<?php
+	
+	
+	
+	?>
+	
+	<hr>
+	<table id="tab0" class="table table-striped table-hover table-condensed tablesorter">
 	<thead allign="center">
 		<tr>
 			<th><?echo Kohana::message('rubic','pp');?></th>
@@ -247,23 +251,68 @@ echo Form::open('garage/control');
 
 			
 		<a class="btn btn-primary" data-toggle="collapse" href="#target_place">Развернуть список машиномест</a>
-<div class="panel panel-default">
+		
+	
+	
+	
+		
+	<div class="panel panel-default">
 		<!-- #target -->
 	<div class="collapse" id="target_place">
 
 		<div>
 		<?php 
 		echo Form::button('todo', 'Добавить/изменить машиноместо', array('value'=>'add_place_to_garage','class'=>'btn btn-success', 'type' => 'submit'));
-		//echo Debug::vars('197', $place_list ); //exit;
-		if(isset($place_list))
+
+
+			//формирую массив парковочных площадей
+		$placeList=array();
+		foreach (Model::factory('ParkingPlace')->get_list() as $key=>$value)
+		{
+			$placeList[Arr::get($value, 'ID')] = Model::factory('Place')->getChild(Arr::get($value, 'ID'));
+		}
+		
+		//echo Debug::vars('206', $placeList);//exit;
+	
+			
+	foreach($placeList as $key2=>$value2)
+	{
+		
+		$place_list2=array();	
+		$parking=new Parking ($key2);
+		//echo Debug::vars('211', iconv('windows-1251','UTF-8', $parking->name));//exit;
+		
+		?>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title"><?php echo __('Список машиномест парковочной площадки :name.', array(':name'=>iconv('windows-1251','UTF-8', $parking->name)));?></h3>
+				</div>
+				<div class="panel-body">
+			
+			
+		<?php
+		
+		//echo Debug::vars('215', $value2);//exit;
+
+		//echo Debug::vars('227', $value2);//exit;
+		foreach($value2 as $key3=>$value3)
+		{
+			
+			$place=new Place(Arr::get($value3, 'ID'));
+			$place_list2[$place->id]['ID']=$place->id;
+			$place_list2[$place->id]['PLACENUMBER']=$place->placenumber;
+			
+			
+		}
+		//echo Debug::vars('233', $place_list2);//exit;
+		$place_list=$place_list2;
+		if(count($place_list))
 			{ ?>
 			
 			<table class="table table-striped table-hover table-condensed">
 				<tbody>
 				<?php 
-				//echo Debug::vars('105', $place_busy);
-				//echo Debug::vars('106', array_key_exists(5, $place_busy));
-				
+								
 				$i=0;
 				$checked='no';
 				$column=10;// количество колонок в таблице
@@ -291,11 +340,26 @@ echo Form::open('garage/control');
 				</tbody>
 			</table>
 			<?php 
-			echo Form::button('todo', 'Добавить/изменить машиноместо', array('value'=>'add_place_to_garage','class'=>'btn btn-success', 'type' => 'submit'));
+			
 			} else {
 				echo __('no_date_for_view');
 		
-			};?>
+			};
+			?>
+			
+			</div>
+			</div>
+			<?php
+	}
+	echo Form::button('todo', 'Добавить/изменить машиноместо', array('value'=>'add_place_to_garage','class'=>'btn btn-success', 'type' => 'submit'));
+		//==
+		echo '<br>';
+		echo '<br>';
+		echo '<br>';
+		echo '<br>';
+		echo '<br>';
+		echo '<br>';
+?>
 		</div>
 	</div>
 	</div>

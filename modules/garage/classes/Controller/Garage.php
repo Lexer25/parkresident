@@ -59,7 +59,7 @@ class Controller_Garage extends Controller_Template {
 	
 		//echo Debug::vars('59', $org_income_garage); exit;
 		
-		$content = View::factory('rubic/edit_garage', array(
+		$content = View::factory('garage/edit_garage2', array(
 			'garage_info'=>$garage_info,
 			'place_list'=>$place_list,
 			'place_income_garage'=>$place_income_garage,
