@@ -142,7 +142,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' добавлено успешно')));
 							
 						} else {
-							Session::instance()->set('e_mess' array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' ошибка при добавлении')));
+							Session::instance()->set('e_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' ошибка при добавлении')));
 							
 						}
 						
@@ -177,7 +177,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' удален успешно')));
 							
 						} else {
-							Session::instance()->set('e_mess' array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' ошибка при удалении')));
+							Session::instance()->set('e_mess', array('ok_mess' => __(Arr::get($_data, 'add_rp_name').' ошибка при удалении')));
 							
 						}
 						
@@ -225,7 +225,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 							Session::instance()->set('ok_mess', array('ok_mess' => __(Arr::get($_data, 'name').' обновлен успешно')));
 							
 						} else {
-							Session::instance()->set('e_mess' array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
+							Session::instance()->set('e_mess', array('ok_mess' => __(Arr::get($_data, 'name').' ошибка при обновлении')));
 							
 						}
 						
@@ -299,7 +299,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 			break;
 			
 			default:
-				echo Debug::vars('95 controller gate', $_GET, $_POST); exit;
+				//echo Debug::vars('95 controller gate', $_GET, $_POST); exit;
 			break;
 		}
 				
