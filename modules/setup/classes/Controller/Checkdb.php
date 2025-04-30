@@ -178,16 +178,19 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		
 		
 		
-		
+		//Удаление таблицы.
+		//Таблица может не удалена, если она связана с другими таблицами.
 		if(Arr::get($_POST, 'delTable'))
 		{
 		
 			$db=Model::factory('Parkdb');
-		
+			//удаляю таблицу
 			try{
-				echo Debug::vars('103 drop table result: ', Database::instance('fb')->query(NULL, 'DROP TABLE '. Arr::get($_POST, 'delTable')));
+				echo Debug::vars('103 drop table result: ', Database::instance('fb')->query(NULL, 'DROP TABLE '. Arr::get($_POST, 'delTable'))); exit;
 			} catch (Exception $e) {
-				echo Debug::vars('105', $e->getMessage());
+				echo Debug::vars('105', $e->getMessage()); exit;
+				
+
 			}
 			try{
 				echo Debug::vars('95 drop table result: ', Database::instance('fb')->query(NULL, 'DROP GENERATOR GEN_'. Arr::get($_POST, 'delTable').'_ID'));

@@ -43,6 +43,7 @@ echo Form::open('gate/control');
 					<th><?php echo 'PORT табло';?></th>
 					<th><?php echo 'IP контроллера';?></th>
 					<th><?php echo 'PORT контроллера';?></th>
+					<th><?php echo 'channel контроллера';?></th>
 					<th><?php echo 'ID видеокамеры';?></th>
 					<th><?php echo 'ID точки прохода';?></th>
 					<th><?php echo 'Режим работы';?></th>
@@ -76,6 +77,7 @@ echo Form::open('gate/control');
 							echo '<td>'.$gate->tablo_port.'</td>';
 							echo '<td>'.$gate->box_ip.'</td>';
 							echo '<td>'.$gate->box_port.'</td>';
+							echo '<td>'.$gate->channel.'</td>';
 							echo '<td>'.$gate->id_cam.'</td>';
 							echo '<td>'.$gate->dev_name.' ('.$gate->id_dev.')</td>';
 							echo '<td>'.Form::select('mode',

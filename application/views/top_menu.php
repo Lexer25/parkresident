@@ -24,6 +24,7 @@
 					<li <?php //if (Arr::get($_SESSION,'menu_active')=='monitor') echo 'class="active"';?>><?php  //echo  HTML::anchor('monitor', __('Монитор')); ?></li>
 					<!--<li <?php if (Arr::get($_SESSION,'menu_active')=='grztest') echo 'class="active"';?>><?php  echo  HTML::anchor('grz/test', __('grztest')); ?></li> -->
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('checkdb', __('checkDB')); ?></li>
+					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('emul', __('emul')); ?></li>
 				</ul>
 		<?php
 		if(Auth::Instance()->logged_in())

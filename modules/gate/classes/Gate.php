@@ -16,6 +16,7 @@ class Gate
             public $tablo_port = 1985;// PORT контроллера табло 
             public $box_ip='192.168.0.100';//IP адрес контроллера реле 
             public $box_port=1985;//PORT контоллера реле 
+            public $channel=1985;//канал контроллера (0 или 1 для МПТ)
             public $id_cam=44;//id камеры от cvs 
             public $id_dev=-1;// id точки проезда 
             public $mode=0;// режим работы
@@ -40,6 +41,7 @@ class Gate
             hlp.tablo_port, 
             hlp.box_ip, 
             hlp.box_port, 
+            hlp.channel, 
             hlp.id_cam, 
             hlp.id_dev, 
             hlp.mode from HL_PARAM hlp
@@ -60,6 +62,7 @@ class Gate
 				$this->box_ip=Arr::get($value,'BOX_IP');
 				$this->box_ip=Arr::get($value,'BOX_IP');
 				$this->box_port=Arr::get($value,'BOX_PORT');
+				$this->channel=Arr::get($value,'CHANNEL');
 				$this->id_cam=Arr::get($value,'ID_CAM');
 				$this->id_dev=Arr::get($value,'ID_DEV');
 				$this->mode=Arr::get($value,'MODE');
