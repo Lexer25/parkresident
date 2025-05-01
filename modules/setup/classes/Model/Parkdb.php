@@ -4,6 +4,20 @@ class Model_Parkdb extends Model {
 	
 	/*11.04.2025 информация по подключенной базе данных
 	*/
+	
+	//путь к базе данных
+	public $_connectName='fb';
+	public $db_path;
+	
+	public function __construct($_connectName='fb')
+	{
+		
+		
+		$this->db_path = iconv('cp866','UTF-8//IGNORE', Arr::get($this->aboutDB($_connectName), 'pathDB'));
+		
+	}
+	
+		
 	public function aboutDB($sourcename)
 	{
 		$_fbinfo=Kohana::$config->load('database')->$sourcename;
@@ -114,6 +128,15 @@ class Model_Parkdb extends Model {
 	
 	public function delTable($tableName)
 	{
+		Log::instance()->add(Log::DEBUG, '117 Удадение таблицы '.$tableName);
+		if($this->checkGeneratorIsPresent($name)) 
+		{
+			Log::instance()->add(Log::DEBUG, '173 Генератора :gen присутвует. Начинается его удаление.', array(':gen'=>$name));
+			$this->makeQuery('DROP GENERATOR GEN_'. $name.'_ID');
+		} else {
+			Log::instance()->add(Log::DEBUG, '176 Генератора :gen Отсутсвует, удалять ничего не надо.', array(':gen'=>$name));
+		}
+		
 		$this->delGenerator($tableName);
 		$this->makeQuery('DROP TABLE '. $tableName);
 		
@@ -133,7 +156,7 @@ class Model_Parkdb extends Model {
 	public function addTableData($name)
 	{
 		//echo Debug::vars('99', $name.'.sql');exit;
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:c:\vnii\vnii.GDB -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\data\\'.$name.'.sql';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\data\\'.$name.'.sql';
 		exec(iconv('UTF-8', 'CP1251', $ttt));
 		
 	}
@@ -143,31 +166,19 @@ class Model_Parkdb extends Model {
 	//31.03.2025 Добавление таблицы сводится к выполнению нескольких sql запросов, взятых из файла конфигурации.
 	public function addTable($tableName)
 	{
-		$this->makeQuery('DROP TABLE '. $tableName);
-		//выбираю набор команд для указанной таблицы
-		
-		/* $sqlarray=Arr::get(Kohana::$config->load('artonitparking_table'), $tableName, null);//выбираю набор команд для добавления таблицы.
-			if($sqlarray)
-			{
-				//выполняю команды в цикле
-				foreach($sqlarray as $key=>$value){
-					$result = $this->makeQuery(iconv('UTF-8', 'CP1251', $value));
-				}
 				
-			} else {
-				
-				echo Debug::vars('102 нет данных для таблицы '. Arr::get($_POST, 'addTable'));//exit;
-			}
-			 */
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:c:\vnii\vnii.GDB -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$tableName.'.sql';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$tableName.'.sql';
 			
-			
-		 exec(iconv('UTF-8', 'CP1251', $ttt));
+		Log::instance()->add(Log::DEBUG, Debug::vars('158 выполняю команду добавления таблицы :', iconv('UTF-8', 'CP1251', $ttt)));	
+		Log::instance()->add(Log::DEBUG, Debug::vars('159 результат добавления таблицы :', exec(iconv('UTF-8', 'CP1251', $ttt))));	
+		// echo Debug::vars('159 результат добавления таблицы :', exec(iconv('UTF-8', 'CP1251', $ttt)));
 	}
 	
 	public function delGenerator($name)
 	{
-		$this->makeQuery('DROP GENERATOR GEN_'. $name.'_ID');
+		
+			$this->makeQuery('DROP GENERATOR GEN_'. $name.'_ID');
+		
 		
 		
 	}
@@ -181,7 +192,7 @@ class Model_Parkdb extends Model {
 	//31.03.2025 ДОбавление процедуры сводится к выполнению скрипта, взятого из файлов.
 	public function addProcedure($name)
 	{
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:c:\vnii\vnii.GDB -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
 			
 			
 		 exec(iconv('UTF-8', 'CP1251', $ttt));
