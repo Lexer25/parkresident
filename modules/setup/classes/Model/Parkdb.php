@@ -8,6 +8,7 @@ class Model_Parkdb extends Model {
 	//путь к базе данных
 	public $_connectName='fb';
 	public $db_path;
+	public $mess;
 	
 	public function __construct($_connectName='fb')
 	{
@@ -101,10 +102,16 @@ class Model_Parkdb extends Model {
 	
 	public function makeQuery($query)
 	{
+		Log::instance()->add(Log::DEBUG, '173 выполняется запрос: '. $query);
 		try{
-			Database::instance('fb')->query(NULL, $query);
+			$this->mess = Database::instance('fb')->query(NULL, $query);
+			Log::instance()->add(Log::DEBUG, '108 Запрос выполнен успешно  '.$this->mess);
+			return true;
 		} catch (Exception $e) {
-			echo Debug::vars('99', $e->getMessage());
+			//echo Debug::vars('99', $e->getMessage());
+			$this->mess = $e->getMessage();
+			Log::instance()->add(Log::DEBUG, '113 Запрос выполнен с ошибкой  '.$this->mess);
+			return false;
 		}
 		
 	}
@@ -128,7 +135,7 @@ class Model_Parkdb extends Model {
 	
 	public function delTable($tableName)
 	{
-		Log::instance()->add(Log::DEBUG, '117 Удадение таблицы '.$tableName);
+		/* Log::instance()->add(Log::DEBUG, '117 Удадение таблицы '.$tableName);
 		if($this->checkGeneratorIsPresent($name)) 
 		{
 			Log::instance()->add(Log::DEBUG, '173 Генератора :gen присутвует. Начинается его удаление.', array(':gen'=>$name));
@@ -137,7 +144,7 @@ class Model_Parkdb extends Model {
 			Log::instance()->add(Log::DEBUG, '176 Генератора :gen Отсутсвует, удалять ничего не надо.', array(':gen'=>$name));
 		}
 		
-		$this->delGenerator($tableName);
+		$this->delGenerator($tableName); */
 		$this->makeQuery('DROP TABLE '. $tableName);
 		
 	}
@@ -166,11 +173,17 @@ class Model_Parkdb extends Model {
 	//31.03.2025 Добавление таблицы сводится к выполнению нескольких sql запросов, взятых из файла конфигурации.
 	public function addTable($tableName)
 	{
-				
+		$retval=null;	
+		$output=null;		
 		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$tableName.'.sql';
 			
 		Log::instance()->add(Log::DEBUG, Debug::vars('158 выполняю команду добавления таблицы :', iconv('UTF-8', 'CP1251', $ttt)));	
-		Log::instance()->add(Log::DEBUG, Debug::vars('159 результат добавления таблицы :', exec(iconv('UTF-8', 'CP1251', $ttt))));	
+		$result=exec(iconv('UTF-8', 'CP1251', $ttt), $retval, $output);
+		/* echo Debug::vars('181', $result, $output);exit;
+		Log::instance()->add(Log::DEBUG, '159 результат добавления таблицы : '. Debug::vars($result));	*/
+		Log::instance()->add(Log::DEBUG, '159-1 результат добавления таблицы : '. Debug::vars($output)); 	
+		if($output==0) return true;
+		return false;
 		// echo Debug::vars('159 результат добавления таблицы :', exec(iconv('UTF-8', 'CP1251', $ttt)));
 	}
 	
@@ -185,7 +198,8 @@ class Model_Parkdb extends Model {
 	
 	public function delProcedure($name)
 	{
-		$this->makeQuery('DROP PROCEDURE '. $name);
+		
+		return $this->makeQuery('DROP PROCEDURE '. $name);
 	}
 	
 	

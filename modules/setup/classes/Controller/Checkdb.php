@@ -20,7 +20,7 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			'HL_RESIDENT',
 			'HL_INSIDE',
 			'HL_MESSAGES',
-			'HL_COUNTERS',
+			//'HL_COUNTERS',
 			'HL_PARAM',
 			'HL_PARKING',
 			'HL_PLACE',
@@ -30,10 +30,11 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		
 	public	$procedureList=array(
 				'HL_UPDATE_GARAGE_NAME',
+				'REGISTERPASS_HL_2',
 				'VALIDATEPASS_HL_PARKING',
 				'VALIDATEPASS_HL_PARKING_2',
 				'VALIDATEPASS_HL_PARKING_3',
-				'REGISTERPASS_HL_2',
+				
 			);
 			
 	public	$dataList=array(
@@ -99,9 +100,9 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 	
 	public function action_worker()
 	{
-		echo Debug::vars('81', $_POST);
-		echo Debug::vars('82', Arr::get($_POST, 'addTable'));
-		echo Debug::vars('83', Arr::get($_POST, 'delTable'));//exit;
+		//echo Debug::vars('81', $_POST);
+		//echo Debug::vars('82', Arr::get($_POST, 'addTable'));
+		//echo Debug::vars('83', Arr::get($_POST, 'delTable'));//exit;
 		//обработка добавления таблицы.
 		$parkDB=Model::factory('Parkdb');
 		
@@ -110,20 +111,30 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		//31.03.2025 удалить все таблицы
 		if(Arr::get($_POST, 'delAllTable'))
 		{
-			//сначала все удаляю
+			Log::instance()->add(Log::DEBUG, '114 Получена команда удалить все таблицы');
+			//сначала удаляю процедуры
+			
 			foreach($this->procedureList as $key=>$value)
 			{
+				Log::instance()->add(Log::DEBUG, '118 Удаляется процедура  '.$value);
+				if( $parkDB->delProcedure(iconv('UTF-8', 'CP1251', $value))) 
+				{
+					Log::instance()->add(Log::DEBUG, '121 Процедура  '.$value.' удалена успешно. '.Debug::vars($parkDB->mess));
+				} else {
+					
+					Log::instance()->add(Log::DEBUG, '124 Ошибка при удалении процедуры  '.$value.' . '.Debug::vars($parkDB->mess));
+				}
 				
-				
-				$parkDB->delTable(iconv('UTF-8', 'CP1251', $value));
 				
 			}
 				
-			
+			//затем удаляю таблицы
 			foreach($this->tableList as $key=>$value)
 			{
 				try{
-					Database::instance('fb')->query(NULL, 'DROP TABLE '. $value);
+					//Database::instance('fb')->query(NULL, 'DROP TABLE '. $value);
+					$parkDB->delTable(iconv('UTF-8', 'CP1251', $value));
+					
 				} catch (Exception $e) {
 				echo Debug::vars('105', $e->getMessage());
 			}	
@@ -168,13 +179,19 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		 {
 			Log::instance()->add(Log::DEBUG, '169 Таблица '.$table.' уже существует. Завершаю работу.');
 			$this->redirect('/checkdb');
-		 }
+		 } 
 		 
 		 Log::instance()->add(Log::DEBUG, '173 Таблица '.$table.' не существует. Продолжаю работу.');
+		
 		 //если таблица не сущесвует, то запускаю скрипт, который добавит и таблицу и, если необходимо, генератор
 		 
 		
-		$parkDB->addTable($table);
+		if($parkDB->addTable($table))
+		{
+			Log::instance()->add(Log::DEBUG, '190 Таблица '.$table.' Добавлена успешно.');
+		} else {
+			Log::instance()->add(Log::DEBUG, '192 При добавлении таблицы '.$table.' возникла ошибка: '. $parkDB->mess);
+		}
 		
 		$this->redirect('/checkdb');
 		}
@@ -189,9 +206,10 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			$db=Model::factory('Parkdb');
 			//удаляю таблицу
 			try{
-				echo Debug::vars('103 drop table result: ', Database::instance('fb')->query(NULL, 'DROP TABLE '. Arr::get($_POST, 'delTable'))); exit;
+				echo Debug::vars('103 drop table result: ', Database::instance('fb')->query(NULL, 'DROP TABLE '. Arr::get($_POST, 'delTable'))); //exit;
+				
 			} catch (Exception $e) {
-				echo Debug::vars('105', $e->getMessage()); exit;
+				echo Debug::vars('105', $e->getMessage()); //exit;
 				
 
 			}
