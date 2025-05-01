@@ -37,7 +37,9 @@ echo Form::open('Checkdb/worker');
 	</tr>
 	<tr>
 		<td>Путь к базе данных</td>
-		<td><?php echo iconv('CP1251','UTF-8//IGNORE', Arr::get($about, 'pathDB')); ?></td>
+		<td><?php echo iconv('cp866','UTF-8//IGNORE', Arr::get($about, 'pathDB'));?>
+		
+		</td>
 	</tr>
 	
 	
