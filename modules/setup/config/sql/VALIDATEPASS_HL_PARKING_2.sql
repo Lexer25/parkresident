@@ -8,37 +8,37 @@ RETURNS (
     EVENT_TYPE INTEGER,
     ID_PEP INTEGER)
 AS
-DECLARE VARIABLE IS_ACTIVE INTEGER; /* РђРєС‚РёРІРЅРѕСЃС‚СЊ РІР»Р°РґРµР»СЊС†Р° РўРЎ */
-DECLARE VARIABLE TIMESTART TIMESTAMP; /* РќР°С‡Р°Р»Рѕ СЃСЂРѕРєР° РґРµР№СЃС‚РІРёСЏ Р“Р Р— */
-DECLARE VARIABLE TIMEEND TIMESTAMP; /* РћРєРѕРЅС‡Р°РЅРёРµ СЃСЂРѕРєР° РґРµР№СЃС‚РІРёСЏ Р“Р Р— */
-DECLARE VARIABLE ID_ORG INTEGER; /* РћСЂРіР°РЅРёР·Р°С†РёСЏ, РєСѓРґР° РІС…РѕРґРёС‚ Р“Р Р— */
-DECLARE VARIABLE CNTCOUNT INTEGER; /* РєРѕР»РёС‡РµСЃС‚РІРѕ РјРµСЃС‚ РІ РіР°СЂР°Р¶Рµ, РїСЂРёРїРёСЃР°РЅРЅРѕРјСѓ Рє Р“Р Р— */
-DECLARE VARIABLE CURRENTCOUNT INTEGER; /* РєРѕР»РёС‡РµСЃС‚РІРѕ РјР°С€РёРЅ РЅР° СЃС‚РѕСЏРЅРєРµ */
-DECLARE VARIABLE RC_OK INTEGER = 50; /* РїСЂРѕРІРµСЂРєР° СѓСЃРїРµС€РЅР°, РїСЂРѕС…РѕРґ СЂР°Р·СЂРµС€РµРЅ */
-DECLARE VARIABLE RC_UNKNOWNCARD INTEGER = 46; /* РЅРµРёР·РІРµСЃС‚РЅР°СЏ РєР°СЂС‚Р° */
-DECLARE VARIABLE RC_DISABLEDCARD INTEGER = 65; /* РєР°СЂС‚Р° РЅРµР°РєС‚РёРІРЅР° */
-DECLARE VARIABLE RC_DISABLEDUSER INTEGER = 65; /* СЋР·РµСЂ РЅРµР°РєС‚РёРІРµРЅ */
-DECLARE VARIABLE RC_CARDEXPIRED INTEGER = 65; /* "СЃРµР№С‡Р°СЃ" РІРЅРµ СЃСЂРѕРєР° РґРµР№СЃС‚РІРёСЏ РєР°СЂС‚С‹ */
-DECLARE VARIABLE RC_ACCESSDENIED INTEGER = 65; /* РЅРµС‚ РїСЂР°РІР° РґРѕСЃС‚СѓРїР° */
-DECLARE VARIABLE RC_CARLIMITEXCEEDED INTEGER = 81; /* РїСЂРµРІС‹С€РµРЅ Р»РёРјРёС‚ РєРѕР»РёС‡РµСЃС‚РІР° Р°РІС‚Рѕ РЅР° С‚РµСЂСЂРёС‚РѕСЂРёРё */
-DECLARE VARIABLE ID_PARKING INTEGER; /* ID РїР°СЂРєРѕРІРєРё */
-DECLARE VARIABLE IS_ENTER INTEGER; /* Р’СЉРµР·Рґ */
-DECLARE VARIABLE ID_GARAGE INTEGER; /* ID РіР°СЂР°Р¶Р° */
-DECLARE VARIABLE CHECKPLACEENABLE_KEY VARCHAR(20) = 'CHECKPLACEENABLE'; /* РРјСЏ РїР°СЂР°РјРµС‚СЂР° РІ РЅР°СЃС‚СЂРѕР№РєР°С… hl_setting */
-DECLARE VARIABLE CHECKPLACEENABLE INTEGER = 1; /* Р—РЅР°С‡РµРЅРёРµ: РїСЂРѕРІРµСЂСЏС‚СЊ (1) РёР»Рё РќР• РїСЂРѕРІРµСЂСЏС‚ (0) */
-DECLARE VARIABLE GARAGEOLACECOUNTENABLE INTEGER = 1; /* СЃС‡РёС‚Р°С‚СЊ Р»Рё СЃРІРѕР±РѕРґРЅС‹Рµ РјРµСЃС‚Р° РґР»СЏ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РіР°СЂР°Р¶Р°? 1 - РќР• СЃС‡РёС‚Р°С‚СЊ, 0 - РЎС‡РёС‚Р°С‚СЊ. */
+DECLARE VARIABLE IS_ACTIVE INTEGER; /* Активность владельца ТС */
+DECLARE VARIABLE TIMESTART TIMESTAMP; /* Начало срока действия ГРЗ */
+DECLARE VARIABLE TIMEEND TIMESTAMP; /* Окончание срока действия ГРЗ */
+DECLARE VARIABLE ID_ORG INTEGER; /* Организация, куда входит ГРЗ */
+DECLARE VARIABLE CNTCOUNT INTEGER; /* количество мест в гараже, приписанному к ГРЗ */
+DECLARE VARIABLE CURRENTCOUNT INTEGER; /* количество машин на стоянке */
+DECLARE VARIABLE RC_OK INTEGER = 50; /* проверка успешна, проход разрешен */
+DECLARE VARIABLE RC_UNKNOWNCARD INTEGER = 46; /* неизвестная карта */
+DECLARE VARIABLE RC_DISABLEDCARD INTEGER = 65; /* карта неактивна */
+DECLARE VARIABLE RC_DISABLEDUSER INTEGER = 65; /* юзер неактивен */
+DECLARE VARIABLE RC_CARDEXPIRED INTEGER = 65; /* "сейчас" вне срока действия карты */
+DECLARE VARIABLE RC_ACCESSDENIED INTEGER = 65; /* нет права доступа */
+DECLARE VARIABLE RC_CARLIMITEXCEEDED INTEGER = 81; /* превышен лимит количества авто на территории */
+DECLARE VARIABLE ID_PARKING INTEGER; /* ID парковки */
+DECLARE VARIABLE IS_ENTER INTEGER; /* Въезд */
+DECLARE VARIABLE ID_GARAGE INTEGER; /* ID гаража */
+DECLARE VARIABLE CHECKPLACEENABLE_KEY VARCHAR(20) = 'CHECKPLACEENABLE'; /* Имя параметра в настройках hl_setting */
+DECLARE VARIABLE CHECKPLACEENABLE INTEGER = 1; /* Значение: проверять (1) или НЕ проверят (0) */
+DECLARE VARIABLE GARAGEOLACECOUNTENABLE INTEGER = 1; /* считать ли свободные места для выбранного гаража? 1 - НЕ считать, 0 - Считать. */
 begin
-    -- РїСЂРѕС†РµРґСѓСЂР° РІС‹РїРѕР»РЅСЏРµС‚ РїСЂРѕРІРµСЂРєСѓ РЅР°Р»РёС‡РёСЏ СЃРІРѕР±РѕРґРЅС‹С… РјРµСЃС‚ РґР»СЏ СѓРєР°Р·Р°РЅРЅРѕРіРѕ Р“Р Р—.
-    -- СЂРµР·СѓР»СЊС‚Р°С‚ РІС‹РїРѕР»РЅРµРЅРёСЏ: РєРѕРґ СЃРѕР±С‹С‚РёСЏ, РєРѕС‚РѕСЂС‹Р№ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ Р·Р°РїРёСЃР°РЅ Рё
-    -- РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ, РµСЃР»Рё РѕРЅ Р±С‹Р» РЅР°Р№РґРµРЅ
+    -- процедура выполняет проверку наличия свободных мест для указанного ГРЗ.
+    -- результат выполнения: код события, который должен быть записан и
+    -- идентификатор пользователя, если он был найден
 
-     -- РїСЂРѕРІРµСЂРєР° РґРѕРїСѓСЃС‚РёРјРѕРіРѕ РєРѕР»РёС‡РµСЃС‚РІР° РјР°С€РёРЅ РЅР° С‚РµСЂСЂРёС‚РѕСЂРёРё
-      -- РѕРїСЂРµРґРµР»РёРј, РІСЉРµР·Рґ СЌС‚Рѕ РёР»Рё РІС‹С…РѕРґ, РїРѕР»СѓС‡РёРј РёРґ С‚РѕС‡РєРё РїСЂРѕС…РѕРґР° РЅР° РІСЉРµР·РґРµ
+     -- проверка допустимого количества машин на территории
+      -- определим, въезд это или выход, получим ид точки прохода на въезде
 
         select hlp.id_parking, hlp.is_enter from hl_param hlp
         where hlp.id_dev=:id_dev into :id_parking, :is_enter;
 
-        -- РѕРїСЂРµРґРµР»СЏСЋ :id_garage РіР°СЂР°Р¶Р° Рё :cntcount РєРѕР»РёС‡РµСЃС‚РІРѕ РјР°С€РёРЅРѕРјРµСЃС‚ РІ РіР°СЂР°Р¶Рµ  СЃ СѓС‡РµС‚РѕРј РїР°СЂРєРёРЅРіР° (СЌС‚Р°Р¶Р°).
+        -- определяю :id_garage гаража и :cntcount количество машиномест в гараже  с учетом паркинга (этажа).
         select hlg.id_garagename, count(*) from card c
         join people p on p.id_pep=c.id_pep
         join hl_orgaccess hlo on hlo.id_org=p.id_org
@@ -46,7 +46,7 @@ begin
         where c.id_card=COALESCE(:id_card, :grz)
         group by hlg.id_garagename  into :id_garage, :cntcount;
 
-        --РїРѕРґСЃС‡РµС‚ РјР°С€РёРЅРѕРјРµСЃС‚ РЅР° РїР°СЂРєРѕРІРєРµ, РєСѓРґР° РїС‹С‚Р°РµС‚СЃСЏ Р·Р°РµС…Р°С‚СЊ Р“Р Р—
+        --подсчет машиномест на парковке, куда пытается заехать ГРЗ
         select count(*) from hl_place hlp
         join hl_garage hlg on hlg.id_place=hlp.id
         where hlp.id_parking=:id_parking
@@ -56,30 +56,30 @@ begin
   select id_pep, "ACTIVE", timestart, timeend from card where id_card = :id_card
     into :id_pep, :is_active, :timestart, :timeend;
 
-  -- РїСЂРѕРІРµСЂСЏРµРј, РЅР°Р№РґРµРЅ Р»Рё РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ
+  -- проверяем, найден ли идентификатор
   if (:id_pep is null) then begin
     event_type = :RC_UNKNOWNCARD;
-  -- СЃС‚РѕРёС‚ Р»Рё РїСЂРёР·РЅР°Рє "РєР°СЂС‚Р° Р°РєС‚РёРІРЅР°"
+  -- стоит ли признак "карта активна"
   end else if (:is_active <> 1) then begin
         event_type = :RC_DISABLEDCARD;
-  -- РїСЂРѕРІРµСЂСЏРµРј СЃСЂРѕРє РґРµР№СЃС‚РІРёСЏ РєР°СЂС‚С‹
+  -- проверяем срок действия карты
   end else if (('now' < :timestart) or ((:timeend is not null) and ('now' > :timeend))) then begin
     event_type = :RC_CARDEXPIRED;
 
-     -- СЃ Р“Р Р— РІСЃРµ РІ РїРѕСЂСЏРґРєРµ, РЅР°С‡РёРЅР°СЋ СЃР»РµРґСѓСЋС‰РёРµ РїСЂРѕРІРµСЂРєРё
+     -- с ГРЗ все в порядке, начинаю следующие проверки
   end else begin
 
 
-     -- РµСЃР»Рё РµСЃС‚СЊ РіР°СЂР°Р¶, С‚Рѕ РїСЂРѕРІРµСЂСЏСЋ РЅР°Р»РёС‡РёРµ СЃРІРѕР±РѕРґРЅС‹С… РјРµСЃС‚.
+     -- если есть гараж, то проверяю наличие свободных мест.
     if(:id_garage is not null) then begin
 
 
-                -- РµСЃР»Рё СЌС‚Рѕ РІСЉРµР·Рґ
+                -- если это въезд
                   if (:is_enter <> 0) then
                         begin
-                        --РµСЃР»Рё РІСЉРµР·Рґ СЂР°Р·СЂРµС€РµРЅ, С‚Рѕ РЅР°С‡РёРЅР°СЋ РїРѕРґСЃС‡РµС‚ СЃРІРѕР±РѕРґРЅС‹С… РјРµСЃС‚
+                        --если въезд разрешен, то начинаю подсчет свободных мест
                          if(:cntcount >0) then begin
-                        --РѕРїСЂРµРґРµР»СЏСЋ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃРІРѕР±РѕРґРЅС‹С… РјРµСЃС‚
+                        --определяю количество свободных мест
                             select count(*) from hl_inside hli
                             join card c on c.id_card=hli.id_card
                             join people p on p.id_pep=c.id_pep
@@ -90,41 +90,41 @@ begin
             
                             select hlt.value_int from hl_setting hlt where hlt.name=:checkplaceenable_key into :checkplaceenable;
 
-                            -- РµСЃР»Рё Р“Р Р— РІ РіР°СЂР°Р¶Рµ, С‚Рѕ РЅР°РґРѕ СЂР°Р·СЂРµС€Р°С‚СЊ РІСЉРµР·Рґ РІ Р»СЋР±РѕРј СЃР»СѓС‡Р°Рµ.
+                            -- если ГРЗ в гараже, то надо разрешать въезд в любом случае.
                                if ((:currentcount < :cntcount) OR (:checkplaceenable=0) OR (exists (select * from hl_inside hli where hli.id_card=:id_card))) then
-                                        -- РІСЉРµР·Рґ СЂР°Р·СЂРµС€РµРЅ
+                                        -- въезд разрешен
                                         event_type = :RC_OK;
                                   else
-                                    -- РїСЂРµРІС‹С€РµРЅ Р»РёРјРёС‚ РєРѕР»РёС‡РµСЃС‚РІР° Р°/Рј
+                                    -- превышен лимит количества а/м
                                     event_type = :RC_CARLIMITEXCEEDED;
                             end
                         else
-                        --РµСЃР»Рё РІСЉРµР·Рґ Р·Р°РїСЂРµС‰РµРЅ, С‚Рѕ РІС‹РґР°СЏСЋ РѕС‚РєР°Р· РІ РїСЂРѕРµР·РґРµ РІ СЏРІРЅРѕРј РІРёРґРµ
+                        --если въезд запрещен, то выдаяю отказ в проезде в явном виде
                             event_type = :rc_accessdenied;
                           end
         
                     else
-                        --РµСЃР»Рё СЌС‚Рѕ РІС‹РµР·Рґ
-                       -- С‚СѓС‚ РЅР°РґРѕ СЃРґРµР»Р°С‚СЊ РїСЂРѕРІРµСЂРєР°: СЃРѕ СЃРІРѕРµРіРѕ Р»Рё РїР°СЂРєРёРЅРіР° РѕРЅ РІС‹РµР·Р¶Р°РµС‚? РЅРѕ РїРѕРєР° СЌС‚РѕР№ РїСЂРѕРІРµСЂРєРё РЅРµС‚, РІС‹РїСѓСЃРєР°РµРј РІСЃРµС…
+                        --если это выезд
+                       -- тут надо сделать проверка: со своего ли паркинга он выезжает? но пока этой проверки нет, выпускаем всех
                         event_type = :RC_OK;
 
-                    -- РѕР±СЂР°Р±РѕС‚РєР° РІСЉРµР·Рґ-РІС‹РµР·Рґ Р·Р°РІРµСЂС€РµРЅР°
-                          -- Р° РµСЃР»Рё РЅРµС‚ РіР°СЂР°Р¶Р°, С‚Рѕ РїСЂРѕРІРµСЂСЏСЋ РєР°С‚РµРіРѕСЂРёРё РґРѕСЃС‚СѓРїР°
+                    -- обработка въезд-выезд завершена
+                          -- а если нет гаража, то проверяю категории доступа
          end
         else begin
 
                     if (exists (select * from ss_accessuser au
                     join access on au.id_accessname = access.id_accessname
                     where au.id_pep = :id_pep and access.id_dev = :id_dev)) then
-                    --РµСЃР»Рё РїСЂРѕРµР·Рґ СЂР°Р·СЂРµС€РµРЅ
-                        --РµСЃР»Рё СЌС‚Рѕ РІСЉРµР·Рґ, С‚Рѕ РїСЂРѕРІРµСЂСЏСЋ РЅР°Р»РёС‡РёРµ Р“Р Р— РЅР° С‚РµСЂСЂРёС‚РѕСЂРёРё РїР°СЂРєРѕРІРєРё
+                    --если проезд разрешен
+                        --если это въезд, то проверяю наличие ГРЗ на территории парковки
                         if (:is_enter <> 0) then
                             if(not exists(select * from hl_inside hli
-                                where hli.id_card=COALESCE(:id_card, :grz))) then event_type = :RC_OK;  --Р“Р Р— РЅРµС‚ РЅР° С‚РµСЂСЂРёС‚РѕСЂРёРё. Р’СЉРµР·Рґ СЂР°Р·СЂРµС€РµРЅ.
-                            else  event_type = :RC_CARLIMITEXCEEDED;  --Р“Р Р— РµСЃС‚СЊ РЅР° С‚РµСЂСЂРёС‚РѕСЂРёРё. Р’СЉРµР·Рґ Р·Р°РїСЂРµС‰РµРЅ (РЅРµС‚ РјРµСЃС‚)
+                                where hli.id_card=COALESCE(:id_card, :grz))) then event_type = :RC_OK;  --ГРЗ нет на территории. Въезд разрешен.
+                            else  event_type = :RC_CARLIMITEXCEEDED;  --ГРЗ есть на территории. Въезд запрещен (нет мест)
 
                         else
-                            event_type = :RC_OK;  --Р° РµСЃР»Рё СЌС‚Рѕ РІС‹РµР·Рґ, С‚Рѕ РІС‹РїСѓСЃРєР°РµРј РІСЃРµС…
+                            event_type = :RC_OK;  --а если это выезд, то выпускаем всех
                     else
                     event_type = :RC_ACCESSDENIED;
 
@@ -139,7 +139,7 @@ end
 SET TERM ; ^
 
 DESCRIBE PROCEDURE VALIDATEPASS_HL_PARKING_2
-'РџСЂРѕРёР·РІРѕРґРёС‚ РїСЂРѕРІРµСЂРєСѓ РЅР°Р»РёС‡РёСЏ СЃРІРѕР±РѕРґРЅС‹С… РјРµСЃС‚ РїСЂРё РІСЉРµР·РґРµ РЅР° РїР°СЂРєРѕРІРєСѓ';
+'Производит проверку наличия свободных мест при въезде на парковку';
 
 GRANT SELECT ON HL_PARAM TO PROCEDURE VALIDATEPASS_HL_PARKING_2;
 

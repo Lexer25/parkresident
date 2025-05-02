@@ -188,7 +188,7 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 
 	public function action_test_car_parking()
 	{
-		//echo Debug::vars('153 car_in_parking', $_POST); exit;
+		echo Debug::vars('153 car_in_parking', $_POST); //exit;
 		$post=Validation::factory($_POST);
 		$post->rule('test_door', 'not_empty')
 			->rule('test_door','is_array') 

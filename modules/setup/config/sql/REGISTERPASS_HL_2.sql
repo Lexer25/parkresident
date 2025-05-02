@@ -10,41 +10,41 @@ RETURNS (
 AS
 DECLARE VARIABLE ID_ORG INTEGER;
 begin
-  -- РїСЂРѕС†РµРґСѓСЂР° СЂРµРіРёСЃС‚СЂРёСЂСѓРµС‚ РїРѕРїС‹С‚РєСѓ РїСЂРѕС…РѕРґР° РїРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂСѓ
-  -- СЂРµР·СѓР»СЊС‚Р°С‚ Р·Р°РїРёСЃС‹РІР°РµС‚СЃСЏ РІ Р¶СѓСЂРЅР°Р» СЃРѕР±С‹С‚РёР№
-  -- РІРѕР·РІСЂР°С‰Р°РµС‚ 0 РїСЂРѕ СѓСЃРїРµС€РЅРѕРј РїСЂРѕС…РѕРґРµ РёР»Рё
-  -- РєРѕРґ СЃРѕР±С‹С‚РёСЏ, РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ Р·Р°РїРёСЃР°РЅ РІ Р¶СѓСЂРЅР°Р» СЃРѕР±С‹С‚РёР№ РїСЂРё РѕС‚РєР°Р·Рµ
+  -- процедура регистрирует попытку прохода по идентификатору
+  -- результат записывается в журнал событий
+  -- возвращает 0 про успешном проходе или
+  -- код события, который будет записан в журнал событий при отказе
 
   if (:grz = '') then grz = null;
   rc=-1;
-  -- РѕРїСЂРµРґРµР»СЏСЋ ID_ORG РґР»СЏ ess2
+  -- определяю ID_ORG для ess2
   select p.id_org from card c
   join people p on p.id_pep=c.id_pep
   where c.id_card=:id_card into :id_org    ;
 
-  --РІС‹РїРѕР»РЅСЏСЋ РІР°Р»РёРґР°С†РёСЋ Р“Р Р—
+  --выполняю валидацию ГРЗ
   execute procedure validatepass_hl_parking_2 :id_dev, :id_card, :grz returning_values :RC, :id_pep;
 
- -- С„РёРєСЃРёСЂСѓСЋ РѕР±СЂР°С‰РµРЅРµ Рє РІР°Р»РёРґР°С†РёРё  РћС‚РєР»СЋС‡РµРЅ 9.08.2023
+ -- фиксирую обращене к валидации  Отключен 9.08.2023
  --   INSERT INTO HL_EVENTS (EVENT_CODE, GRZ, ID_GATE)
  --   VALUES (13, :id_card, :id_dev);
 
 
 
 
--- РµСЃР»Рё Р“Р Р— СѓР¶Рµ РЅР° С‚РµСЂСЂРёС‚РѕСЂРёРё, С‚Рѕ РїСЂРё РІСЉРµР·РґРµ С„РѕСЂРјРёСЂСѓСЋ СЃРѕР±С‹С‚РёСЏ РїРѕРІС‚РѕСЂРЅРѕРіРѕ РІСЉРµР·РґР° Рё СѓРґР°Р»СЏСЋ Р“Р Р— РёР· С‚Р°Р±Р»РёС†С‹ inside
+-- если ГРЗ уже на территории, то при въезде формирую события повторного въезда и удаляю ГРЗ из таблицы inside
   if(((rc=81) or (rc=50))  and (exists(select * from hl_inside hli where hli.id_card=:id_card)) and (exists(select * from hl_param hlp where hlp.id_dev=:id_dev and hlp.is_enter=1))) then
     begin
         INSERT INTO HL_EVENTS (EVENT_CODE, GRZ, ID_GATE, ID_PEP)  VALUES (6, :id_card, :id_dev, :id_pep);
         delete from hl_inside hli2 where hli2.id_card=:id_card;
         rc=50;
     end
--- С„РёРєСЃРёСЂСѓСЋ СЂРµР·СѓР»СЊС‚Р°С‚ РІР°Р»РёРґР°С†РёРё
+-- фиксирую результат валидации
  INSERT INTO HL_EVENTS (EVENT_CODE, GRZ, ID_GATE, ID_PEP)
     VALUES (:rc, :id_card, :id_dev, :id_pep);
 
 
-     -- Р·Р°РїРёС€РµРј СЂРµР·СѓР»СЊС‚Р°С‚ РІ Р–РЎ
+     -- запишем результат в ЖС
     --1 ID_DB integer,
     --2 ID_EVENTTYPE integer,
     --3 ID_CTRL integer,
@@ -59,7 +59,7 @@ begin
 INSERT INTO EVENTS (ID_DB, ID_EVENTTYPE, ID_DEV,  DATETIME, ID_CARD, NOTE,  ID_PEP, ESS1, ESS2)
 VALUES (1, :rc, :id_dev,  'now', :id_card, :id_card, 1, :id_pep, :id_org);
 
-  -- РїСЂРё СѓСЃРїРµС€РЅРѕРј РїСЂРѕС…РѕРґР° РІРѕР·СЂР°С‰Р°РµРј РЅРѕР»СЊ, Р° РЅРµ 50, С‡С‚РѕР±С‹ РґСЂР°Р№РІРµСЂ РЅРµ РїСѓС‚Р°Р»СЃСЏ, РєР°РєРѕР№ РєРѕРґ СѓСЃРїРµС…Р°, Р° РєР°РєРѕР№ РЅРµС‚
+  -- при успешном прохода возращаем ноль, а не 50, чтобы драйвер не путался, какой код успеха, а какой нет
   --IF (:RC = 50) THEN RC = 0;
   suspend;
 end
@@ -68,7 +68,7 @@ end
 SET TERM ; ^
 
 DESCRIBE PROCEDURE REGISTERPASS_HL_2
-'РџСЂРѕРІРµСЂРєР° РґРѕРїСѓСЃС‚РёРјРѕСЃС‚Рё РїСЂРѕС…РѕРґР° + Р·Р°РїРёСЃСЊ СЃРѕР±С‹С‚РёСЏ РІ Р¶СѓСЂРЅР°Р»';
+'Проверка допустимости прохода + запись события в журнал';
 
 GRANT SELECT ON CARD TO PROCEDURE REGISTERPASS_HL_2;
 

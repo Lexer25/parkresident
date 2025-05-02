@@ -138,8 +138,10 @@ echo Form::open('Checkdb/worker');
 				echo '<td>';
 				echo Arr::get($procedureListCheck, $value)? HTML::image('static/images/green-check.png', array('alt' => 'true')) : 'false';
 				echo '</td>';
-				echo '<td>'.Form::button('addProcedure', 'Добавить процедуру', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
-				echo '<td>'.Form::button('delProcedure', 'Удалить процедуру', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
+				//echo '<td>'.Form::button('addProcedure', 'Добавить процедуру', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
+				//echo '<td>'.Form::button('delProcedure', 'Удалить процедуру', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
+				echo '<td>'.Form::button('addProcedure', 'Добавить процедуру', array('value'=>$value)).'</td>';
+				echo '<td>'.Form::button('delProcedure', 'Удалить процедуру', array('value'=>$value)).'</td>';
 				
 			echo '</tr>';	
 		}	

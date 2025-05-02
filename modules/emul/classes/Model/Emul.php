@@ -79,6 +79,55 @@ class Model_Emul extends Model {
 				->execute()
 				->get('total');
 		}
+		
+		
+	/**02.05.2025 Получить список ГРЗ для работы в эмуляторе
+	*/
+	public function getListIdCard($id_cardtype)
+	{
+		$sql='select c.id_card from card c
+		where c.id_cardtype='.$id_cardtype.'
+		and c.id_card not containing \' \'';
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		return $query;
+		
+	}
+	
+	
+	/**02.05.2025 Получить список cam из настроект системы
+	* с этим видеокамер могут приходить ГРЗ
+	*/
+	public function getListIdCam()
+	{
+		$sql='select hlp.id_cam from hl_param hlp';
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		return $query;
+		
+	}
+	
+	
+	
+	/**02.05.2025 Получить список ворот
+	* от этих ворот будут приходить коды UHF
+	*/
+	public function getListIdGate()
+	{
+		$sql='select hlp.id from hl_param hlp';
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		return $query;
+		
+	}
+	
+	
+	
+	
+	
 	
 	
 }

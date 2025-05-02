@@ -27,7 +27,7 @@ class Model_Grz extends Model {
 	}
 	
 	/*
-	Получить информацию по всем ГРЗ
+	Получить информацию по всем ГРЗ, зарегистрированных в базе данных СКУД.
 	
 	*/
 	public function getGrzInfoList()

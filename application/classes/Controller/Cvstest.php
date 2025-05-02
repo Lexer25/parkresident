@@ -192,7 +192,7 @@ class Controller_Cvstest extends Controller_Template { // класс описы�
 					->body(json_encode($cvs_emul))
 					->execute();
 					
-								/* echo  Debug::vars('191', $request, 
+				/* echo  Debug::vars('191', $request, 
 				'EMERGENCY='.Log::EMERGENCY, 
 				'ALERT='.Log::ALERT, 
 				'CRITICAL='.Log::CRITICAL, 
