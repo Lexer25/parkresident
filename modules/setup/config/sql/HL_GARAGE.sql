@@ -73,31 +73,6 @@ SET TERM ; ^
 
 
 /******************************************************************************/
-/***                              Descriptions                              ***/
-/******************************************************************************/
-
-DESCRIBE TABLE HL_GARAGE
-'Р“Р°СЂР°Р¶ - РіСЂСѓРїРїРёСЂРѕРІРєР° РјР°С€РёРЅРѕРјРµСЃС‚.
-Р’ РѕРґРЅРѕРј РіР°СЂР°Р¶Рµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РЅРµСЃРєРѕР»СЊРєРѕ РјР°С€РёРЅРѕРјРµСЃС‚.
-Р’ РѕРґРёРЅ РіР°СЂР°Р¶ РјРѕРіСѓС‚ Р·Р°РµР·Р¶Р°С‚СЊ С‚СЂР°РЅСЃРїРѕСЂС‚РЅС‹Рµ СЃСЂРµРґСЃС‚РІР° РёР· РЅРµСЃРєРѕР»СЊРєРёС… РѕСЂРіР°РЅРёР·Р°С†РёР№.';
-
-
-
-/* Fields descriptions */
-
-DESCRIBE FIELD CREATED TABLE HL_GARAGE
-'РњРµС‚РєР° РІСЂРµРјРµРЅРё СЃРѕР·РґР°РЅРёСЏ.
-';
-
-DESCRIBE FIELD ID_GARAGENAME TABLE HL_GARAGE
-'РЎСЃС‹Р»РєР° РЅР° РёРјСЏ РіР°СЂР°Р¶Р°';
-
-DESCRIBE FIELD ID_PLACE TABLE HL_GARAGE
-'РќРѕРјРµСЂ РёР»Рё РёРЅРѕРµ РѕР±РѕР·РЅР°С‡РµРЅРёРµ РјР°С€РёРЅРѕРјРµСЃС‚Р°';
-
-
-
-/******************************************************************************/
 /***                               Privileges                               ***/
 /******************************************************************************/
 
@@ -105,3 +80,23 @@ DESCRIBE FIELD ID_PLACE TABLE HL_GARAGE
 /* Privileges of procedures */
 GRANT SELECT ON HL_GARAGE TO PROCEDURE VALIDATEPASS_HL_PARKING_2;
 GRANT SELECT ON HL_GARAGE TO PROCEDURE VALIDATEPASS_HL_PARKING_3;
+
+commit;
+Update Rdb$Relations set Rdb$Description =
+'Гараж - группировка машиномест.
+В одном гараже может быть несколько машиномест.
+В один гараж могут заезжать транспортные средства из нескольких организаций.'
+where Rdb$Relation_Name='HL_GARAGE';
+
+Update Rdb$Relation_Fields set Rdb$Description =
+'Метка времени создания.
+'
+where Rdb$Relation_Name='HL_GARAGE' and Rdb$Field_Name='CREATED';
+
+Update Rdb$Relation_Fields set Rdb$Description =
+'Номер или иное обозначение машиноместа'
+where Rdb$Relation_Name='HL_GARAGE' and Rdb$Field_Name='ID_PLACE';
+
+Update Rdb$Relation_Fields set Rdb$Description =
+'Ссылка на имя гаража'
+where Rdb$Relation_Name='HL_GARAGE' and Rdb$Field_Name='ID_GARAGENAME';

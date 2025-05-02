@@ -84,20 +84,20 @@ echo Form::open('Checkdb/worker');
 				
 				//echo Debug::vars(Arr::get($tableListCheck, $value));
 				echo '</td>';
-				echo '<td>'.Form::button('addTable', 'Добавить таблицу', array('value'=>$value)).'</td>';
-				echo '<td>'.Form::button('delTable', 'Удалить таблицу', array('value'=>$value)).'</td>';
+				echo '<td>'.Form::button('addTable', 'Добавить таблицу', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
+				echo '<td>'.Form::button('delTable', 'Удалить таблицу', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
 				if(Arr::get($tableListCheck, $value))
 				{
 					//проверка, что для этой таблицы есть данных для записи (может и не быть)
 					//echo Debug::vars('51', $value, $dataList, in_array($value, $dataList));//exit;
 					if(in_array($value, $dataList))
 					{
-						echo '<td>'.Form::button('addTableData', 'Добавить данные', array('value'=>$value)).'</td>';
+						echo '<td>'.Form::button('addTableData', 'Добавить данные', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
 					} else {
 						//echo '<td>'.Form::button('addTableData', 'Добавить данные', array('disabled'=>'disabled')).'</td>';
 						echo '<td>-</td>';
 					}
-					echo '<td>'.Form::button('delTableData', 'Удалить данные', array('value'=>$value)).'</td>';
+					echo '<td>'.Form::button('delTableData', 'Удалить данные', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
 				} else 
 				{
 					echo '<td>-</td>';
@@ -111,8 +111,8 @@ echo Form::open('Checkdb/worker');
 	</table>	
 
 <?php
-	echo '<td>'.Form::button('addAllTable', 'Добавить все таблицы', array('value'=>$value)).'</td>';
-	echo '<td>'.Form::button('delAllTable', 'Удалить все таблицы', array('value'=>$value)).'</td>';
+	echo '<td>'.Form::button('addAllTable', 'Добавить все таблицы, процедуры и генераторы', array('value'=>$value)).'</td>';
+	echo '<td>'.Form::button('delAllTable', 'Удалить все таблицы, процедуры и генераторы', array('value'=>$value)).'</td>';
 
 ?>	
 		<h2>Процедуры</h2>
@@ -138,8 +138,8 @@ echo Form::open('Checkdb/worker');
 				echo '<td>';
 				echo Arr::get($procedureListCheck, $value)? HTML::image('static/images/green-check.png', array('alt' => 'true')) : 'false';
 				echo '</td>';
-				echo '<td>'.Form::button('addProcedure', 'Добавить процедуру', array('value'=>$value)).'</td>';
-				echo '<td>'.Form::button('delProcedure', 'Удалить процедуру', array('value'=>$value)).'</td>';
+				echo '<td>'.Form::button('addProcedure', 'Добавить процедуру', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
+				echo '<td>'.Form::button('delProcedure', 'Удалить процедуру', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
 				
 			echo '</tr>';	
 		}	

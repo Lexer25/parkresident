@@ -102,20 +102,41 @@ class Model_Parkdb extends Model {
 	
 	public function makeQuery($query)
 	{
-		Log::instance()->add(Log::DEBUG, '173 выполняется запрос: '. $query);
+		Log::instance()->add(Log::DEBUG, '173 makeQuery выполняется запрос: '. $query);
 		try{
 			$this->mess = Database::instance('fb')->query(NULL, $query);
-			Log::instance()->add(Log::DEBUG, '108 Запрос выполнен успешно  '.$this->mess);
+			Log::instance()->add(Log::DEBUG, '108 makeQuery выполнен успешно.');
 			return true;
 		} catch (Exception $e) {
 			//echo Debug::vars('99', $e->getMessage());
 			$this->mess = $e->getMessage();
-			Log::instance()->add(Log::DEBUG, '113 Запрос выполнен с ошибкой  '.$this->mess);
+			Log::instance()->add(Log::DEBUG, '113 makeQuery выполнен с ошибкой  '.$this->mess);
 			return false;
 		}
 		
 	}
 	
+	//2.05.2025 единая процедура выполнения exec с анализом ответа.
+	// ответ 0 - команда выполнена успешно.
+	// ответ НЕ 0 - ошибка.
+	public function makeExec($query)
+	{
+		Log::instance()->add(Log::DEBUG, Debug::vars('124 makeExec выполняет запрос  :', $query));	
+			
+		 $retval = null;
+		 $output = null;
+		 $result=exec(iconv('UTF-8', 'CP1251', $query), $retval, $output);
+		 
+		 if($output==0)
+		 {
+			 Log::instance()->add(Log::DEBUG, '132 makeExec выполнен успешно. Результат выполнения '. $output); 	
+			 return true;
+		 } else {	 
+			  Log::instance()->add(Log::DEBUG, '135 makeExec выполнен с ошибкой. Результат выполнения '. $output);	
+			return false;
+		 }
+		
+	}
 	
 	public function aboutTable($tableName)
 	{
@@ -145,7 +166,7 @@ class Model_Parkdb extends Model {
 		}
 		
 		$this->delGenerator($tableName); */
-		$this->makeQuery('DROP TABLE '. $tableName);
+		return $this->makeQuery('DROP TABLE '. $tableName);
 		
 	}
 	
@@ -190,7 +211,7 @@ class Model_Parkdb extends Model {
 	public function delGenerator($name)
 	{
 		
-			$this->makeQuery('DROP GENERATOR GEN_'. $name.'_ID');
+			return $this->makeQuery('DROP GENERATOR GEN_'. $name.'_ID');
 		
 		
 		
@@ -208,8 +229,10 @@ class Model_Parkdb extends Model {
 	{
 		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
 			
+		Log::instance()->add(Log::DEBUG, Debug::vars('226 выполняю команду добавления процедуры :', $name));	
 			
-		 exec(iconv('UTF-8', 'CP1251', $ttt));
+		
+		return $this->makeExec($ttt);
 	}
 	
 	

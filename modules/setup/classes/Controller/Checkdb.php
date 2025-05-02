@@ -30,10 +30,11 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		
 	public	$procedureList=array(
 				'HL_UPDATE_GARAGE_NAME',
-				'REGISTERPASS_HL_2',
+				
 				'VALIDATEPASS_HL_PARKING',
 				'VALIDATEPASS_HL_PARKING_2',
 				'VALIDATEPASS_HL_PARKING_3',
+				'REGISTERPASS_HL_2',
 				
 			);
 			
@@ -112,9 +113,9 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		if(Arr::get($_POST, 'delAllTable'))
 		{
 			Log::instance()->add(Log::DEBUG, '114 Получена команда удалить все таблицы');
-			//сначала удаляю процедуры
 			
-			foreach($this->procedureList as $key=>$value)
+			//сначала удаляю процедуры
+			foreach(array_reverse($this->procedureList) as $key=>$value)
 			{
 				Log::instance()->add(Log::DEBUG, '118 Удаляется процедура  '.$value);
 				if( $parkDB->delProcedure(iconv('UTF-8', 'CP1251', $value))) 
@@ -127,18 +128,35 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 				
 				
 			}
+			
 				
 			//затем удаляю таблицы
-			foreach($this->tableList as $key=>$value)
+			foreach(array_reverse($this->tableList) as $key=>$value)
 			{
 				try{
 					//Database::instance('fb')->query(NULL, 'DROP TABLE '. $value);
 					$parkDB->delTable(iconv('UTF-8', 'CP1251', $value));
 					
 				} catch (Exception $e) {
-				echo Debug::vars('105', $e->getMessage());
-			}	
+				echo Debug::vars('139', $e->getMessage());
+				}	
 			}
+			
+			//затем удаляю генераторы
+			foreach($this->tableList as $key=>$value)
+			{
+				try{
+					//Database::instance('fb')->query(NULL, 'DROP TABLE '. $value);
+					$parkDB->delGenerator(iconv('UTF-8', 'CP1251', $value));
+					
+				} catch (Exception $e) {
+				echo Debug::vars('151', $e->getMessage());
+				}	
+			}
+			
+			
+			
+			
 			$this->redirect('/checkdb');
 		}
 		
@@ -202,31 +220,73 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		//Таблица может не удалена, если она связана с другими таблицами.
 		if(Arr::get($_POST, 'delTable'))
 		{
+			$table=Arr::get($_POST, 'delTable'); //получил название таблицы
+						
+		Log::instance()->add(Log::DEBUG, '225 Удаление  таблицы '.$table);
 		
-			$db=Model::factory('Parkdb');
-			//удаляю таблицу
-			try{
-				echo Debug::vars('103 drop table result: ', Database::instance('fb')->query(NULL, 'DROP TABLE '. Arr::get($_POST, 'delTable'))); //exit;
-				
-			} catch (Exception $e) {
-				echo Debug::vars('105', $e->getMessage()); //exit;
-				
-
-			}
-			try{
-				echo Debug::vars('95 drop table result: ', Database::instance('fb')->query(NULL, 'DROP GENERATOR GEN_'. Arr::get($_POST, 'delTable').'_ID'));
-			} catch (Exception $e) {
-				echo Debug::vars('99', $e->getMessage());
-			}	
-			//exit;
+		 if(!$parkDB->checkTableIsPresent($table))// проверка на наличие удаляемой таблицы
+		 {
+			//если таблицы нет, то завершаю работу.
+			Log::instance()->add(Log::DEBUG, '228 Таблица '.$table.' уже не существует. Завершаю работу по удалению таблицы '.$table);
 			$this->redirect('/checkdb');
+		 } 
+		 
+		 Log::instance()->add(Log::DEBUG, '232 Таблица '.$table.' существует. Продолжаю работу по удалению таблицы '.$table);
+		
+		//если таблица есть, то удаляю таблицу		
+		if($parkDB->delTable($table))
+		{
+			Log::instance()->add(Log::DEBUG, '237 Таблица '.$table.' удалена успешно.');
+			//проверяю на наличие генератора. Если он есть, то его тоже надо удалить
+			
+			if($parkDB->checkGeneratorIsPresent($table))
+			{
+				//есть генератор. Надо удалять.
+				Log::instance()->add(Log::DEBUG, '227 Генератор для таблицы '.$table.' имеется и должен быть удален.');
+				if($parkDB->delGenerator($table))
+				{
+					//если удален успешно, то 
+					Log::instance()->add(Log::DEBUG, '230 Генератор для таблицы '.$table.' удален успешно.');
+				} else {
+					Log::instance()->add(Log::DEBUG, '232 Ошибка при удалении генератора для таблицы '.$table);
+				}
+				
+			} else {
+				
+				//нет генератора, удалять не надо.
+				Log::instance()->add(Log::DEBUG, '227 Генератор для таблицы '.$table.' нет. Удалять генератор не требуется.');
+			}
+		} else {
+			Log::instance()->add(Log::DEBUG, '239 При удалении таблицы '.$table.' возникла ошибка: '. $parkDB->mess);
 		}
+		
+		$this->redirect('/checkdb');
+		}
+		
+		
 		//31.03.2025 добавление процедур
 		if(Arr::get($_POST, 'addProcedure'))
 		{
 			
-			$procSql=Arr::get($_POST, 'addProcedure'); //получил название процедуры
-			$parkDB->addProcedure($procSql);
+			$procedure=Arr::get($_POST, 'addProcedure'); //получил название процедуры
+			if($parkDB->checkProcedureIsPresent($procedure))
+			{
+				//процедура уже есть
+				Log::instance()->add(Log::DEBUG, '257 Процедура  '.$procedure.' уже существует. Завершаю работу по добавлению процедуры.');
+				$this->redirect('/checkdb');
+			} else {
+				Log::instance()->add(Log::DEBUG, '260 Процедура  '.$procedure.' не существует. Продолжаю работу по добавлению процедуры.');
+				
+				
+				if($parkDB->addProcedure($procedure))
+				{
+					Log::instance()->add(Log::DEBUG, '265 Процедура  '.$procedure.' добавлена успешно.');
+				} else {
+					Log::instance()->add(Log::DEBUG, '267 При добавлении процедуры '.$procedure.' возникла ошибка: '. $parkDB->mess);
+				}
+		
+		
+			}
 			$this->redirect('/checkdb');
 			
 		}
