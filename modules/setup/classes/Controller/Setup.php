@@ -1,13 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /*
-20.03.2025 
-Checkdb - контроллера для проверки базы данных.
-цель проверки - проверить наличие необходимых таблиц в базе данных и возможность установить эти таблицы.
+3.05.2025 
+Setup - контроллер для автоматизации настройки парковочной системы
 
 */
 
 
-class Controller_Checkdb extends Controller_Template { // класс описывает въезды и вызды (ворота) для парковочных площадок
+class Controller_Setup extends Controller_Template { // класс описывает въезды и вызды (ворота) для парковочных площадок
 	
 	
 	public $template = 'template';
@@ -57,6 +56,17 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 	}
 	
 	
+	
+	/**3.05.2025 Добавление категорий доступа в СКУД.
+	* каждая парковочная площадка добавляется в СКУД как категорию доступа с таким же названием. 
+	*/
+	public function action_addAccessname()
+	{
+		echo Debug::vars('65', $_POST);exit;
+		$this->redirect('checkdb');
+		
+	}
+	
 	public function action_index()
 	{
 		$_SESSION['menu_active']='rmo';
@@ -83,7 +93,7 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			
 		}
 		
-		$content = View::factory('setup/tableList', array(
+		$content = View::factory('tableList', array(
 			'tableList'=>$tableList,
 			'tableListCheck'=>$tableListCheck,
 			'procedureList'=>$procedureList,

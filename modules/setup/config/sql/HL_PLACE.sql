@@ -34,7 +34,7 @@ CREATE TABLE HL_PLACE (
 /***                           Unique Constraints                           ***/
 /******************************************************************************/
 
-ALTER TABLE HL_PLACE ADD CONSTRAINT UNQ1_HL_PLACE UNIQUE (PLACENUMBER);
+ALTER TABLE HL_PLACE ADD CONSTRAINT UNQ1_HL_PLACE UNIQUE (PLACENUMBER, ID_PARKING);
 
 
 /******************************************************************************/

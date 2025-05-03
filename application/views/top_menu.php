@@ -25,6 +25,7 @@
 					<!--<li <?php if (Arr::get($_SESSION,'menu_active')=='grztest') echo 'class="active"';?>><?php  echo  HTML::anchor('grz/test', __('grztest')); ?></li> -->
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('checkdb', __('checkDB')); ?></li>
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('emul', __('emul')); ?></li>
+					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('wizard', __('wizard')); ?></li>
 				</ul>
 		<?php
 		if(Auth::Instance()->logged_in())
@@ -41,7 +42,7 @@
 					 echo  Form::button('todo', __('-1'), array('value'=>'open_gate_1', 'class'=>'btn btn-info btn-sm', 'type' => 'submit'));
 					 echo ' ';
 					 echo  Form::button('todo', __('-2'), array('value'=>'open_gate_2','class'=>'btn btn-info btn-sm', 'type' => 'submit'));
-					 echo  Form::hidden('action', Request::current()->controller().'/'.Request::current()->action().' '.Request::current()->directory());
+					 //echo  Form::hidden('action', Request::current()->controller().'/'.Request::current()->action().' '.Request::current()->directory());
 					echo Form::close();
 			}
 			?>			

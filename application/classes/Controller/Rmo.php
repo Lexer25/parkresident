@@ -375,7 +375,7 @@ public function action_opengateCVS()//передача команды на от�
 	public function action_control()// просмотр списка ГРЗ и их свойств
 	{
 		$_SESSION['menu_active']='grz';
-		//echo Debug::vars('30', $_GET, $_POST); exit;	
+		echo Debug::vars('30', $_GET, $_POST); exit;	
 		$todo = $this->request->post('todo');
 		
 		switch ($todo){

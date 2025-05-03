@@ -127,7 +127,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	
 	public function action_control()
 	{
-		//echo Debug::vars('134', $_POST);exit;
+		//echo Debug::vars('130', $_POST);exit;
 		//echo Debug::vars('131',  $this->request->referrer());exit;
 		$requestFrom=$this->request->referrer();
 		$post=Validation::factory($this->request->post());
