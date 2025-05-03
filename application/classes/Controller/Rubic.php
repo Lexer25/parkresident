@@ -669,4 +669,4 @@ class Controller_Rubic extends Controller_Template {
         $this->template->content = $content;
 	
 	}
-} 
+}

@@ -35,6 +35,22 @@ class Controller_Wizard extends Controller_Template { // класс описыв
 	}
 	
 	
+	/** 3.05.2025 Добавление категории доступа в БД СКУД. Название категории берется как название парковочной площадки.
+	*/
+	public function action_addAccessname ()
+	{
+		
+		//echo Debug::vars('41', $_POST);//exit;
+		$sql='INSERT INTO ACCESSNAME (ID_DB,NAME) VALUES (1,\''.Arr::get($_POST, 'name').'\')';
+		//echo Debug::vars('45', $sql);exit;
+		Log::instance()->add(Log::NOTICE, $sql);
+		Model::factory('Parkdb')->makeQuery(iconv('UTF-8','windows-1251',$sql));
+		$this->redirect('wizard');
+       
+		
+	}
+	
+	
 	
 	
 	

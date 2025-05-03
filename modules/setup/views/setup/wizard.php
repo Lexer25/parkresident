@@ -3,7 +3,7 @@
 //echo Debug::vars('3', $tableListCheck); //exit;
 //echo Debug::vars('4', $procedureList); //exit;
 //echo Debug::vars('5', $procedureListCheck); //exit;
-echo Form::open('Checkdb/worker');
+
 ?>
 <script type="text/javascript">
      
@@ -54,10 +54,11 @@ echo Form::open('Checkdb/worker');
 							echo '</td>';
 							
 							echo '<td>';
-								echo Form::open('setup/addAccessname');
-									echo Form::button('addAccessname', 'Добавить категорию доступа', array('value'=>Arr::get($value, 'ID')));
-									echo Debug::vars('202', $parking->name);
-									//echo Form::button('addAccessname', 'Добавить категорию доступа', array('value'=>$parking->name));
+								echo Form::open('wizard/addAccessname');
+									//echo Form::button('addAccessname', 'Добавить категорию доступа', array('value'=>Arr::get($value, 'ID')));
+									//echo Debug::vars('202', $parking->name);
+									echo Form::hidden('name', iconv('windows-1251','UTF-8', $parking->name));
+									echo Form::button('addAccessname2', 'Добавить категорию доступа', array('value'=>$parking->name));
 								echo Form::close();	
 							echo '</td>';
 							

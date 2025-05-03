@@ -16,7 +16,7 @@ class Gate
             public $tablo_port = 1985;// PORT контроллера табло 
             public $box_ip='192.168.0.100';//IP адрес контроллера реле 
             public $box_port=1985;//PORT контоллера реле 
-            public $channel=1985;//канал контроллера (0 или 1 для МПТ)
+            public $channel=0;//канал контроллера (0 или 1 для МПТ)
             public $id_cam=44;//id камеры от cvs 
             public $id_dev=-1;// id точки проезда 
             public $mode=0;// режим работы
@@ -88,6 +88,7 @@ class Gate
 				TABLO_PORT,
 				BOX_IP,
 				BOX_PORT,
+				CHANNEL,
 				
 				ID_CAM,
 				ID_DEV,
@@ -102,6 +103,7 @@ class Gate
 				'.$this->tablo_port.',
 				\''.$this->box_ip.'\',
 				'.$this->box_port.',
+				'.$this->channel.',
 				
 				'.$this->id_cam.',
 				'.$this->id_dev.',
@@ -140,6 +142,7 @@ class Gate
 				TABLO_PORT = '.$this->tablo_port.',
 				BOX_IP = \''.$this->box_ip.'\',
 				BOX_PORT = '.$this->box_port.',
+				CHANNEL = '.$this->channel.',
 				
 				ID_CAM = '.$this->id_cam.',
 				ID_DEV = '.$this->id_dev.',

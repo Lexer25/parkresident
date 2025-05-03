@@ -3,7 +3,7 @@
 //echo Debug::vars('3', $tableListCheck); //exit;
 //echo Debug::vars('4', $procedureList); //exit;
 //echo Debug::vars('5', $procedureListCheck); //exit;
-echo Form::open('Checkdb/worker');
+
 ?>
 <script type="text/javascript">
      
@@ -20,6 +20,7 @@ echo Form::open('Checkdb/worker');
 	<div class="panel-body">
 			Подключение к базе данных:
 		<?php
+		echo Form::open('Checkdb/worker');
 			$_connectName='fb';
 			$about=Model::factory('Parkdb')->aboutDB($_connectName);
 			//echo Debug::vars('22', $about);

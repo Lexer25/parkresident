@@ -26,13 +26,13 @@ echo Form::open('gate/control');
 
 	<div class="panel panel-primary">
 		<div class="panel-heading">
-			<h3 class="panel-title"><?echo __('gate_list');?></h3>
+			<h3 class="panel-title"><?echo __('Список ворот');?></h3>
 		</div>
 		<div class="panel-body">
 
 			<table id="tablesorter" class="table table-striped table-hover table-condensed tablesorter">
 
-			<thead allign="center">
+			<thead>
 				<tr>
 					<th><?php echo 'Выбор.';?></th>
 					<th><?php echo 'ID';?></th>
@@ -46,12 +46,12 @@ echo Form::open('gate/control');
 					<th><?php echo 'channel контроллера';?></th>
 					<th><?php echo 'ID видеокамеры';?></th>
 					<th><?php echo 'ID точки прохода';?></th>
-					<th><?php echo 'Режим работы';?></th>
+					<!--<th><?php echo 'Режим работы';?></th>-->
 					
 
 				</tr>
-				</thead>
-				<tbody>
+			</thead>
+			<tbody>
 				<?php
 				$i=0;
 				$checked=1;
@@ -72,7 +72,9 @@ echo Form::open('gate/control');
 								$gate->is_enter, 
 								array('disabled'=>'disabled'))
 								.' '.$gate->is_enter.'</td>';
-							echo '<td>'.$gate->id_parking.'</td>';
+							$parkingInfo=new Parking($gate->id_parking);
+							//echo '<td>'.$gate->id_parking.'</td>';
+							echo '<td>'.iconv('windows-1251','UTF-8',$parkingInfo->name).'</td>';
 							echo '<td>'.$gate->tablo_ip.'</td>';
 							echo '<td>'.$gate->tablo_port.'</td>';
 							echo '<td>'.$gate->box_ip.'</td>';
@@ -80,12 +82,12 @@ echo Form::open('gate/control');
 							echo '<td>'.$gate->channel.'</td>';
 							echo '<td>'.$gate->id_cam.'</td>';
 							echo '<td>'.$gate->dev_name.' ('.$gate->id_dev.')</td>';
-							echo '<td>'.Form::select('mode',
+							/* echo '<td>'.Form::select('mode',
 								array('0'=>'Шлюз 0','1'=>'Ворота 1','2'=>'Шлагбаум 2','3'=>'Ворота+шлагбаум 3'),
 								$gate->mode,
 								array('type'=>'number', 'size'=>'1', 'min'=>'0', 'max'=>'3', 'disabled'=>'disabled')).' '.$gate->mode.'</td>';
 							
-						echo '</tr>';	
+						echo '</tr>';	 */
 						$i++;
 					
 					}
@@ -114,7 +116,7 @@ echo Form::open('gate/control');
 
 		<div class="panel panel-primary">
 			  <div class="panel-heading">
-				<h3 class="panel-title"><?php echo __('Настройка ворот');?></h3>
+				<h3 class="panel-title"><?php echo __('Добавление ворот');?></h3>
 			  </div>
 			  <div class="panel-body">
 
@@ -174,7 +176,7 @@ echo Form::open('gate/control');
 					?>
 					<div class="panel-body">
 				
-					<table id="tablesorter" class="table table-striped table-hover table-condensed tablesorter">
+					<table id="tablesorter2" class="table table-striped table-hover table-condensed tablesorter">
 
 						<thead allign="center">
 							<tr>
@@ -210,7 +212,7 @@ echo Form::open('gate/control');
 				?>
 				
 
-			<table id="tablesorter" class="table table-striped table-hover table-condensed tablesorter">
+			<table id="tablesorter3" class="table table-striped table-hover table-condensed tablesorter">
 
 			<thead allign="center">
 				<tr>

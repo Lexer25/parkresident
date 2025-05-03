@@ -71,7 +71,7 @@ if(Auth::Instance()->logged_in() OR true)
 		<table id="tablesorter2" class="table table-striped table-hover table-condensed tablesorter">
 			<tr>
 				<th>UHF</th>
-				<th>channel</th>
+				<th>Gate</th>
 				<th>Отправить команду</th>
 			</tr>
 			<tr>

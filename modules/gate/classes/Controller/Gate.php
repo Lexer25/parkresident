@@ -134,7 +134,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 					{
 						
 						$entity = new Gate();
-						$entity->name='Новые ворота_'.Arr::get($_data, 'name');
+						$entity->name=Arr::get($_data, 'name');
 						
 						//echo Debug::vars('143', $entity);exit;
 						if ($entity->add())
@@ -212,6 +212,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 					$entity->tablo_port = Arr::get($_data, 'tablo_port');
 					$entity->box_ip = Arr::get($_data, 'box_ip');
 					$entity->box_port = Arr::get($_data, 'box_port');
+					$entity->channel = Arr::get($_data, 'channel');
 					
 					$entity->id_cam = Arr::get($_data, 'id_cam');
 					$entity->id_dev = Arr::get($_data, 'id_dev');
