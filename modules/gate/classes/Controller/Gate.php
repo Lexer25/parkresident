@@ -218,8 +218,12 @@ class Controller_Gate extends Controller_Template { // класс описыва
 					
 					$entity->tablo_ip = Arr::get($_data, 'tablo_ip');
 					$entity->tablo_port = Arr::get($_data, 'tablo_port');
+					if(Arr::get($_data, 'tablo_port') == '') $entity->tablo_port=0; 
+					
 					$entity->box_ip = Arr::get($_data, 'box_ip');
 					$entity->box_port = Arr::get($_data, 'box_port');
+					if(Arr::get($_data, 'box_port') == '') $entity->box_port=0;
+					
 					$entity->channel = Arr::get($_data, 'channel');
 					
 					$entity->id_cam = Arr::get($_data, 'id_cam');
