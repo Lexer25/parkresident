@@ -1,4 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+/**
+* @package    ParkResident/Application
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
 class Controller_Grz extends Controller_Template { // класс описывает въезды и вызды (ворота) для парковочных площадок
 	
@@ -26,11 +34,13 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 	public function action_index()// просмотр списка ГРЗ и их свойств
 	{
 		$_SESSION['menu_active']='grz';
-			
+		$t1=microtime(true);//отмека времени для оценки быстродействия	
 		//echo Debug::vars('38', $_GET, $_POST, $id_parking); //exit;
 		$getGrzInfo=Model::Factory('grz')->getGrzInfoList();//список ГРЗ
+		
 		$content = View::factory('rubic/grzList', array(
 			'grz_list'=>$getGrzInfo,
+			't1'=>$t1,
 			));
         $this->template->content = $content;
 		//echo View::factory('profiler/stats');

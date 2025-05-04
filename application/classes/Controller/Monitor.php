@@ -1,4 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+/**
+* @package    ParkResident/Application
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
 class Controller_Monitor extends Controller_Template { // Монитор событий онлайн. Ожидаю увидеть проезды автомобилей
 	

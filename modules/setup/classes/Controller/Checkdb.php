@@ -1,4 +1,13 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+
+/**
+* @package    ParkResident/Setup
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 /*
 20.03.2025 
 Checkdb - контроллера для проверки базы данных.

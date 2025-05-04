@@ -1,5 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-
+/**
+* @package    ParkResident/Emul
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 class Controller_Emul extends Controller_Template { // класс для программной эмуляции работы парковочной системы
 //предполагаю в нем имитировать сигналы от обрудования и наблюдать реакцию парковочной системы 
 	

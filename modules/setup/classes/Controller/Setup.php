@@ -1,9 +1,26 @@
 <?php defined('SYSPATH') or die('No direct script access.');
-/*
-3.05.2025 
-Setup - контроллер для автоматизации настройки парковочной системы
 
-*/
+/**
+* @package    ParkResident/Setup
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
+ 
+
+/** 3.05.2025 
+* Setup - контроллер для автоматизации настройки парковочной системы
+* @package    ParkResident/controller
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
+ 
+
 
 
 class Controller_Setup extends Controller_Template { // класс описывает въезды и вызды (ворота) для парковочных площадок

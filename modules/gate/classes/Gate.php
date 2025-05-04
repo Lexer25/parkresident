@@ -1,4 +1,14 @@
 <?php
+
+/**
+* @package    ParkResident/Gate
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
+ 
 /* Gate 
 07.04.2025
 Класс описывает ворота

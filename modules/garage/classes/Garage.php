@@ -1,6 +1,14 @@
 <?php
 
+/**
 
+* @package    ParkResident/Garage
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
 /* Garage 
 Класс для работы с сущностью Гараж

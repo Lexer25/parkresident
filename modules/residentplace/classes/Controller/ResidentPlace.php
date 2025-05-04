@@ -1,4 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+/**
+* @package    ParkResident/ResidentPlace
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
 class Controller_ResidentPlace extends Controller_Template { // класс описывает жилой комплекс (resident place)
 	

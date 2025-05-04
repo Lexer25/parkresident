@@ -1,5 +1,16 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
+/**
+* @package    ParkResident/Setup
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
+ 
+ 
+
 class Model_wizard extends Model {
 	
 	/*11.04.2025 информация по подключенной базе данных

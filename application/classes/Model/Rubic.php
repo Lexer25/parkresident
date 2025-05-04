@@ -1,4 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
+/**
+* @package    ParkResident/Application
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
 class Model_Rubic extends Model {
 	
@@ -96,7 +104,7 @@ class Model_Rubic extends Model {
 	
 	public function getEventsFromTo($data)
 	{
-		//echo Debug::vars('415', Date::formatted_time(Arr::get($data, 'timeFrom'), 'Y-m-d H:i:s'), 'timeFrom '.Arr::get($data, 'timeFrom'),'timeTo '. Arr::get($data, 'timeTo'),'id_event_filter '. Arr::get($data, 'id_event_filter')); exit;
+		//echo Debug::vars('415', $data); exit;
 		
 		$sql='select hle.event_time, hle.event_code, hlp.is_enter, hlp.name as gate_name, hlp.id_parking, hle.grz, hle.id_pep, hle.id_gate, hle.comment, et.name as event_name,  p.surname, p.name, p.surname, hl_org.id_garage
             from hl_events  hle

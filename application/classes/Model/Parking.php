@@ -2,15 +2,14 @@
 
 class Model_Parking extends Model {
 	
-	
-	
-	/**
-	 * Получить список парковочных площадок
-	 *
-	 * @param   void
-	 * @param   
-	 * @return  array
-	 */
+/**
+* @package    ParkResident/Application
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 	 
 	public function get_list_parking($id_parking=null)// получить список парковок для указанного жилого копмлекса
 	{

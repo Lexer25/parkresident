@@ -1,5 +1,12 @@
 <?php
-
+/**
+* @package    ParkResident/Place
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
 
 /* Place 

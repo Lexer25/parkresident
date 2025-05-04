@@ -1,4 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+/**
+* @package    ParkResident/Gate
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
 class Controller_Gate extends Controller_Template { // класс описывает въезды и вызды (ворота) для парковочных площадок
 	

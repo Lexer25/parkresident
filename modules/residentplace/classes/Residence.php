@@ -1,6 +1,13 @@
 <?php
 
-
+/**
+* @package    ParkResident/ResidentPlace
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
 /* Residence 
 Класс описывает жилой комплекс

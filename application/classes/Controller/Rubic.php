@@ -1,4 +1,12 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+/**
+* @package    ParkResident/Application
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
 class Controller_Rubic extends Controller_Template {
 	
@@ -134,7 +142,7 @@ class Controller_Rubic extends Controller_Template {
 		}
 		
 		$list_garage=Model::Factory('garage')->get_list_garage();
-		
+		//echo Debug::vars('145', $event_list );exit;
 		$events_name_list=Model::factory('event')->get_events_name_list();
 		$content = View::factory('rubic/event', array(
 			'event_list'=>$event_list,

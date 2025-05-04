@@ -1,11 +1,14 @@
 <?php
 
+/**
+* @package    ParkResident/Application
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
-
-/* Events 
-Класс для работы с событиями
-
-*/
 
 class Events
 {

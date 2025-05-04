@@ -1,6 +1,13 @@
 <?php
 
-
+/**
+* @package    ParkResident/Parking
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
 /* Parking 
 Класс описывает парковочную площадь - территорию, где находятся парковочные места.

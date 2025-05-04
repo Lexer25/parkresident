@@ -1,4 +1,15 @@
 <?php defined('SYSPATH') or die('No direct script access.');
+
+/**
+* @package    ParkResident/Setup
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
+ 
+ 
 /*
 03.05.2025 
 Wizard - контроллера для настройки интеграции

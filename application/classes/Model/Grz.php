@@ -1,4 +1,12 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
+/**
+* @package    ParkResident/Application
+ * @category   Base
+ * @author     Artonit
+ * @copyright  (c) 2025 Artonit Team
+ * @license    http://artonit/ru 
+ 
+ */
 
 class Model_Grz extends Model {
 	
@@ -40,7 +48,7 @@ class Model_Grz extends Model {
 			->as_array();
 		
 		
-		foreach (array_slice($query, 0, 10000) as $key=>$value)
+		foreach (array_slice($query, 0, 1000) as $key=>$value)
 		{
 			$res[]=$this->getGrzInfo(Arr::get($value, 'ID_CARD'));
 			

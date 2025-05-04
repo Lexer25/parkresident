@@ -55,7 +55,6 @@
 			echo '<tr>';
 				//echo '<td>'.$i++.'</td>';
 				echo '<td>'. HTML::anchor('grz/history/'.Arr::get($value,'ID_CARD'), iconv('windows-1251','UTF-8',Arr::get($value,'ID_CARD')));
-					//if( preg_match("/[А-Яа-я]/", Arr::get($value,'ID_CARD', '')) ) echo __('LATIN_ERROR');
 					if( preg_match("/[а-яё]/iu", iconv('windows-1251','UTF-8',Arr::get($value,'ID_CARD', '')))) echo '<br><span class="label label-danger">Русские буквы в ГРЗ</span>';
 					//echo Debug::vars('60', $value);
 					echo '</td>';
@@ -163,6 +162,9 @@
 		
 </div>
 </div>
+<?php
+	echo __('Время выполнения :t', array(':t'=>(microtime(true) - $t1)));
+?>
 
 
 
