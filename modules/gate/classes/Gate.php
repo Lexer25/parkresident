@@ -22,7 +22,7 @@ class Gate
             public $mode=0;// режим работы
             public $messageIdlleTop='Parking';//надпись в режиме ожидания верхняя
             public $messageIdlleDown='ARTSEC';// надпись в режиме ожидания нижняя
-            public $dev_name = 'dev_name';// 
+            public $dev_name = 'dev_name';// название точки прохода в СКУД
 	
 	
 	
@@ -135,7 +135,7 @@ class Gate
 		//echo Debug::vars('36', $this);exit;
 		//echo Debug::vars('93', get_object_vars($this));//exit;
 		//hlr.id, hlr.name, hlr.is_active, hlr.created, hlr.modify
-		
+		$this->mode=1;
 		$sql='UPDATE HL_PARAM SET 
 			
 				TABLO_IP = \''.$this->tablo_ip.'\',

@@ -61,5 +61,7 @@ return array(
 			// Copyright message, shown in the footer for this module
 			'copyright' => '&copy; 2008–2012 Kohana Team',
 		),
+		
+	
 	)
 );

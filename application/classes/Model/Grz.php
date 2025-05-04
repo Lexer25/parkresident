@@ -38,14 +38,14 @@ class Model_Grz extends Model {
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array();
-		//echo Debug::vars('20', $query); exit;
 		
-		foreach ($query as $key=>$value)
+		
+		foreach (array_slice($query, 0, 10000) as $key=>$value)
 		{
 			$res[]=$this->getGrzInfo(Arr::get($value, 'ID_CARD'));
 			
 		}
-		
+		//echo Debug::vars('20', $res); exit;
 		return $res;
 	}
 	
@@ -60,6 +60,8 @@ class Model_Grz extends Model {
 	*/
 	public function getGrzInfo($grz)
 	{
+		
+		//собираю ФИО и данные по идентификатору
 		$sql='select c.id_card, c.id_pep, c.timestart, c.timeend, c.note, c.status, c."ACTIVE", c.flag, c.id_cardtype, p.name , p.surname as GRZ_MODEL, p.patronymic from card c
 			join people p on p.id_pep=c.id_pep
 			where c.id_card=\''.$grz.'\'';
@@ -74,10 +76,12 @@ class Model_Grz extends Model {
 			
 		}
 			
+			
 		//список категорий доступа для ГРЗ	
 		$sql='select an.id_accessname, an.name from ss_accessuser ssa
 				join accessname an on an.id_accessname=ssa.id_accessname
 				where ssa.id_pep='.Arr::get($res, 'ID_PEP');
+
 		try
 		{
 		$query = DB::query(Database::SELECT, $sql)
@@ -90,10 +94,6 @@ class Model_Grz extends Model {
 		
 		
 		//список гаражей для ГРЗ
-		$sql='select hlo.id_garage, hlo.is_active, hlg.name from hl_orgaccess hlo
-				join people p on p.id_org=hlo.id_org
-				join hl_garagename hlg on hlg.id=hlo.id_garage
-				where p.id_pep='.Arr::get($res, 'ID_PEP');
 				
 		 $sql='select hlo.id_garage, hlo.is_active, hlg.name, hlgg.id_place, hlp.id_parking, hlpp.id as id_parking, hlpp.name as parking_name from hl_orgaccess hlo
                 join people p on p.id_org=hlo.id_org
@@ -102,7 +102,7 @@ class Model_Grz extends Model {
                 join hl_place hlp on hlp.id=hlgg.id_place
                 join hl_parking hlpp on hlp.id_parking=hlpp.id
                 where p.id_pep='.Arr::get($res, 'ID_PEP');
-				
+							
 				
 			try
 		{
@@ -116,9 +116,8 @@ class Model_Grz extends Model {
 		
 		
 		//список парковок для ГРЗ
-		
-				
-		 $sql='select distinct hlpp.id  as id_parking, hlpp.name as parking_name from hl_orgaccess hlo
+					
+		 $sql='select  hlpp.id  as id_parking, hlpp.name as parking_name from hl_orgaccess hlo
                 join people p on p.id_org=hlo.id_org
                 join hl_garagename hlg on hlg.id=hlo.id_garage
                 join hl_garage hlgg on hlgg.id_garagename=hlg.id
@@ -138,9 +137,7 @@ class Model_Grz extends Model {
 		}
 		
 		
-		
-		
-		
+				
 		//список парковок, где находится ГРЗ
 		$sql='select hli.entertime, hli.id_card, hli.counterid, hlp.name from hl_inside hli
 		join hl_parking hlp on hlp.id=hli.counterid
@@ -156,8 +153,6 @@ class Model_Grz extends Model {
 			Log::instance()->add(Log::ERROR, $e->getMessage());
 			
 		}
-		
-		//echo Debug::vars('101', $sql, $query, $res); exit;
 		return $res;
 	}
 	

@@ -205,7 +205,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 						;
 				if($_data->check())
 				{
-					//echo Debug::vars('208', $_data);//exit;
+					echo Debug::vars('208', $_data);//exit;
 					$entity = new Gate (Arr::get($_data, 'id'));
 					
 					$entity->tablo_ip = Arr::get($_data, 'tablo_ip');

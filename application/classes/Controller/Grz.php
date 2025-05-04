@@ -33,6 +33,7 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 			'grz_list'=>$getGrzInfo,
 			));
         $this->template->content = $content;
+		//echo View::factory('profiler/stats');
 	}
 	
 	

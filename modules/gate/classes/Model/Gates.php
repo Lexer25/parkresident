@@ -1,5 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
+
 class Model_Gates extends Model {
 	
 	public $res_ok = 0;
@@ -441,6 +442,38 @@ class Model_Gates extends Model {
 				}
 		return;
 	}
+	
+	
+	/**
+	*04.05.2025 Получить список точек прохода для формирования select 
+	* @param ts
+	* @return array
+	*/
+	
+	public function get_list_access_point_for_select() //
+	{
+		$res=array();
+				
+		$sql='select d.id_dev as id, d.name from device d
+			where d.id_reader is not null';
+		
+		
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		$res=array();
+		if($query)
+		{
+			foreach($query as $key=>$value)
+			{
+				$res[Arr::get($value, 'ID')] = iconv('windows-1251','UTF-8', Arr::get($value, 'NAME'));
+				
+			}
+		}
+			
+		return $res;	
+	}
+	
 	
 	
 	

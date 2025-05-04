@@ -53,6 +53,7 @@ echo Form::open('gate/control');
 			</thead>
 			<tbody>
 				<?php
+				$list=Model::factory('Gates')->get_list_access_point_for_select();//список точек прохода
 				$i=0;
 				$checked=1;
 				
@@ -81,7 +82,7 @@ echo Form::open('gate/control');
 							echo '<td>'.$gate->box_port.'</td>';
 							echo '<td>'.$gate->channel.'</td>';
 							echo '<td>'.$gate->id_cam.'</td>';
-							echo '<td>'.$gate->dev_name.' ('.$gate->id_dev.')</td>';
+							echo '<td>'.Arr::get($list, $gate->id_dev).' ('.$gate->id_dev.')</td>';
 							/* echo '<td>'.Form::select('mode',
 								array('0'=>'Шлюз 0','1'=>'Ворота 1','2'=>'Шлагбаум 2','3'=>'Ворота+шлагбаум 3'),
 								$gate->mode,

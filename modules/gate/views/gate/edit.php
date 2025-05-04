@@ -32,7 +32,7 @@ if(Auth::Instance()->logged_in())
 		//echo Debug::vars('11', $info_gate, $info_gate->ENABLED'));
 
 		echo __('gate_name').Form::input('name', iconv('windows-1251','UTF-8', $info_gate->name), array('maxlength'=>50)).'<br>';
-		//вывод списка парковок
+		//вывод списка парковок в виде списка
 		$list=Model::factory('ParkingPlace')->get_list_for_select();
 		echo Form::select('id_parking', $list, $info_gate->id_parking).'<br>';
 		echo __('id_gate'). ' '. $info_gate->id.'<br>';
@@ -74,7 +74,15 @@ if(Auth::Instance()->logged_in())
 				echo '<td>'.Form::input('box_port',$info_gate->box_port, array('type'=>'number', 'size'=>'5', 'min'=>'1', 'max'=>'65535')).'</td>';
 				echo '<td>'.Form::input('channel',$info_gate->channel).'</td>';
 				echo '<td>'.Form::input('id_cam',$info_gate->id_cam).'</td>';
-				echo '<td>'.Form::input('id_dev',$info_gate->id_dev).'</td>';
+				//вывод точек прохода в виде списка
+				$list=Model::factory('Gates')->get_list_access_point_for_select();
+								
+				echo '<td>';
+					echo Form::select('id_dev', $list, $info_gate->id_dev).'<br>';
+				echo '</td>';
+		
+				
+				//echo '<td>'.Form::input('id_dev',$info_gate->id_dev).'</td>';
 				//echo '<td>'.Form::input('mode',$info_gate->mode','--'), array('type'=>'number', 'size'=>'1', 'min'=>'0', 'max'=>'3')).'</td>';
 				/* echo '<td>'.Form::select('mode',
 					array('0'=>'Шлюз 0','1'=>'Ворота 1','2'=>'Шлагбаум 2','3'=>'Ворота+шлагбаум 3'),
