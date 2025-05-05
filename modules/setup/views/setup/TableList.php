@@ -122,9 +122,10 @@
 		<thead>
 			<tr>
 				<th><?echo __('№ п/п');?></th>
-				<th><?echo __('Код события');?></th>
-				<th><?echo __('КПП.');?></th>
-				<th><?echo __('Время события');?></th>
+				<th><?echo __('Название процедуры');?></th>
+				<th><?echo __('Прецедура установлена.');?></th>
+				<th><?echo __('Добавить процедуру');?></th>
+				<th><?echo __('Удалить процедуру');?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -144,6 +145,40 @@
 				//echo '<td>'.Form::button('delProcedure', 'Удалить процедуру', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
 				echo '<td>'.Form::button('addProcedure', 'Добавить процедуру', array('value'=>$value)).'</td>';
 				echo '<td>'.Form::button('delProcedure', 'Удалить процедуру', array('value'=>$value)).'</td>';
+				
+			echo '</tr>';	
+		}	
+		?>
+		</tbody>
+	</table>		
+	
+		<h2>Триггеры</h2>
+		<table id="tablesorter_ge3" class="table table-striped table-hover table-condensed tablesorter">
+		<thead>
+			<tr>
+				<th><?echo __('№ п/п');?></th>
+				<th><?echo __('Название триггера');?></th>
+				<th><?echo __('Тригггер установлен.');?></th>
+				<th><?echo __('Добавить триггер');?></th>
+				<th><?echo __('Удалить триггер');?></th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php 
+		$i=0;
+		foreach($triggerList as $key=>$value)
+		{
+		echo '<tr>';
+				echo '<td>'.++$i.'</td>';
+				
+				echo '<td>'.$value.'</td>';
+
+				echo '<td>';
+				echo Arr::get($triggerListCheck, $value)? HTML::image('static/images/green-check.png', array('alt' => 'true')) : 'false';
+				echo '</td>';
+				
+				echo '<td>'.Form::button('addTrigger', 'Добавить триггер', array('value'=>$value)).'</td>';
+				echo '<td>'.Form::button('delTrigger', 'Удалить триггер', array('value'=>$value)).'</td>';
 				
 			echo '</tr>';	
 		}	

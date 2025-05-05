@@ -109,6 +109,27 @@ class Model_Parkdb extends Model {
 	}
 	
 	
+	/**
+	20.03.2025 Проверка наличия указанных процедур
+	
+	*/
+	public function checkTriggerIsPresent($name)
+	{
+		$res=array();
+
+		$sql='select distinct * from rdb$triggers
+    where rdb$trigger_name=\''.$name.'\'';
+		
+		//echo Debug::vars('123', $sql); exit;
+		
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		if($query) return true;
+		return false;
+	}
+	
+	
 	
 	
 	public function makeQuery($query)
@@ -246,6 +267,17 @@ class Model_Parkdb extends Model {
 		return $this->makeExec($ttt);
 	}
 	
+	//31.03.2025 ДОбавление процедуры сводится к выполнению скрипта, взятого из файлов.
+	public function addTrigger($name)
+	{
+		return $this->addProcedure($name);
+	}
+	
+	public function delTrigger($name)
+	{
+		
+		return $this->makeQuery('DROP TRIGGER '. $name);
+	}
 	
 	
 }

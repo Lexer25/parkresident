@@ -55,6 +55,10 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 				
 			);
 			
+	public	$triggerList=array(
+				'EVENTS_PARKING_HL',
+			);
+			
 	
 	
 	public function before()
@@ -74,6 +78,7 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		$tableList=$this->tableList;
 		$procedureList=$this->procedureList;
 		$dataList=$this->dataList;
+		$triggerList=$this->triggerList;
 		
 		
 		$db=Model::factory('Parkdb');
@@ -92,11 +97,24 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			
 		}
 		
+		foreach($triggerList as $key=>$value)
+		{
+			//echo Debug::vars('60', $value, $db->checkProcedureIsPresent($value));//exit;
+			$triggerListCheck[$value]=$db->checktriggerIsPresent($value);
+			
+		}
+		//echo Debug::vars('106', $triggerListCheck);exit;
 		$content = View::factory('setup/tableList', array(
 			'tableList'=>$tableList,
 			'tableListCheck'=>$tableListCheck,
+			
 			'procedureList'=>$procedureList,
 			'procedureListCheck'=>$procedureListCheck,
+			
+			
+			'triggerList'=>$triggerList,
+			'triggerListCheck'=>$triggerListCheck,
+			
 			'dataList'=>$dataList,
 				
 		));
@@ -185,15 +203,8 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 			{
 				$parkDB->addProcedure($value);
 			}	
-			
-			
-			
-			
-			
 			$this->redirect('/checkdb');
 		}
-		
-		
 		
 		if(Arr::get($_POST, 'addTable'))
 		{
@@ -222,9 +233,7 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		
 		$this->redirect('/checkdb');
 		}
-		
-		
-		
+
 		//Удаление таблицы.
 		//Таблица может не удалена, если она связана с другими таблицами.
 		if(Arr::get($_POST, 'delTable'))
@@ -293,8 +302,6 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 				} else {
 					Log::instance()->add(Log::DEBUG, '267 При добавлении процедуры '.$procedure.' возникла ошибка: '. $parkDB->mess);
 				}
-		
-		
 			}
 			$this->redirect('/checkdb');
 			
@@ -302,8 +309,40 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		
 		if(Arr::get($_POST, 'delProcedure'))
 		{
-		
 			$parkDB->delProcedure(Arr::get($_POST, 'delProcedure'));
+			$this->redirect('/checkdb');
+		}
+		
+		
+		//31.03.2025 добавление триггера
+		if(Arr::get($_POST, 'addTrigger'))
+		{
+			
+			$name=Arr::get($_POST, 'addTrigger'); //получил название процедуры
+			if($parkDB->checkTriggerIsPresent($name))
+			{
+				//триггер уже есть
+				Log::instance()->add(Log::DEBUG, '257 Триггер   '.$name.' уже существует. Завершаю работу по добавлению триггера.');
+				$this->redirect('/checkdb');
+			} else {
+				Log::instance()->add(Log::DEBUG, '260 Триггер  '.$name.' не существует. Продолжаю работу по добавлению триггера.');
+				
+				
+				if($parkDB->addProcedure($name))
+				{
+					Log::instance()->add(Log::DEBUG, '265 Триггер  '.$name.' добавлена успешно.');
+				} else {
+					Log::instance()->add(Log::DEBUG, '267 При добавлении триггера '.$name.' возникла ошибка: '. $parkDB->mess);
+				}
+			}
+			$this->redirect('/checkdb');
+			
+		}
+		
+		if(Arr::get($_POST, 'delTrigger'))
+		{
+			//echo Debug::vars('344', $_POST);exit;
+			$parkDB->delTrigger(Arr::get($_POST, 'delTrigger'));
 			$this->redirect('/checkdb');
 		}
 		
