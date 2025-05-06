@@ -28,9 +28,9 @@ class Model_Gates extends Model {
 	}
 	
 	
-	/*
-	Получить список gate для указанной парковки
-
+	/**	Получить список gate для указанной парковки
+	*@param не входных параметров
+	*@return array
 	*/
 	public function get_list_gate($id_parking=0, $is_enter = null)// 
 	{
