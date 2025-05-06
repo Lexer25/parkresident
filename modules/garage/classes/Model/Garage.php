@@ -45,6 +45,7 @@ class Model_Garage extends Model {
 			'orgList'=>$this->org_income_garage($id_garage),
 			'placeList'=>$this->place_income_garage($id_garage),
 			'grzList'=>$this->place_grz_garage_($id_garage),
+			'cardList'=>$this->place_grz_garage_($id_garage, 1),
 			'grzInGarageList'=>$this->get_grz_in_parking($id_garage),
 			'parkingList'=>Model::Factory('parking')->get_list_parking($this->rootParking),
 			);
@@ -83,12 +84,12 @@ class Model_Garage extends Model {
 		
 	}
 	
-	public function place_grz_garage_($id_garage)// Список ГРЗ, входящих в указанный гараж
+	public function place_grz_garage_($id_garage, $cardType=4)// Список ГРЗ, входящих в указанный гараж
 	{
 		
 		$sql='select distinct c.id_card, c."ACTIVE", p.surname from hl_orgaccess hlo
 			join people p on p.id_org=hlo.id_org
-			join card c on c.id_pep=p.id_pep and c.id_cardtype=4
+			join card c on c.id_pep=p.id_pep and c.id_cardtype='.$cardType.'
 			where hlo.id_garage='.$id_garage;
 		//echo Debug::vars('38', $sql); exit;
 		try
@@ -111,6 +112,9 @@ class Model_Garage extends Model {
 		}
 		
 	}
+	
+	
+
 	
 	public function get_garage_parking_list($id_garage)// Список парковок, входящих в указанный гараж
 	{
@@ -451,7 +455,11 @@ class Model_Garage extends Model {
 	}
 	
 	
-	public function get_list_garage($id_garagename=null)// Список гаражей для указанной парковке
+	/**
+	*@param id_garagename - с
+	*@return array
+	*/
+	public function get_list_garage()// Список гаражей 
 	{
 		//echo Debug::vars('41');
 

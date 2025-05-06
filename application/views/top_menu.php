@@ -25,6 +25,7 @@
 					<!--<li <?php if (Arr::get($_SESSION,'menu_active')=='grztest') echo 'class="active"';?>><?php  echo  HTML::anchor('grz/test', __('grztest')); ?></li> -->
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('checkdb', __('checkDB')); ?></li>
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('emul', __('emul')); ?></li>
+					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('emul/grz', __('emul2')); ?></li>
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('wizard', __('wizard')); ?></li>
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('guide', __('Инструкция')); ?></li>
 				</ul>

@@ -11,7 +11,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 //предполагаю в нем имитировать сигналы от обрудования и наблюдать реакцию парковочной системы 
 	
 	
-	public $template = 'template';
+	public $template = 'templateWidth';
 	public function before()
 	{
 			
@@ -33,12 +33,34 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	public function action_index()//Показываю список машиномест для указанных паркингов
 	{
 		
-		
 		$content = View::factory('emul/emul', array(
-			
-			
-		
 		));
+        $this->template->content = $content;
+	}
+	
+	public function action_test()//
+	{
+		echo Debug::vars('43', $_POST);exit;
+		$content = View::factory('emul/emul', array(
+		));
+        $this->template->content = $content;
+	}
+	
+	
+	public function action_grz()//
+	{
+		
+		$_SESSION['menu_active']='grz';
+		$t1=microtime(true);//отмека времени для оценки быстродействия	
+		//echo Debug::vars('38', $_GET, $_POST, $id_parking); //exit;
+		$getGrzInfo=array_slice(Model::Factory('grz')->getGrzInfoList(), 0, 10);//список ГРЗ
+		$garageList=array_slice(Model::Factory('Garage')->get_list_garage(), 0, 10);//список ГРЗ
+		//echo Debug::vars('57', $garageList);exit;
+		$content = View::factory('emul/grzList', array(
+			'grz_list'=>$getGrzInfo,
+			'garageList'=>$garageList,
+			't1'=>$t1,
+			));
         $this->template->content = $content;
 	}
 	
