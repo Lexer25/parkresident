@@ -87,6 +87,27 @@ class Model_Emul extends Model {
 				->execute()
 				->get('total');
 		}
+	
+
+		/*06.05.2025 Замена номера ворот на видеокамеру
+	*/	
+	//public static function unique_numberPlace($placenumber, $id_parking)
+	public static function unique_numberPlace($data)
+		{
+		//echo Debug::vars('68', $data);exit; 
+		 // Check if the username already exists in the database
+			$sql='select * from hl_place hlp
+					where hlp.placenumber=2
+					and hlp.id_parking=1';
+			return ! DB::select(array(DB::expr('COUNT(id)'), 'total'))
+				->from('hl_place')
+				->where('placenumber', '=', $placenumber)
+				->and_where('id_parking', '=', $id_parking)
+				->execute()
+				->get('total');
+		}
+	
+
 		
 		
 	/**02.05.2025 Получить список ГРЗ для работы в эмуляторе

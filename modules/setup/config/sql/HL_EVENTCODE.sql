@@ -94,3 +94,4 @@ INSERT INTO HL_EVENTCODE (ID, NAME, COLOR) VALUES (4, 'Отметка о въезде поставле
 INSERT INTO HL_EVENTCODE (ID, NAME, COLOR) VALUES (81, 'Проезд запрещен. Нет свободных мест в гараже', 65535);
 INSERT INTO HL_EVENTCODE (ID, NAME, COLOR) VALUES (5, 'Грз не распознан, въезд открыт оператором', 65535);
 INSERT INTO HL_EVENTCODE (ID, NAME, COLOR) VALUES (6, 'Повторный въезд на парковку', 65535);
+INSERT INTO HL_EVENTCODE (ID, NAME, COLOR) VALUES (47, 'Срок действия истек', NULL);

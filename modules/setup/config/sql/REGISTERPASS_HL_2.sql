@@ -36,7 +36,8 @@ begin
   if(((rc=81) or (rc=50))  and (exists(select * from hl_inside hli where hli.id_card=:id_card)) and (exists(select * from hl_param hlp where hlp.id_dev=:id_dev and hlp.is_enter=1))) then
     begin
         INSERT INTO HL_EVENTS (EVENT_CODE, GRZ, ID_GATE, ID_PEP)  VALUES (6, :id_card, :id_dev, :id_pep);
-        delete from hl_inside hli2 where hli2.id_card=:id_card;
+        --delete from hl_inside hli2 where hli2.id_card=:id_card;
+        delete from hl_inside hli2 where hli2.id_pep=:id_pep;
         rc=50;
     end
 -- фиксирую результат валидации
@@ -66,9 +67,6 @@ end
 ^
 
 SET TERM ; ^
-
-DESCRIBE PROCEDURE REGISTERPASS_HL_2
-'ѕроверка допустимости прохода + запись событи€ в журнал';
 
 GRANT SELECT ON CARD TO PROCEDURE REGISTERPASS_HL_2;
 

@@ -18,7 +18,7 @@ DECLARE VARIABLE RC_OK INTEGER = 50; /* проверка успешна, проход разрешен */
 DECLARE VARIABLE RC_UNKNOWNCARD INTEGER = 46; /* неизвестная карта */
 DECLARE VARIABLE RC_DISABLEDCARD INTEGER = 65; /* карта неактивна */
 DECLARE VARIABLE RC_DISABLEDUSER INTEGER = 65; /* юзер неактивен */
-DECLARE VARIABLE RC_CARDEXPIRED INTEGER = 65; /* "сейчас" вне срока действия карты */
+DECLARE VARIABLE RC_CARDEXPIRED INTEGER = 47; /* "сейчас" вне срока действия карты */
 DECLARE VARIABLE RC_ACCESSDENIED INTEGER = 65; /* нет права доступа */
 DECLARE VARIABLE RC_CARLIMITEXCEEDED INTEGER = 81; /* превышен лимит количества авто на территории */
 DECLARE VARIABLE ID_PARKING INTEGER; /* ID парковки */
@@ -91,7 +91,14 @@ begin
                             select hlt.value_int from hl_setting hlt where hlt.name=:checkplaceenable_key into :checkplaceenable;
 
                             -- если ГРЗ в гараже, то надо разрешать въезд в любом случае.
-                               if ((:currentcount < :cntcount) OR (:checkplaceenable=0) OR (exists (select * from hl_inside hli where hli.id_card=:id_card))) then
+                            -- если ГРЗ уже в гараже, то все равно разрешаю въезд
+                            --   if ((:currentcount < :cntcount) OR (:checkplaceenable=0) OR (exists (select * from hl_inside hli where hli.id_card=:id_card))) then
+                               if ((:currentcount < :cntcount) OR (:checkplaceenable=0) OR (exists (
+                               select * from hl_inside hli
+                                join card c on c.id_card=hli.id_card
+                                join card c2 on c2.id_pep=c.id_pep
+                                where c2.id_card=:id_card
+                                ))) then
                                         -- въезд разрешен
                                         event_type = :RC_OK;
                                   else
@@ -138,9 +145,6 @@ end
 
 SET TERM ; ^
 
-DESCRIBE PROCEDURE VALIDATEPASS_HL_PARKING_2
-'Производит проверку наличия свободных мест при въезде на парковку';
-
 GRANT SELECT ON HL_PARAM TO PROCEDURE VALIDATEPASS_HL_PARKING_2;
 
 GRANT SELECT ON CARD TO PROCEDURE VALIDATEPASS_HL_PARKING_2;
@@ -162,4 +166,5 @@ GRANT SELECT ON SS_ACCESSUSER TO PROCEDURE VALIDATEPASS_HL_PARKING_2;
 GRANT SELECT ON ACCESS TO PROCEDURE VALIDATEPASS_HL_PARKING_2;
 
 GRANT EXECUTE ON PROCEDURE VALIDATEPASS_HL_PARKING_2 TO PROCEDURE REGISTERPASS_HL;
+GRANT EXECUTE ON PROCEDURE VALIDATEPASS_HL_PARKING_2 TO PROCEDURE REGISTERPASS_HL_2;
 GRANT EXECUTE ON PROCEDURE VALIDATEPASS_HL_PARKING_2 TO SYSDBA;

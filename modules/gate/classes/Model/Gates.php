@@ -113,6 +113,7 @@ class Model_Gates extends Model {
             hlp.box_port, 
             hlp.id_cam, 
             hlp.id_dev, 
+			hlp.channel,
             hlp.mode from HL_PARAM hlp
 			where hlp.id='.$id_gate;
 		
@@ -134,6 +135,7 @@ class Model_Gates extends Model {
 			$res['id_cam']=Arr::get($value,'ID_CAM');
 			$res['id_dev']=Arr::get($value,'ID_DEV');
 			$res['mode']=Arr::get($value,'MODE');
+			$res['channel']=Arr::get($value,'CHANNEL');
 		}
 		return $res;	
 		
