@@ -40,7 +40,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	
 	public function action_test()//
 	{
-		echo Debug::vars('43', $_POST);exit;
+		echo Debug::vars('43', $_GET, $_POST);exit;
 		$content = View::factory('emul/emul', array(
 		));
         $this->template->content = $content;

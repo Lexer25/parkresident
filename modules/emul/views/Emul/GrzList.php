@@ -57,15 +57,29 @@
 						foreach(array_slice(Arr::get($data, 'grzList'), 0, 3) as $key2=>$value2)
 						{
 								echo Arr::get($value2, 'GRZ');
-								echo Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
-								echo array_key_exists(Arr::get($value2, 'GRZ'), $cardInGarage)? 'yes' : 'No';
+								
+								echo  array_key_exists(Arr::get($value2, 'GRZ'), $cardInGarage)? 'true' : 'false';
+								if(array_key_exists(Arr::get($value2, 'GRZ'), $cardInGarage))
+								{
+									echo Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+								} else {
+									echo Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-warning btn-xs', 'type' => 'submit'));
+								}
+									
 								echo '<br>';
 								
 						}
 						foreach(array_slice(Arr::get($data, 'cardList'), 0, 3) as $key2=>$value2)
 						{
 								echo Arr::get($value2, 'GRZ');
-								echo Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+								echo  array_key_exists(Arr::get($value2, 'GRZ'), $cardInGarage)? 'true' : 'false';
+								if(array_key_exists(Arr::get($value2, 'GRZ'), $cardInGarage))
+								{
+									echo Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+								} else {
+									echo Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-warning btn-xs', 'type' => 'submit'));
+								}
+								
 								echo '<br>';
 						}
 						
@@ -81,32 +95,32 @@
 						foreach(array_slice(Arr::get($data, 'grzList'), 0, 3) as $key2=>$value2)
 						{
 							//echo Debug::vars('41', $value4);
-							/* echo Form::open('emul/test');
-								//echo Arr::get($value2, 'GRZ');
+							echo Form::open('emul/test');
+								echo Arr::get($value2, 'GRZ');
 								echo Form::hidden('card', Arr::get($value2, 'GRZ'));
 								echo Form::hidden('gate', Arr::get($value4, 'id'));
 								
-								//echo Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit')).
-								//Form::button('todo', 'OUT', array('value'=>'out','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+								echo Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit')).
+								Form::button('todo', 'OUT', array('value'=>'out','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
 								
-							echo Form::close(); */
-							 echo HTML::anchor('emul/test?card='.Arr::get($value2, 'GRZ').'&gate='.Arr::get($value4, 'id'), Arr::get($value2, 'GRZ'));
+							echo Form::close();
+							 //echo HTML::anchor('emul/test?card='.Arr::get($value2, 'GRZ').'&gate='.Arr::get($value4, 'id'), Arr::get($value2, 'GRZ'));
 							 echo '<br>';
 						}
 						//вывожу список CARD
 						foreach(array_slice(Arr::get($data, 'cardList'), 0, 3) as $key2=>$value2)
 						{
 							//echo Debug::vars('41', $value3);
-							/* echo Form::open('emul/test');
+							echo Form::open('emul/test');
 								echo Arr::get($value2, 'GRZ');
 								echo Form::hidden('card', Arr::get($value2, 'GRZ'));
 								echo Form::hidden('gate', Arr::get($value4, 'id'));
 								
 								echo Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit')).
 								 Form::button('todo', 'OUT', array('value'=>'out','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
-							echo Form::close(); */
+							echo Form::close();
 							
-							 echo HTML::anchor('emul/test?card='.Arr::get($value2, 'GRZ').'&gate='.Arr::get($value4, 'id'), Arr::get($value2, 'GRZ'));
+							 //echo HTML::anchor('emul/test?card='.Arr::get($value2, 'GRZ').'&gate='.Arr::get($value4, 'id'), Arr::get($value2, 'GRZ'));
 							 echo '<br>';
 						}
 						
