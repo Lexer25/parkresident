@@ -1,6 +1,5 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
- //echo Debug::vars('11', $rp_info); 
-// страница для редактирования сущности
+// страница для редактирования сущности Жилой комплекс
 //echo Debug::vars('4');exit;
 //echo Debug::vars('5', $residence);exit;
 echo Form::open('ResidentPlace/control');
@@ -17,7 +16,7 @@ if(Auth::Instance()->logged_in())
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo __('Конфигурация жилого комплекса').' '. iconv('windows-1251','UTF-8',$residence->name);
-		echo Form::hidden('id_rp', $residence->id);
+		echo Form::hidden('id', $residence->id);
 		
 		
 		

@@ -318,7 +318,7 @@ class Controller_Rubic extends Controller_Template {
 				Model::factory('rubic')->del_door_parking($post);// удаляю точку прохода из парковки
 				$this->redirect('rubic/edit_rubic/'.Arr::get($post, 'id_parking', 0));
 				} {
-					echo Debug::vars('293', $post->errors('validation')); exit;	
+					echo Debug::vars('293', $post->errors('Valid_mess')); exit;	
 				}
 				$this->redirect('rubic/edit_rubic/'.$id_rubic);
 		
@@ -343,7 +343,7 @@ class Controller_Rubic extends Controller_Template {
 				$this->redirect('rubic/edit_rubic/'.Arr::get($post, 'id_parking', 0));
 				}
 				else {
-					echo Debug::vars('318', $post->errors('validation')); exit;	
+					echo Debug::vars('318', $post->errors('Valid_mess')); exit;	
 				}
 				$this->redirect('rubic/edit_rubic/'.$id_rubic);
 		
@@ -369,7 +369,7 @@ class Controller_Rubic extends Controller_Template {
 				$this->redirect('rubic/edit_rubic/'.Arr::get($post, 'id_parking', 0));
 				}
 				else {
-					echo Debug::vars('344', $post->errors('validation')); exit;	
+					echo Debug::vars('344', $post->errors('Valid_mess')); exit;	
 				}
 				$this->redirect('rubic/edit_rubic/'.$id_rubic);
 		
@@ -398,7 +398,7 @@ class Controller_Rubic extends Controller_Template {
 				Model::factory('rubic')->change_config($id_parking, $name, $id_parking, $maxcount, $position);// обновление информации о парковке
 				} else {
 					
-				echo Debug::vars('373', $post->errors('validation')); exit;	
+				echo Debug::vars('373', $post->errors('Valid_mess')); exit;	
 					
 				}
 				
@@ -432,8 +432,8 @@ class Controller_Rubic extends Controller_Template {
 					$id_rubic=Arr::get($post, 'id_rubic');
 					Model::factory('rubic')->update_delay_pass($id_rubic, $id_dev);// очистка указанного периметра
 				} else {
-					echo Debug::vars('497', $post->errors('validation')); exit;
-					$res=$post->errors('validation');
+					echo Debug::vars('497', $post->errors('Valid_mess')); exit;
+					$res=$post->errors('Valid_mess');
 					$res='post->errors(validation)';
 				}
 				

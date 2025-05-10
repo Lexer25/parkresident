@@ -60,7 +60,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 	
 	public function action_control()
 	{
-		
+		//echo Debug::vars('63', $_POST);exit;
 		$post=Validation::factory($this->request->post());
 					$post->rule('todo', 'not_empty')
 							
@@ -71,6 +71,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 						
 					} else 
 					{
+						Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
 						$todo='no';
 						
 					}
@@ -102,6 +103,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 						
 					} else 
 					{
+						Log::instance()->add(Log::ERROR, $_data->errors('Valid_mess'));
 						Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 						
 					}
@@ -135,6 +137,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 						
 						} else {
 
+								Log::instance()->add(Log::ERROR, $_data->errors('Valid_mess'));
 								Session::instance()->set('e_mess', array('ok_mess' => __('Не могу удалить жилой комплекс ":name". Необходимо удалить парковочные площадки, входящие в этот жилой комплекс.', array(':name'=>iconv('windows-1251','UTF-8',$_entity->name)))));
 						}							
 						
@@ -145,7 +148,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 					$this->redirect('residentplace');
 			break;
 			
-			case 'edit'://просмотр и редакция парковки. Переход на форму редактирования
+			case 'edit'://просмотр и редакция жилого комплекса. Переход на форму редактирования
 			//echo Debug::vars('235', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('id', 'not_empty')
@@ -162,7 +165,7 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 					$this->template->content = $content;
 				} else 
 				{
-					echo Debug::vars('175');exit;
+					//echo Debug::vars('175');exit;
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 					$this->redirect('residentplace');
 				}
@@ -199,6 +202,8 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 					
 				} else 
 				{
+					//Log::instance()->add(Log::ERROR, $_data->errors('Valid_mess'));
+					Log::instance()->add(Log::ERROR, Debug::vars($_data->errors('Valid_mess')));
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 					
 				}

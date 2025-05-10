@@ -92,7 +92,7 @@ class Model_Emul extends Model {
 		/*06.05.2025 Замена номера ворот на видеокамеру
 	*/	
 	//public static function unique_numberPlace($placenumber, $id_parking)
-	public static function unique_numberPlace($data)
+	public static function unique_numberPlace_2($data)
 		{
 		//echo Debug::vars('68', $data);exit; 
 		 // Check if the username already exists in the database

@@ -103,7 +103,8 @@ class Controller_Garage extends Controller_Template {
 				//to do
 				$this->redirect('rubic/edit_rubic/'.Arr::get($post, 'ID', 0));
 				} else {
-					echo Debug::vars('293', $post->errors('validation')); exit;	
+					//echo Debug::vars('293', $post->errors('Valid_mess')); exit;	
+					Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
 				}
 				$this->redirect('rubic/edit_garage/'.Arr::get($post, 'id'));
 			break;
@@ -120,7 +121,8 @@ class Controller_Garage extends Controller_Template {
 				//to do
 				$this->redirect('garage/edit_garage/'.Arr::get($post, 'id_garage', 0));
 				} else {
-					echo Debug::vars('293', $post->errors('validation')); exit;	
+					//echo Debug::vars('293', $post->errors('Valid_mess')); exit;	
+					Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
 				}
 				$this->redirect('rubic/edit_garage/'.Arr::get($post, 'id'));
 			break;
@@ -139,7 +141,8 @@ class Controller_Garage extends Controller_Template {
 					//echo Debug::vars('96',Arr::get($post, 'id_garage')); exit; 
 					$this->redirect('garage/edit_garage/'.Arr::get($post, 'id_garage'));
 				} else {
-					echo Debug::vars('293', $post->errors('validation')); exit;	
+					//echo Debug::vars('293', $post->errors('Valid_mess')); exit;	
+					Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
 				}
 				$this->redirect('garage/edit_garage/'.$id_rubic);
 					
@@ -163,6 +166,7 @@ class Controller_Garage extends Controller_Template {
 					} else 
 					{
 						//echo Debug::vars('415', 'valid ERR'); exit;
+						Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
 						Session::instance()->set('e_mess', $post->errors('Valid_mess'));
 						$this->redirect('rubic/event');
 					}
@@ -191,6 +195,7 @@ class Controller_Garage extends Controller_Template {
 					} else 
 					{
 						//echo Debug::vars('415', 'valid ERR'); exit;
+						Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
 						Session::instance()->set('e_mess', $post->errors('Valid_mess'));
 						//$this->redirect('rubic/event');
 					}
@@ -214,6 +219,7 @@ class Controller_Garage extends Controller_Template {
 					} else 
 					{
 						//echo Debug::vars('415', 'valid ERR'); exit;
+						Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
 						Session::instance()->set('e_mess', $post->errors('Valid_mess'));
 						$this->redirect('rubic/event');
 					}
@@ -267,6 +273,7 @@ class Controller_Garage extends Controller_Template {
 					} else 
 					{
 						//echo Debug::vars('415', 'valid ERR'); exit;
+						Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
 						Session::instance()->set('e_mess', $post->errors('Valid_mess'));
 						$this->redirect('rubic/event');
 					}
@@ -292,6 +299,7 @@ class Controller_Garage extends Controller_Template {
 					} else 
 					{
 						//echo Debug::vars('269', 'valid ERR', $post->errors('Valid_mess')); exit;
+						Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
 						Session::instance()->set('e_mess', $post->errors('Valid_mess'));
 						$this->redirect('rubic/event');
 					}
@@ -316,6 +324,7 @@ class Controller_Garage extends Controller_Template {
 					} else 
 					{
 						//echo Debug::vars('269', 'valid ERR', $post->errors('Valid_mess')); exit;
+						Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
 						Session::instance()->set('e_mess', $post->errors('Valid_mess'));
 						$this->redirect('rubic/event');
 					}

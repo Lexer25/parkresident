@@ -79,19 +79,7 @@ function koggle(elem)
   <link rel="stylesheet" href="/city/static/css/bootstrap.min.css" />
   <!-- 6. Подключить CSS виджета "Bootstrap datetimepicker" -->  
   <link rel="stylesheet" href="/city/static/css/bootstrap-datetimepicker.min.css" />
-  
-  
-    
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="../../assets/js/html5shiv.js"></script>
-      <script src="../../assets/js/respond.min.js"></script>
-    <![endif]-->
-    
-    
-   <!--  Скрипты для сортировки таблицы 
-     <script type="text/javascript" src="/city/static/js/sort/jquery-latest.js"></script> --> 
+ 
 	<script type="text/javascript" src="/city/static/js/sort/jquery.tablesorter.js"></script>
 	 
   </head>
@@ -111,11 +99,12 @@ $error_id = uniqid('error');
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					  <?php echo HTML::anchor('rubic', __('City'),  array('class'=>'navbar-brand')) ?>
+					  <?php //echo HTML::anchor('rubic', __('City'),  array('class'=>'navbar-brand')) ?>
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li><?php echo HTML::anchor('skud', __('сводная'));?></li>
+						
+						<li><?php  echo  HTML::anchor('guide', __('Руководство пользователя')); ?></li>
 					</ul>
 				</div>
 			</div>
