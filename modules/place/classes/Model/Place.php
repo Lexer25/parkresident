@@ -55,6 +55,21 @@ class Model_Place extends Model {
 		return $query;
 	}
 	
+	/**10.05.2025
+	*@info получить набор данных для указанной парковочной площадки
+	*/
+	public function getChild_2($parent)
+	{
+		$sql='select * from hl_place hlp
+			where hlp.id_parking='.$parent;
+		//echo Debug::vars('41', $sql);//exit;
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array()
+			;
+		return $query;
+	}
+	
 	
 	// получить id всех машиномест
 	public function getAll()

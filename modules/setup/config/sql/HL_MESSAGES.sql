@@ -31,26 +31,26 @@ CREATE TABLE HL_MESSAGES (
 /******************************************************************************/
 
 DESCRIBE TABLE HL_MESSAGES
-'РўР°Р±Р»РёС†Р° HL_MESSAGES РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅР° РґР»СЏ С…СЂР°РЅРµРЅРёСЏ СЃРѕРѕР±С‰РµРЅРёР№, РІС‹РІРѕРґРёРјС‹С… РЅР° СЃСЂРµРґСЃС‚РІР° РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё (С‚Р°Р±Р»Рѕ РёР»Рё РёРЅС‹Рµ РїСЂРёР±РѕСЂС‹)';
+'Таблица HL_MESSAGES предназначена для хранения сообщений, выводимых на средства отображения информации (табло или иные приборы)';
 
 
 
 /* Fields descriptions */
 
 DESCRIBE FIELD EVENTCODE TABLE HL_MESSAGES
-'РЎСЃС‹Р»РєР° РЅР° РєРѕРґ СЃРѕР±С‹С‚РёСЏ, СЃРІСЏР·Р°РЅРЅРѕРіРѕ СЃ СЌС‚РёРј СЃРѕРѕР±С‰РµРЅРёРµРј.';
+'Ссылка на код события, связанного с этим сообщением.';
 
 DESCRIBE FIELD PARAM TABLE HL_MESSAGES
-'РџР°СЂР°РјРµС‚СЂС‹ С‚РµРєСЃС‚Р° РІ СЃС‚СЂРѕРєРѕРІРѕРј РІРёРґРµ (РЅР°С‡Р°Р»СЊРЅС‹Рµ РєРѕРѕСЂРґРёРЅР°РєС‚С‹, С†РІРµС‚ Рё С‚.Рї.)';
+'Параметры текста в строковом виде (начальные координакты, цвет и т.п.)';
 
 DESCRIBE FIELD SMALNAME TABLE HL_MESSAGES
-'РљСЂР°С‚РєРѕРµ РЅР°Р·РІР°РЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ. РќР°РїСЂРёРјРµСЂ alarm, time Рё С‚.Рї.';
+'Краткое название сообщения. Например alarm, time и т.п.';
 
 DESCRIBE FIELD TEXT TABLE HL_MESSAGES
-'РўРµРєСЃС‚, РІС‹РІРѕРґРёРјС‹Р№ РЅР° С‚Р°Р±Р»Рѕ';
+'Текст, выводимый на табло';
 
 DESCRIBE FIELD "TIMESTAMP" TABLE HL_MESSAGES
-'РњРµС‚РєР° РІСЂРµРјРµРЅРё СЃРѕР·РґР°РЅРёСЏ РёР»Рё РїРѕСЃР»РµРґРЅРѕРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ';
+'Метка времени создания или последного обновления';
 
 
 
@@ -58,9 +58,9 @@ DESCRIBE FIELD "TIMESTAMP" TABLE HL_MESSAGES
 /***                               Privileges                               ***/
 /******************************************************************************/
 commit;
-INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, 46, 'РџСЂРѕРµР·Рґ Р·Р°РїСЂРµС‰РµРЅ. РќРµРёР·РІРµСЃС‚РЅР°СЏ РєР°СЂС‚Р°.', '{"dx":"0","dy":"8","messColor":"4","messScroll":"1"}', NULL, NULL);
-INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, 50, 'Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ!', '{"dx":"0","dy":"8","messColor":"2","messScroll":"1"}', '2023-04-07 12:31:47', NULL);
-INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, 65, 'РџСЂРѕРµР·Рґ Р·Р°РїСЂРµС‰РµРЅ. РќРµС‚ РїСЂР°РІ.', '{"dx":"0","dy":"8","messColor":"1","messScroll":"1"}', '2023-04-07 12:32:18', NULL);
-INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, 81, 'РџСЂРѕРµР·Рґ Р·Р°РїСЂРµС‰РµРЅ. РќРµС‚ РјРµСЃС‚.', '{"dx":"0","dy":"8","messColor":"6","messScroll":"1"}', '2023-04-07 12:32:46', NULL);
-INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, NULL, 'РџР°СЂРєРёРЅРі', '{"dx":31,"dy":32,"messColor":33,"messScroll":34}', '2023-04-07 12:33:54', 'text1');
-INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, NULL, 'РЁРјРёС‚РѕРІСЃРєРёР№, 39', '{"dx":41,"dy":42,"messColor":43,"messScroll":44}', '2023-04-07 12:34:14', 'text2');
+INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, 46, 'Проезд запрещен. Неизвестная карта.', '{"dx":"0","dy":"8","messColor":"4","messScroll":"1"}', NULL, NULL);
+INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, 50, 'Добро пожаловать!', '{"dx":"0","dy":"8","messColor":"2","messScroll":"1"}', '2023-04-07 12:31:47', NULL);
+INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, 65, 'Проезд запрещен. Нет прав.', '{"dx":"0","dy":"8","messColor":"1","messScroll":"1"}', '2023-04-07 12:32:18', NULL);
+INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, 81, 'Проезд запрещен. Нет мест.', '{"dx":"0","dy":"8","messColor":"6","messScroll":"1"}', '2023-04-07 12:32:46', NULL);
+INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, NULL, 'Паркинг', '{"dx":31,"dy":32,"messColor":33,"messScroll":34}', '2023-04-07 12:33:54', 'text1');
+INSERT INTO HL_MESSAGES (ID, EVENTCODE, TEXT, PARAM, "TIMESTAMP", SMALNAME) VALUES (NULL, NULL, 'Шмитовский, 39', '{"dx":41,"dy":42,"messColor":43,"messScroll":44}', '2023-04-07 12:34:14', 'text2');

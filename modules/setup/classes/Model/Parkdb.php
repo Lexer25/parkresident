@@ -19,6 +19,8 @@ class Model_Parkdb extends Model {
 	//путь к базе данных
 	public $_connectName='fb';
 	public $db_path;
+	public $serverIP;
+	public $serverPort;
 	public $mess;
 	
 	public function __construct($_connectName='fb')
@@ -26,7 +28,11 @@ class Model_Parkdb extends Model {
 		
 		
 		$this->db_path = iconv('cp866','UTF-8//IGNORE', Arr::get($this->aboutDB($_connectName), 'pathDB'));
+		$this->serverIP = iconv('cp866','UTF-8//IGNORE', Arr::get($this->aboutDB($_connectName), 'Server'));
 		
+		//echo Debug::vars('29', $this->aboutDB()); exit;
+		$this->serverPort=3050;
+		//echo Debug::vars('35', $_connectName, $this); exit;
 	}
 	
 		
@@ -39,10 +45,17 @@ class Model_Parkdb extends Model {
 
 		//$reg=shell_exec('C:\Windows\system32\reg.exe query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\SDuo" /v "Database"');
 		$reg=shell_exec('C:\Windows\system32\reg.exe query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\\'.Arr::get(explode(":", $_dsn), 1).'" /v "Database"');
+//		echo Debug::vars('43', shell_exec('C:\Windows\system32\reg.exe query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\\'.Arr::get(explode(":", $_dsn), 1)));exit;
 		$_aaa=explode("REG_SZ", $reg);
+	
+		$reg=shell_exec('C:\Windows\system32\reg.exe query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\\'.Arr::get(explode(":", $_dsn), 1).'" /v "Server"');
+		$_ip=explode("REG_SZ", $reg);
+
+//		echo Debug::vars('44', $_aaa, $_ip);exit;
 		return array('connectName'=>$sourcename,
 				'dsn'=>$_dsn,
-				'pathDB'=>trim(Arr::get($_aaa, 1))
+				'pathDB'=>trim(Arr::get($_aaa, 1)),
+				'Server'=>trim(Arr::get($_ip, 1))
 				);
 		
 	}
@@ -216,7 +229,7 @@ class Model_Parkdb extends Model {
 	public function addTableData($name)
 	{
 		//echo Debug::vars('99', $name.'.sql');exit;
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\data\\'.$name.'.sql';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" "'.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\data\\'.$name.'.sql';
 		exec(iconv('UTF-8', 'CP1251', $ttt));
 		
 	}
@@ -228,7 +241,7 @@ class Model_Parkdb extends Model {
 	{
 		$retval=null;	
 		$output=null;		
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$tableName.'.sql';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" "'.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.'  -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$tableName.'.sql';
 			
 		Log::instance()->add(Log::DEBUG, Debug::vars('158 выполняю команду добавления таблицы :', iconv('UTF-8', 'CP1251', $ttt)));	
 		$result=exec(iconv('UTF-8', 'CP1251', $ttt), $retval, $output);
@@ -259,7 +272,7 @@ class Model_Parkdb extends Model {
 	//31.03.2025 ДОбавление процедуры сводится к выполнению скрипта, взятого из файлов.
 	public function addProcedure($name)
 	{
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" "'.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.'  -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
 			
 		Log::instance()->add(Log::DEBUG, Debug::vars('226 выполняю команду добавления процедуры :', $name));	
 			

@@ -23,7 +23,7 @@
 		echo Form::open('Checkdb/worker');
 			$_connectName='fb';
 			$about=Model::factory('Parkdb')->aboutDB($_connectName);
-			//echo Debug::vars('22', $about);
+			echo Debug::vars('22', $about);
 			
 		?>
 		<table class="table table-striped table-hover table-condensed">
@@ -41,7 +41,14 @@
 				<td>Путь к базе данных</td>
 				<td><?php echo iconv('cp866','UTF-8//IGNORE', Arr::get($about, 'pathDB'));?>
 				
-				</td>
+			</td>
+			<tr>
+				<td>IP</td>
+				<td><?php echo iconv('cp866','UTF-8//IGNORE', Arr::get($about, 'Server'));?>
+				
+			</td>
+			
+			
 			</tr>
 			
 			

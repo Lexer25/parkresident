@@ -13,6 +13,7 @@ SET NAMES WIN1251;
 /******************************************************************************/
 
 
+
 CREATE GENERATOR GEN_HL_PARAM_ID;
 
 CREATE TABLE HL_PARAM (
@@ -28,8 +29,10 @@ CREATE TABLE HL_PARAM (
     NAME        STR_250 /* STR_250 = VARCHAR(250) */,
     ID_PARKING  SMALLINT,
     IS_ENTER    SMALLINT DEFAULT 1,
-    CREATED     TIMESTAMP DEFAULT 'now'
+    CREATED     TIMESTAMP DEFAULT 'now',
+    CHANNEL     INTEGER
 );
+
 
 
 

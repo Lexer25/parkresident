@@ -1,11 +1,12 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по машноместам
 //echo Debug::vars('3', $id_place);
-$token = Profiler::start('pr', 'placeLisr');//Профилирую работу вывода списка мм
-if(count($id_place) == 1)
+if(count($id_place) == 1)//если указана только одна площадка, то вывожу данные только по указанной площадке.
 {
 	$_parking=new Parking(Arr::get(Arr::flatten($id_place), 'ID'));//информация о парковочной площадке
-	$placeList=Model::factory('Place')->getChild($_parking->id);//список машиномест на этой парковочной площадке
+	//$placeList=Model::factory('Place')->getChild($_parking->id);//список машиномест на этой парковочной площадке
+	$placeList=Model::factory('Place')->getChild_2($_parking->id);//список машиномест на этой парковочной площадке с уже готовой информацией
+	
 	echo Form::open('place/control');
 	$titleAddPlace=__('Регистрация машиноместа для парковочной площадки ":name". Зарегистрировано :regPlace. Количество мест на площадке :countPlace',
 				array(
@@ -21,24 +22,24 @@ if(count($id_place) == 1)
 					':regPlace'=> count($placeList),
 					':countPlace'=>$_parking->count
 					));
-} else {
-	
-		$placeList=Model::factory('Place')->getAll();//список машиномест на этой парковочной площадке
+	} else {//если ничего не указано, то вывожу данные по всем площадкам. Количество разделом равно количеству площадок.
 		
-		$titleAddPlace=__('Регистрация машиноместа для парковочных площадок. Общее количество мест на площадке :countPlace',
-					array(
-						
-						':regPlace'=> count($placeList),
-						':countPlace'=>count($placeList)
-						));
-						
+			$placeList=Model::factory('Place')->getAll();//список всех машиномест на на всех площадках
+			
+			$titleAddPlace=__('Регистрация машиноместа для парковочных площадок. Общее количество мест на площадке :countPlace',
+						array(
+							
+							':regPlace'=> count($placeList),
+							':countPlace'=>count($placeList)
+							));
+							
 
-		$title=__('Список машиномест для всех парковочных площадок. Парковочных площадок :regPlace. Зарегистрировано машиномест на площадках :countPlace',
-					array(
-						':regPlace'=> count($id_place),
-						':countPlace'=>count($placeList)
-						));
-}	
+			$title=__('Список машиномест для всех парковочных площадок. Парковочных площадок :regPlace. Зарегистрировано машиномест на площадках :countPlace',
+						array(
+							':regPlace'=> count($id_place),
+							':countPlace'=>count($placeList)
+							));
+	}	
 ?>
 <script type="text/javascript">
      
@@ -109,10 +110,12 @@ echo Form::open('place/control');
 		$i=0;
 		$checked='no';
 		//вывод списка машиномест для указанного паркинга
-		
-		foreach($placeList as $key=>$value)
+		echo Debug::vars('113', $placeList);exit;
+		foreach($placeList as $key=>$place)
 		{
-			$place=new Place(Arr::get($value, 'ID'));
+			//echo Debug::vars('116', $placeList);exit;
+			
+			//$place=new Place(Arr::get($value, 'ID'));
 			//echo Debug::vars('68', $key, $value, $place); exit;
 			
 			echo '<tr>';
@@ -177,24 +180,7 @@ echo Form::open('place/control');
 </div>
 </div>
 
-<?php
-	echo Form::close();
-	
-	
-	/* $token2 = Profiler::start('pr', 'ttt');//Профилирую работу другого процесса
-	Profiler::stop($token);
-	Profiler::stop($token2);
-	$stat=Profiler::stats(array($token));
-	echo Debug::vars('188', $stat);
-	$stat=Profiler::stats(array($token2));
-	echo Debug::vars('190-0', $stat);//exit;
-	echo Debug::vars('190-1', $stat);
-	echo Debug::vars('190-2', Arr::get(Arr::get(Profiler::groups(), 'pr'), 'ttt'));
-	//echo Debug::vars('186',  Profiler::application());
-	echo Debug::vars('192', Arr::get(Profiler::groups(), 'pr'));//exit;//похоже, что это информация берется из кеша
-	echo View::factory('profiler/stats') */
-
-?>
+<?echo Form::close();?>
 	
   
 

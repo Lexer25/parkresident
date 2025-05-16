@@ -58,6 +58,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 		
 		));
         $this->template->content = $content;
+		//echo View::factory('profiler/stats');
 	}
 	
 	/*11.04.2025 редактирование машиноместа
@@ -79,28 +80,30 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	/** 4.04.2025 	Показываю список машиномест для указанных паркингов
 	*если паркинг указан, то показываю места именно этого паркинга
 	*если паркинг НЕ указан, то показываю все.
+	*@param $this->request->param('id') - идентификатор парковочной площадки
 	*/
 	public function action_list()//
 	{
 		$id = $this->request->param('id');
 		//$_SESSION['menu_active']='rubic';
 		$query=Validation::factory($this->request->param());
-					$query->rule('id', 'not_empty')
-							->rule('id', 'digit')
+			$query->rule('id', 'not_empty')
+					->rule('id', 'digit')
 							;
-					if($query->check())
-					{
-						//$id_place=Model::factory('place')->getChild(Arr::get($query, 'id'));
-						$id_place[]=array('ID'=>$id);
-					} else 
-					{
-						$id_place=Model::factory('place')->getAll();
-					}
+			if($query->check())
+			{
+				//$id_place=Model::factory('place')->getChild(Arr::get($query, 'id'));
+				$id_place[]=array('ID'=>$id);
+			} else 
+			{
+				$id_place=Model::factory('place')->getAll();
+			}
 		//echo Debug::vars('90',$id_place );exit;
 		$content = View::factory('place/list', array(
 			'id_place'=>$id_place,
 		));
         $this->template->content = $content;
+		//echo View::factory('profiler/stats');
 	}
 	
 	
@@ -128,6 +131,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 			'id_place'=>$id_place,
 		));
         $this->template->content = $content;
+		
 	}
 	
 	
@@ -316,7 +320,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						}
 				} else 
 				{
-					echo Debug::vars('298');exit;
+					//echo Debug::vars('298');exit;
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 				}
 				$this->redirect('place/list');
@@ -338,7 +342,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 		public function _action_addMatrix()
 		{
 			
-			echo Debug::vars('297', $_POST, $this->request->param('id'));exit;
+			//echo Debug::vars('297', $_POST, $this->request->param('id'));exit;
 			$_data=Validation::factory($this->request->post());
 				$_data->rule('place', 'not_empty')
 						->rule('place', 'digit')
