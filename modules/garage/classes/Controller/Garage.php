@@ -69,7 +69,7 @@ class Controller_Garage extends Controller_Template {
 	
 		//echo Debug::vars('59', $org_income_garage); exit;
 		
-		$content = View::factory('garage/edit_garage2', array(
+		$content = View::factory('garage/edit_garage', array(
 			'garage_info'=>$garage_info,
 			'place_list'=>$place_list,
 			'place_income_garage'=>$place_income_garage,
@@ -86,7 +86,7 @@ class Controller_Garage extends Controller_Template {
 
 	public function action_control()
 	{
-		//echo Debug::vars('30', $_GET, $_POST); exit;
+		echo Debug::vars('30', $_GET, $_POST); exit;
 		
 		$todo = $this->request->post('todo');
 		switch ($todo){

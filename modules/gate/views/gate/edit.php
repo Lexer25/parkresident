@@ -1,5 +1,5 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
- echo Debug::vars('2', $info_gate);
+ //echo Debug::vars('2', $info_gate);
 
 	
 // страница отображения данных по воротам
@@ -69,7 +69,7 @@ if(Auth::Instance()->logged_in())
 					array('1'=>'Въезд 1', '0'=>'Выезд 0'),
 					$info_gate->is_enter).' '.$info_gate->is_enter.'</td>';
 				echo '<td>'.Form::input('tablo_ip', $info_gate->tablo_ip, array('pattern'=>$patter_IP)).'</td>';
-				echo '<td>'.Form::input('tablo_port',$info_gate->tablo_port, array('type'=>'number', 'size'=>'5', 'min'=>'1', 'max'=>'65535')).'</td>';
+				echo '<td>'.Form::input('tablo_port',$info_gate->tablo_port, array('type'=>'number', 'size'=>'5', 'min'=>'0', 'max'=>'65535')).'</td>';
 				echo '<td>'.Form::input('box_ip',$info_gate->box_ip, array('pattern'=>$patter_IP)).'</td>';
 				echo '<td>'.Form::input('box_port',$info_gate->box_port, array('type'=>'number', 'size'=>'5', 'min'=>'1', 'max'=>'65535')).'</td>';
 				echo '<td>'.Form::input('channel',$info_gate->channel).'</td>';

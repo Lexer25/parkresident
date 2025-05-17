@@ -1,3 +1,62 @@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const table = document.getElementById('tablesorter');
+  const rows = table.querySelectorAll('tbody tr');
+  const columnIndex = 10; // Номер колонки для проверки (начиная с 0)
+  
+  // Собираем значения из указанной колонки
+  const values = Array.from(rows).map(row => 
+    row.cells[columnIndex].textContent.trim()
+  );
+  
+  // Находим дубликаты
+  const duplicates = values.filter((item, index) => 
+    values.indexOf(item) !== index
+  );
+  const uniqueDuplicates = [...new Set(duplicates)];
+  
+  // Подсвечиваем дубликаты
+  rows.forEach(row => {
+    const cellValue = row.cells[columnIndex].textContent.trim();
+    if (uniqueDuplicates.includes(cellValue)) {
+      row.cells[columnIndex].style.backgroundColor = '#ffeb3b';
+      row.cells[columnIndex].style.fontWeight = 'bold';
+    }
+  });
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const table = document.getElementById('tablesorter');
+  const rows = table.querySelectorAll('tbody tr');
+  const columnIndex = 11; // Номер колонки для проверки (начиная с 0)
+  
+  // Собираем значения из указанной колонки
+  const values = Array.from(rows).map(row => 
+    row.cells[columnIndex].textContent.trim()
+  );
+  
+  // Находим дубликаты
+  const duplicates = values.filter((item, index) => 
+    values.indexOf(item) !== index
+  );
+  const uniqueDuplicates = [...new Set(duplicates)];
+  
+  // Подсвечиваем дубликаты
+  rows.forEach(row => {
+    const cellValue = row.cells[columnIndex].textContent.trim();
+    if (uniqueDuplicates.includes(cellValue)) {
+      row.cells[columnIndex].style.backgroundColor = '#ffeb3b';
+      row.cells[columnIndex].style.fontWeight = 'bold';
+    }
+  });
+});
+
+
+
+
+</script>
+
 <?php
 //echo Debug::vars('2', $gate_list, $id_parking);
 //echo Debug::vars('3', $gate_list); exit;
@@ -81,8 +140,8 @@ echo Form::open('gate/control');
 							echo '<td>'.$gate->box_ip.'</td>';
 							echo '<td>'.$gate->box_port.'</td>';
 							echo '<td>'.$gate->channel.'</td>';
-							echo '<td>'.$gate->id_cam.'</td>';
-							echo '<td>'.Arr::get($list, $gate->id_dev).' ('.$gate->id_dev.')</td>';
+							echo '<td id="myForm2">'.$gate->id_cam.'</td>';
+							echo '<td id="myForm3">'.Arr::get($list, $gate->id_dev).' ('.$gate->id_dev.')</td>';
 							/* echo '<td>'.Form::select('mode',
 								array('0'=>'Шлюз 0','1'=>'Ворота 1','2'=>'Шлагбаум 2','3'=>'Ворота+шлагбаум 3'),
 								$gate->mode,
