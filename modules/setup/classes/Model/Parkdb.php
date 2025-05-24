@@ -201,16 +201,7 @@ class Model_Parkdb extends Model {
 	
 	public function delTable($tableName)
 	{
-		/* Log::instance()->add(Log::DEBUG, '117 Удадение таблицы '.$tableName);
-		if($this->checkGeneratorIsPresent($name)) 
-		{
-			Log::instance()->add(Log::DEBUG, '173 Генератора :gen присутвует. Начинается его удаление.', array(':gen'=>$name));
-			$this->makeQuery('DROP GENERATOR GEN_'. $name.'_ID');
-		} else {
-			Log::instance()->add(Log::DEBUG, '176 Генератора :gen Отсутсвует, удалять ничего не надо.', array(':gen'=>$name));
-		}
 		
-		$this->delGenerator($tableName); */
 		return $this->makeQuery('DROP TABLE '. $tableName);
 		
 	}

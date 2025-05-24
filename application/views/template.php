@@ -21,6 +21,7 @@
 	<?= HTML::style('static/css/city.css'); ?>
 	<?//= HTML::style('static/css/modal.css'); ?>
 	<link rel="stylesheet" href="/parkresident/static/css/themes/blue/style.css" type="text/css" />
+	
 	 
 <!-- ... -->
   <!-- 1. Подключить библиотеку jQuery -->

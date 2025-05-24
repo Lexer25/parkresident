@@ -34,6 +34,10 @@
 						echo '<br>';
 						echo Arr::get($value, 'is_enter')? 'Въезд':'Выезд';
 						echo ' (id_dev='.Arr::get($value, 'id_dev').')';
+						echo Form::open('emul/sendOpen');
+						echo Form::hidden('id', Arr::get($value, 'id'));
+							echo Form::button('todo', 'open', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+						echo Form::close();
 					echo '</th>';
 				}
 			

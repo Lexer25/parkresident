@@ -50,7 +50,8 @@
 							echo '<td>'.iconv('windows-1251','UTF-8', $parking->name).'</td>';
 
 							echo '<td>';
-								//echo Arr::get($procedureListCheck, $value)? HTML::image('static/images/green-check.png', array('alt' => 'true')) : 'false';
+							//echo Debug::vars('53', Model_wizard::checkAccessNameIsPresent(iconv('windows-1251','UTF-8', $parking->name)));//exit;
+								echo !Model_wizard::checkAccessNameIsPresent(iconv('windows-1251','UTF-8', $parking->name))? HTML::image('static/images/green-check.png', array('alt' => 'true')) : 'false';
 							echo '</td>';
 							
 							echo '<td>';
@@ -58,7 +59,7 @@
 									//echo Form::button('addAccessname', 'Добавить категорию доступа', array('value'=>Arr::get($value, 'ID')));
 									//echo Debug::vars('202', $parking->name);
 									echo Form::hidden('name', iconv('windows-1251','UTF-8', $parking->name));
-									echo Form::button('addAccessname2', 'Добавить категорию доступа', array('value'=>$parking->name));
+									echo Form::button('addAccessname2', 'Добавить категорию доступа в СКУД', array('value'=>$parking->name));
 								echo Form::close();	
 							echo '</td>';
 							

@@ -291,6 +291,13 @@ class Controller_Gate extends Controller_Template { // класс описыва
 					$this->redirect('gate');
 			break;
 			
+			case 'open'://включить счетчики свободных мест
+				echo Debug::vars('295', $_POST); exit;
+		
+					Model::factory('gates')->check_count_on();
+					$this->redirect('gate');
+			break;
+			
 			case 'set_tablo_text':		//сохранить параметры табло
 				//echo Debug::vars('172', $_POST); exit;
 				//$data=Validation::factory($this->request->post());

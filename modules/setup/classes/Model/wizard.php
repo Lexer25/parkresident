@@ -11,7 +11,7 @@
  
  
 
-class Model_wizard extends Model {
+class Model_Wizard extends Model {
 	
 	/*11.04.2025 информация по подключенной базе данных
 	*/
@@ -25,10 +25,34 @@ class Model_wizard extends Model {
 	{
 		
 		
-		$this->db_path = iconv('cp866','UTF-8//IGNORE', Arr::get($this->aboutDB($_connectName), 'pathDB'));
 		
 	}
 	
+	
+	/**
+		
+	* @package    dashboard
+	 * @category   Base
+	 * @author     Artonit
+	 * @copyright  (c) 2025 Artonit Team
+	 * @license    http://artonit/ru 
+	 * @desc проверка наличия названия категории доступа в БД СКУД. Если название имеется, то вернется false
+	 
+	 */
+	public static function checkAccessNameIsPresent($name)
+	{
+		$sql='select count(*) from accessname an
+			where an.name=\''.$name.'\'';
+	
+		if(!DB::query(Database::SELECT, iconv('UTF-8', 'CP1251', $sql))
+			->execute(Database::instance('fb'))
+			->get('COUNT')) return true;
+			
+		return false;
+		
+		
+	}
+ 
 		
 	public function _aboutDB($sourcename)
 	{

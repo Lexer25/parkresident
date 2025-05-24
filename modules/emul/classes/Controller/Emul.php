@@ -12,6 +12,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	
 	
 	public $template = 'templateWidth';
+	private $requestPort=8080;
 	public function before()
 	{
 			
@@ -70,7 +71,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	//отправка http post запроса эмуляция работы cvs
 	 public function action_sendGRZ()
 	 {	
-		//echo Debug::vars('44', $_POST);exit;
+		echo Debug::vars('74', $_POST);exit;
 		
 		//$cam=Arr::get($_POST, 'card');
 		$cam=Arr::get(Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate')), 'id_cam');
@@ -104,7 +105,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	 //отправка http post запроса эмуляция работы МПТ UHF
 	 public function action_sendUHF()
 	 {	
-		//echo Debug::vars('71', $_POST);//exit;
+		//echo Debug::vars('71', $_POST);exit;
 		//echo Debug::vars('108', Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate')));exit;
 		$gate=Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate'));
 		
@@ -112,11 +113,30 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	$data=json_encode(array (
 			'key' => Arr::get($_POST, 'card'),
 			'ip'=>Arr::get($gate, 'box_ip'),
-			'channel'=>Arr::get($gate,'channel'),
+			'ch'=>Arr::get($gate,'channel'),
 			
 			
 			));
 		$this->sendRequestPostJson($data, 'dashboard/sendMPT');
+		$this->redirect('emul/grz');
+	 }
+	 
+	 
+	  //отправка http post запроса на открытие двери
+	 public function action_sendOpen()
+	 {	
+		//echo Debug::vars('71', $_POST);exit;
+		//echo Debug::vars('108', Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate')));exit;
+		//$gate=Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate'));
+		
+		
+	$data=json_encode(array (
+			'id' => Arr::get($_POST, 'id'),
+					
+			
+			));
+		//	echo Debug::vars('138', $data); exit;
+		$this->sendRequestPostJson($data, 'dashboard/opengate');
 		$this->redirect('emul/grz');
 	 }
 	 
@@ -128,7 +148,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	//Отправк POST запроса. Данные должны быть в формате json
 	public function sendRequestPostJson($data, $url)
 	{
-			$request = Request::factory('http://localhost/cvs/'.$url)
+			$request = Request::factory('http://localhost.:'.$this->requestPort.'/cvs/'. $url)
 					->headers("Accept", "application/json")
 					->headers("Content-Type", "application/json")
 					->method('POST')

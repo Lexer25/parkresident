@@ -50,12 +50,23 @@ class Controller_Wizard extends Controller_Template { // класс описыв
 	*/
 	public function action_addAccessname ()
 	{
-		
-		//echo Debug::vars('41', $_POST);//exit;
-		$sql='INSERT INTO ACCESSNAME (ID_DB,NAME) VALUES (1,\''.Arr::get($_POST, 'name').'\')';
-		//echo Debug::vars('45', $sql);exit;
-		Log::instance()->add(Log::NOTICE, $sql);
-		Model::factory('Parkdb')->makeQuery(iconv('UTF-8','windows-1251',$sql));
+		//echo Debug::vars('53', $_POST);//exit;
+		$post=Validation::factory($_POST);
+		$post->rule('name', 'not_empty')
+				->rule('name', 'Model_wizard::checkAccessNameIsPresent')
+				;
+				if($post->check())
+				{
+					$sql='INSERT INTO ACCESSNAME (ID_DB,NAME) VALUES (1,\''.Arr::get($_POST, 'name').'\')';
+					//echo Debug::vars('45', $sql);exit;
+					Log::instance()->add(Log::NOTICE, $sql);
+					Model::factory('Parkdb')->makeQuery(iconv('UTF-8','windows-1251',$sql));
+					
+					
+				} else {
+					//echo Debug::vars('62 err', $post);exit;
+					
+				}
 		$this->redirect('wizard');
        
 		
