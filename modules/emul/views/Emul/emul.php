@@ -55,8 +55,7 @@ if(Auth::Instance()->logged_in() OR true)
 				</td>
 				<td>
 					<?php
-					//echo 'Прием сообщения от CVS о получении ГРЗ.';
-					//echo HTML::anchor('emul/sendGRZ', 'Send from GRZ');
+					
 					echo Form::button('sendGRZ', 'Send from GRZ');
 					?>
 				</td>

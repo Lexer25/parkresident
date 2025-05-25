@@ -15,7 +15,6 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	private $requestPort=8080;
 	public function before()
 	{
-			
 			parent::before();
 			$session = Session::instance();
 			if (!empty($_POST)) {
@@ -27,7 +26,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 				}
 			}
 			I18n::load('rubic');
-			
+			$this->requestPort = Kohana::$config->load('emul_config')->get('requestPort', 80);
 	}
 	
 	
@@ -63,6 +62,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 			't1'=>$t1,
 			));
         $this->template->content = $content;
+		//echo View::factory('profiler/stats');
 	}
 	
 	
@@ -71,8 +71,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	//отправка http post запроса эмуляция работы cvs
 	 public function action_sendGRZ()
 	 {	
-		echo Debug::vars('74', $_POST);exit;
-		
+		//echo Debug::vars('74', $_POST);exit;
 		//$cam=Arr::get($_POST, 'card');
 		$cam=Arr::get(Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate')), 'id_cam');
 		$grz=Arr::get($_POST, 'card');
@@ -94,7 +93,8 @@ class Controller_Emul extends Controller_Template { // класс для про�
 			'quality' =>  '555555555000',
 			'stayTimeMinutes' => 0,
 			'type' => 0,
-			'weight' => 0
+			'weight' => 0,
+			'test' => 1
 			));
 			//echo Debug::vars('98', $data);exit;
 		$this->sendRequestPostJson($data, 'dashboard/exec');
@@ -109,16 +109,19 @@ class Controller_Emul extends Controller_Template { // класс для про�
 		//echo Debug::vars('108', Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate')));exit;
 		$gate=Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate'));
 		
-		
-	$data=json_encode(array (
-			'key' => Arr::get($_POST, 'card'),
-			'ip'=>Arr::get($gate, 'box_ip'),
-			'ch'=>Arr::get($gate,'channel'),
+		//в режиме ТЕСТ добавляю данные IP и PORT из базы данных. В реальных условиях эти данные будут извлекаться из запроса от контроллера.
+		$data_0=array (
+				'key' => Arr::get($_POST, 'card'),
+				'test' => Arr::get($_POST, 'test'),
+				'ip'=>Arr::get($gate, 'box_ip'),
+				'ch'=>Arr::get($gate,'channel'),
+				);
 			
+	//$data=json_encode($data_0);
 			
-			));
-		$this->sendRequestPostJson($data, 'dashboard/sendMPT');
+		$this->sendRequestPostJson($data_0, 'dashboard/sendMPT');
 		$this->redirect('emul/grz');
+
 	 }
 	 
 	 
@@ -132,8 +135,6 @@ class Controller_Emul extends Controller_Template { // класс для про�
 		
 	$data=json_encode(array (
 			'id' => Arr::get($_POST, 'id'),
-					
-			
 			));
 		//	echo Debug::vars('138', $data); exit;
 		$this->sendRequestPostJson($data, 'dashboard/opengate');
@@ -148,12 +149,18 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	//Отправк POST запроса. Данные должны быть в формате json
 	public function sendRequestPostJson($data, $url)
 	{
-			$request = Request::factory('http://localhost.:'.$this->requestPort.'/cvs/'. $url)
-					->headers("Accept", "application/json")
-					->headers("Content-Type", "application/json")
-					->method('POST')
-					->body($data)
-					->execute();
+			//echo Debug::vars('150', 'http://localhost:'.$this->requestPort.'/cvs/'. $url);exit;
+			$request = Request::factory('http://localhost:'.$this->requestPort.'/cvs/'. $url)
+					//->headers("Accept", "application/json")
+					//->headers("Content-Type", "application/json")
+					//->headers("Accept", "application/json")
+					//->headers("Content-Type", "application/x-www-form-urldecode")
+					->method(Request::POST)
+					//->body($data)
+					->post($data);
+					
+			$response=$request->execute();
+			Log::instance()->add(Log::NOTICE, '157 отправлен тестовый запрос на адрес http://localhost:'.$this->requestPort.'/cvs/'. $url);
 			return $request->body();
 	} 
 }

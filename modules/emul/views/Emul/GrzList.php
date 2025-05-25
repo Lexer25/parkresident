@@ -19,7 +19,7 @@
 	<thead>
 		<tr>
 			<th> Гараж </th>
-			<th> Идентификаторы </th>
+			<th> Идентификаторы/<BR>IN - в гараже, OUT - не в гараже</th>
 			<?php
 			
 				$list=Model::factory('Gates')->get_list_gate();//список гаражей
@@ -64,8 +64,10 @@
 						foreach(array_slice(Arr::get($data, 'grzList'), 0, 300) as $key2=>$value2)
 						{
 								echo Arr::get($value2, 'GRZ');
+								echo ' ';
 								
-								echo  array_key_exists(Arr::get($value2, 'GRZ'), $cardInGarage)? 'true' : 'false';
+								// echo  array_key_exists(Arr::get($value2, 'GRZ'), $cardInGarage)? 'true' : 'false';
+								// echo ' ';
 								if(array_key_exists(Arr::get($value2, 'GRZ'), $cardInGarage))
 								{
 									echo Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
@@ -79,8 +81,11 @@
 						echo '---<br>';
 						foreach(array_slice(Arr::get($data, 'cardList'), 0, 300) as $key2=>$value2)
 						{
+								echo Form::hidden('test', true);
 								echo Arr::get($value2, 'GRZ');
-								echo  array_key_exists(Arr::get($value2, 'GRZ'), $cardInGarage)? 'true' : 'false';
+								echo ' ';
+								// echo  array_key_exists(Arr::get($value2, 'GRZ'), $cardInGarage)? 'true' : 'false';
+								// echo ' ';
 								if(array_key_exists(Arr::get($value2, 'GRZ'), $cardInGarage))
 								{
 									echo Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
@@ -105,6 +110,7 @@
 							//echo Debug::vars('41', $value4);
 							echo Form::open('emul/sendGRZ');
 								echo Arr::get($value2, 'GRZ');
+								echo Form::hidden('test', 1);
 								echo Form::hidden('card', Arr::get($value2, 'GRZ'));
 								echo Form::hidden('gate', Arr::get($value4, 'id'));
 								echo Form::button('todo', 'send', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
@@ -120,6 +126,7 @@
 							//echo Debug::vars('41', $value3);
 							echo Form::open('emul/sendUHF');
 								echo Arr::get($value2, 'GRZ');
+								echo Form::hidden('test', 1);
 								echo Form::hidden('card', Arr::get($value2, 'GRZ'));
 								echo Form::hidden('gate', Arr::get($value4, 'id'));
 								
