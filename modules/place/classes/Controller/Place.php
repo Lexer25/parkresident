@@ -16,7 +16,10 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	{
 			
 			parent::before();
+			//$token = Profiler::start('test', 'profiler');
+			
 			$session = Session::instance();
+			$session->set('token', Profiler::start('vvv', 'profiler'));
 			if (!empty($_POST)) {
              	$username = Arr::get($_POST, 'username');
                 $password = Arr::get($_POST, 'password');
@@ -113,6 +116,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	*/
 	public function action_matrix()//
 	{
+		
 		$id = $this->request->param('id');
 		//$_SESSION['menu_active']='rubic';
 		$query=Validation::factory($this->request->param());
@@ -129,6 +133,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 		
 		$content = View::factory('place/matrix', array(
 			'id_place'=>$id_place,
+			
 		));
         $this->template->content = $content;
 		

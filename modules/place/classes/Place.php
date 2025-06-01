@@ -29,6 +29,7 @@ class Place
 	public $created;
 	public $modify;//дата последнего изменения
 	public $mess;//сообщения всякие
+	public $id_garage;//id гаража, куда входит машиноместо
 	
 	
 	
@@ -36,8 +37,11 @@ class Place
     {
        if(!is_null($id))//если указан id, то создаю экземпляр класса с данными из БД.
 	   {
-	   
-		$sql='select hlr.id, hlr.placenumber, hlr.description, hlr.note, hlr.status, hlr.name, hlr.id_parking, hlr.created from hl_place hlr where hlr.id ='.$id;
+	  
+		$sql='select hlr.id, hlr.placenumber, hlr.description, hlr.note, hlr.status, hlr.name, hlr.id_parking, hlr.created , hlg.id_garagename
+			from hl_place hlr
+			left join hl_garage hlg on hlg.id_place=hlr.id
+			where hlr.id ='.$id;
 		try
 		{
 			$query = Arr::flatten(DB::query(Database::SELECT, $sql)
@@ -52,9 +56,10 @@ class Place
 			//$this->modify=Arr::get($query, 'MODIFY');
 			$this->placenumber=Arr::get($query, 'PLACENUMBER');
 			$this->id_parking=Arr::get($query, 'ID_PARKING');
+			$this->id_garage=Arr::get($query, 'ID_GARAGENAME');
 			
 			
-			//echo Debug::vars('49', $sql, $query); exit;
+			//echo Debug::vars('49', $sql, $query, $this); exit;
 			
 		} catch (Exception $e) {
 			////echo Debug::vars('30', $sql, $e->getMessage()); exit;

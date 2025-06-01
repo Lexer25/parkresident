@@ -71,12 +71,14 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	//отправка http post запроса эмуляция работы cvs
 	 public function action_sendGRZ()
 	 {	
+		
+		//Log::instance()->add(Log::NOTICE, '75 '.Debug::vars($_POST));
 		//echo Debug::vars('74', $_POST);exit;
 		//$cam=Arr::get($_POST, 'card');
 		$cam=Arr::get(Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate')), 'id_cam');
 		$grz=Arr::get($_POST, 'card');
 		//echo Debug::vars('78', $cam, $grz);exit;
-		$data=json_encode(array (
+		$data_0=array (
 			'camera' => $cam,
 			'channel' => 3,
 			'count' => 16,
@@ -95,9 +97,12 @@ class Controller_Emul extends Controller_Template { // класс для про�
 			'type' => 0,
 			'weight' => 0,
 			'test' => 1
-			));
+			);
 			//echo Debug::vars('98', $data);exit;
-		$this->sendRequestPostJson($data, 'dashboard/exec');
+			
+			
+		$data=json_encode($data_0);
+		$this->sendRequestPostJson(Array('plate'=>$data), 'dashboard/exec');
 		$this->redirect('emul/grz');
 	 }
 	 
@@ -128,14 +133,11 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	  //отправка http post запроса на открытие двери
 	 public function action_sendOpen()
 	 {	
-		//echo Debug::vars('71', $_POST);exit;
-		//echo Debug::vars('108', Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate')));exit;
-		//$gate=Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate'));
 		
 		
-	$data=json_encode(array (
+	$data=array (
 			'id' => Arr::get($_POST, 'id'),
-			));
+			);
 		//	echo Debug::vars('138', $data); exit;
 		$this->sendRequestPostJson($data, 'dashboard/opengate');
 		$this->redirect('emul/grz');
@@ -149,7 +151,9 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	//Отправк POST запроса. Данные должны быть в формате json
 	public function sendRequestPostJson($data, $url)
 	{
-			//echo Debug::vars('150', 'http://localhost:'.$this->requestPort.'/cvs/'. $url);exit;
+			 Log::instance()->add(Log::NOTICE, '167 отправлен тестовый запрос на адрес http://localhost:'.$this->requestPort.'/cvs/'. $url);
+			 Log::instance()->add(Log::NOTICE, '168 '.Debug::vars($data));
+			
 			$request = Request::factory('http://localhost:'.$this->requestPort.'/cvs/'. $url)
 					//->headers("Accept", "application/json")
 					//->headers("Content-Type", "application/json")
@@ -158,9 +162,8 @@ class Controller_Emul extends Controller_Template { // класс для про�
 					->method(Request::POST)
 					//->body($data)
 					->post($data);
-					
 			$response=$request->execute();
-			Log::instance()->add(Log::NOTICE, '157 отправлен тестовый запрос на адрес http://localhost:'.$this->requestPort.'/cvs/'. $url);
+			
 			return $request->body();
 	} 
 }

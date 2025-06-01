@@ -26,7 +26,7 @@
 					<li <?php echo 'class="active"';?>><?php  if(Kohana::$config->load('artonitparking_config')->checkdb) echo  HTML::anchor('checkdb', __('checkDB')); ?></li>
 					<li <?php echo 'class="active"';?>><?php // echo  HTML::anchor('emul', __('emul')); ?></li>
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('emul/grz', __('emul2')); ?></li>
-					<li <?php echo 'class="active"';?>><?php  //echo  HTML::anchor('wizard', __('wizard')); ?></li>
+					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('wizard', __('wizard')); ?></li>
 					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('guide', __('Инструкция')); ?></li>
 				</ul>
 		<?php
