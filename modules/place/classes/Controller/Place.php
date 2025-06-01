@@ -89,21 +89,28 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	{
 		$id = $this->request->param('id');
 		//$_SESSION['menu_active']='rubic';
-		$query=Validation::factory($this->request->param());
+		/* $query=Validation::factory($this->request->param());
 			$query->rule('id', 'not_empty')
 					->rule('id', 'digit')
 							;
 			if($query->check())
 			{
 				//$id_place=Model::factory('place')->getChild(Arr::get($query, 'id'));
-				$id_place[]=array('ID'=>$id);
+				//$id_place[]=array('ID'=>$id);
+				$place_list=Model::factory('Place')->getPlaceListforParking();
 			} else 
 			{
-				$id_place=Model::factory('place')->getAll();
-			}
-		//echo Debug::vars('90',$id_place );exit;
+				//$id_place=Model::factory('place')->getAll();
+				$place_list=Model::factory('Place')->getPlaceListforAllParking();
+			} */
+		
+		
+		$place_list=Model::factory('Place')->getPlaceListforAllParking();
+		
+		//echo Debug::vars('90',$place_list );exit;
 		$content = View::factory('place/list', array(
-			'id_place'=>$id_place,
+			//'id_place'=>$id_place,
+			'place_list'=>$place_list,
 		));
         $this->template->content = $content;
 		//echo View::factory('profiler/stats');

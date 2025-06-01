@@ -98,5 +98,22 @@ class Model_ParkingPlace extends Model {
 	}
 	
 	
+	public static function  getCountParking()// получить количество паркингов
+	{
+		
+		$sql='select count(*) from hl_parking';
+		
+		
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->get('COUNT');
+	//echo Debug::vars('11',$sql, $query); exit;
+		
+		return $query;	
+	}
+	
+	
+	
+	
 	
 }
