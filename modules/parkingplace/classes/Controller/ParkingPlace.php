@@ -32,6 +32,24 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 			
 	}
 	
+		
+	/**контроллера для отображения машин на парковке
+	*
+	*/
+	public function action_onplace()
+	{
+		$itemInParking=Model::factory('ParkingPlace')->getItemInparking();//список пиплов на парковке. Тут же указан card, по которому они въехали
+		$parkingAccessName=Model::factory('ParkingPlace')->getParkingAccessName();//список категорий доступа для тех, кто на парковке
+		//echo Debug::vars('43', $parkingAccessName);exit;
+		$content = View::factory('parking/onplace', array(
+			
+				'itemInParking'=>$itemInParking,	
+				'parkingAccessName'=>$parkingAccessName,	
+		
+		));
+        $this->template->content = $content;
+
+	}		
 	
 	public function action_index()// главная страница при входе. Показывает все парковочные площадки
 	{

@@ -113,6 +113,52 @@ class Model_ParkingPlace extends Model {
 	}
 	
 	
+	//1.06.2025получить список всех машин на парковке.
+	
+	public function getItemInparking()
+	{
+			$sql='select hli.entertime, hli.id_card, hli.id_pep, hli.counterid as id_parking, hlp.name as parkingName, c."ACTIVE", c.id_cardtype, cd.name as cardtypename,
+p.surname||\' \'||p.name||\' \'||p.patronymic||\'(\'||o.name||\')\' as pepname, hlo.id_garage, hlgn.name as GARAGENAME from hl_inside hli
+join hl_parking hlp on hli.counterid=hlp.id
+join card c on c.id_card=hli.id_card
+join cardtype cd on cd.id=c.id_cardtype
+join people p on p.id_pep=hli.id_pep
+join organization o on o.id_org=p.id_org
+left join hl_orgaccess hlo on hlo.id_org=p.id_org
+left join hl_garagename hlgn on hlgn.id=hlo.id_garage
+			';
+			//echo Debug::vars('128', $sql );exit;
+			$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+			
+		return $query;	
+	}
+	
+	
+	//1.06.2025 получить список категорий доступа, в которые включены ворота.
+	
+	public function getParkingAccessName()
+	{
+			$sql='  select distinct hli.id_pep,  an.name from hl_inside hli
+			  join ss_accessuser ssau on ssau.id_pep=hli.id_pep
+			  join access a on ssau.id_accessname=a.id_accessname
+			  join hl_param hlpr on a.id_dev=hlpr.id_dev
+			  join accessname an on a.id_accessname=an.id_accessname';
+			$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+			
+			
+			$result=array();
+			foreach($query as $key=>$value)
+			{
+				$result[Arr::get($value, 'ID_PEP')][] = Arr::get($value, 'NAME');
+				
+			}
+			//echo Debug::vars('154', $result);exit;
+		return $result;	
+	}
 	
 	
 	

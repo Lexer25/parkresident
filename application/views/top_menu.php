@@ -20,6 +20,7 @@
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='event') echo 'class="active"';?>><?php  echo  HTML::anchor('rubic/event', __('События')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='gate') echo 'class="active"';?>><?php  echo  HTML::anchor('gate/list', __('gate_menu')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='grz') echo 'class="active"';?>><?php  echo  HTML::anchor('grz', __('grz')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='grz') echo 'class="active"';?>><?php  echo  HTML::anchor('parkingPlace/onplace', __('На парковке')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='rmo') echo 'class="active"';?>><?php  echo  HTML::anchor('rmo', __('Рабочее место охраны')); ?></li>
 					<li <?php //if (Arr::get($_SESSION,'menu_active')=='monitor') echo 'class="active"';?>><?php  //echo  HTML::anchor('monitor', __('Монитор')); ?></li>
 					<!--<li <?php if (Arr::get($_SESSION,'menu_active')=='grztest') echo 'class="active"';?>><?php  echo  HTML::anchor('grz/test', __('grztest')); ?></li> -->
