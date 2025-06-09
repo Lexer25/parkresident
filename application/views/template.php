@@ -78,23 +78,8 @@
 			echo $content;?>
 			<button onclick="topFunction()" id="myBtn" title="Go to top"><?php echo __('top'); ?></button> 
 	</div>
-	<?php echo Kohana::VERSION();
-	
-	Profiler::stop(Session::instance()->get('token'));//остановил профилер
-	//$ttt=Profiler::stats(array(Session::instance()->get('token')));//получил массив значений
-	echo '<br>';
-	//echo __('time execute :t', array(':t'=>number_format(Arr::get(Arr::get($ttt, 'average'), 'time'),3)));
-	?>
+	<?php echo Kohana::VERSION(); ?>
 </div>  
-
-<?php
-
-//echo View::factory('test', 'profiler');
-//echo Debug::vars(Session::instance()->get('token')); exit;
-
-//echo Debug::vars(Profiler::stats(array(Session::instance()->get('token'))));
-?>
-
 
 	
 

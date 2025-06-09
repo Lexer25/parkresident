@@ -174,7 +174,7 @@ echo Form::open('garage/control');
 		{
 			foreach($place_grz_garage_ as $key=>$value)
 				
-				echo Arr::get($value, 'GRZ').' '.Arr::get($value, 'NAME').'<br> ';
+				echo Arr::get($value, 'GRZ').' '.Arr::get($value, 'NAME').' ';
 		} else 
 		{
 			echo __('Нет ГРЗ для этого гаража.');

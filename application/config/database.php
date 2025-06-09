@@ -11,6 +11,8 @@ return array
 			'password'	=> 'temp',
 			)
 		),
-	
+    'charset' =>  'UTF8',
+    'profiling' =>  TRUE,
+
 );
 

@@ -271,7 +271,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 					$this->template->content = $content;
 				} else 
 				{
-					echo Debug::vars('193');exit;
+					//echo Debug::vars('193');exit;
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 					$this->redirect('gate/list');
 				}

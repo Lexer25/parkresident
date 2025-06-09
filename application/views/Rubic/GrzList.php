@@ -19,7 +19,6 @@
 
 	<thead allign="center">
 		<tr>
-			<th><?php echo __('pp');?></th>
 			<th><?php echo __('grz');?></th>
 			<th><?php echo __('pep_name');?></th>
 			<th><?php echo __('Активность');?></th>
@@ -54,7 +53,7 @@
 		foreach($grz_list as $key=>$value)
 		{
 			echo '<tr>';
-				echo '<td>'.$i++.'</td>';
+				//echo '<td>'.$i++.'</td>';
 				echo '<td>'. HTML::anchor('grz/history/'.Arr::get($value,'ID_CARD'), iconv('windows-1251','UTF-8',Arr::get($value,'ID_CARD')));
 					if( preg_match("/[а-яё]/iu", iconv('windows-1251','UTF-8',Arr::get($value,'ID_CARD', '')))) echo '<br><span class="label label-danger">Русские буквы в ГРЗ</span>';
 					//echo Debug::vars('60', $value);

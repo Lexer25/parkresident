@@ -145,7 +145,9 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 		//echo Debug::vars('79 car_in_parking', $_POST); exit;
 		$post=Validation::factory($_POST);
 		$post->rule('car_out_parking', 'not_empty')
-			
+			//->rule('car_out_parking', 'regex', array(':value', '/^[A-F\d]{10}+$/')) // https://regex101.com/ допустимы знаки только ГРЗ
+			//->rule('id_parking','not_empty') 
+			//->rule('id_parking','digit') 
 			;
 		if($post->check())
 		{
@@ -155,16 +157,13 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 			Model::factory('grz')->addEventsDeleteGRZFromInside(Arr::get($post, 'car_out_parking'));			
 			
 			Session::instance()->set('ok_mess', array('result'=>'ГРЗ '.Arr::get($post, 'car_out_parking').' удален из списка INSIDE'));
-			//$this->redirect('grz');
-			$this->redirect($this->request->referrer());
+			$this->redirect('grz');
 			
 		} else {
 			Session::instance()->set('e_mess', $post->errors('Valid_mess'));
-			//$this->redirect('grz');
-			$this->redirect($this->request->referrer());
+			$this->redirect('grz');
 		}
-		//$this->redirect('grz');
-		$this->redirect($this->request->referrer());
+		$this->redirect('grz');
 		
 	}
 	

@@ -1,23 +1,27 @@
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по машноместам
 //echo Debug::vars('3', $id_place);
+$token = Profiler::start('pr', 'placeLisr');//Профилирую работу вывода списка мм
+if(count($id_place) == 1)
+{
+	$_parking=new Parking(Arr::get(Arr::flatten($id_place), 'ID'));//информация о парковочной площадке
+	$placeList=Model::factory('Place')->getChild($_parking->id);//список машиномест на этой парковочной площадке
+	echo Form::open('place/control');
+	$titleAddPlace=__('Регистрация машиноместа для парковочной площадки ":name". Зарегистрировано :regPlace. Количество мест на площадке :countPlace',
+				array(
+					':name'=>iconv('windows-1251','UTF-8',$_parking->name),
+					':regPlace'=> count($placeList),
+					':countPlace'=>$_parking->count
+					));
+					
 
-$t1=microtime(true);
-
-//вспомогательный класс для быстрого преобразования массива в класс.
-//ключи массива становятся свойствами класса
-  class MyClass {
-    public function __construct(Array $properties=array()){
-      foreach($properties as $key => $value){
-        $this->{strtolower($key)} = $value;
-      }
-    }
-  }
-  
-  
-//echo Debug::vars('4', array_slice($place_list, 0, 2));
-//$token = Profiler::start('pr', 'placeLisr');//Профилирую работу вывода списка мм
-
+	$title=__('Список машиномест для парковочной площадки ":name". Зарегистрировано :regPlace. Количество мест на площадке :countPlace',
+				array(
+					':name'=>iconv('windows-1251','UTF-8',$_parking->name),
+					':regPlace'=> count($placeList),
+					':countPlace'=>$_parking->count
+					));
+} else {
 	
 		$placeList=Model::factory('Place')->getAll();//список машиномест на этой парковочной площадке
 		
@@ -31,10 +35,10 @@ $t1=microtime(true);
 
 		$title=__('Список машиномест для всех парковочных площадок. Парковочных площадок :regPlace. Зарегистрировано машиномест на площадках :countPlace',
 					array(
-						':regPlace'=> Model_ParkingPlace::getCountParking(),
+						':regPlace'=> count($id_place),
 						':countPlace'=>count($placeList)
 						));
-
+}	
 ?>
 <script type="text/javascript">
      
@@ -75,7 +79,6 @@ echo Form::close();
 echo Form::open('place/control');
 ?>
 
-
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<h3 class="panel-title"><?echo $title;?></h3>
@@ -92,11 +95,11 @@ echo Form::open('place/control');
 			
 			<th><?echo __('Номер п/п');?></th>
 			<th><?echo __('Выбор');?></th>
-			<th><?echo 'Название парковки';?></th>
 			<th><?echo __('Номер машиноместа');?></th>
 			<th><?echo __('Название машиноместа');?></th>
 			<th><?echo __('Комментарий машиноместа');?></th>
 			<th><?echo 'Прим.';?></th>
+			<th><?echo 'Название парковки';?></th>
 			<th><?echo 'Гараж';?></th>
 		</tr>
 
@@ -107,10 +110,9 @@ echo Form::open('place/control');
 		$checked='no';
 		//вывод списка машиномест для указанного паркинга
 		
-		foreach($place_list as $key=>$value)
+		foreach($placeList as $key=>$value)
 		{
-			$place = new MyClass($value);
-			
+			$place=new Place(Arr::get($value, 'ID'));
 			//echo Debug::vars('68', $key, $value, $place); exit;
 			
 			echo '<tr>';
@@ -120,12 +122,12 @@ echo Form::open('place/control');
 					//echo ' '. Debug::vars('82', $place);
 				echo '</td>';
 				echo '<td>'.Form::radio( 'id', $place->id, Arr::get($value, 'is_active' == 1)).' '.$place->id.'</td>';
-								
-				echo '<td>'. iconv('windows-1251','UTF-8',$place->parkingname).'</td>';
+
 				if(Auth::Instance()->logged_in())
 				{				
 					echo '<td>'.HTML::anchor('place/edit/'.$place->id,
 							$place->placenumber)
+							.' ('.$place->id.')'
 							.'</td>';
 				} else 
 				{
@@ -135,13 +137,9 @@ echo Form::open('place/control');
 				echo '<td>'.iconv('windows-1251','UTF-8', $place->name). '</td>';
 				echo '<td>'.iconv('windows-1251','UTF-8',$place->description).'</td>';
 				echo '<td>'.iconv('windows-1251','UTF-8',$place->note).'</td>';
-				if($place->id_garage) 
-				{
-					echo '<td>'.HTML::anchor('garage/edit_garage/'.$place->id_garage,  iconv('windows-1251','UTF-8', $place->garagename)).' </td>';
-				} else 
-				{
-					echo '<td>--</td>';
-				}
+				$_parking = new Parking($place->id_parking);
+				echo '<td>'. iconv('windows-1251','UTF-8',$_parking->name).'</td>';
+				echo '<td>'.HTML::anchor('garage/edit_garage/'.Arr::get($value,'ID_GARAGE'),  iconv('windows-1251','UTF-8', Arr::get($value,'GARAGE_NAME'))).' </td>';
 				
 			echo '</tr>';	
 
@@ -158,9 +156,7 @@ echo Form::open('place/control');
 
 	
 		
-<?php 
-echo 'Time execute='.(microtime(true)-$t1);
-if(Auth::Instance()->logged_in())
+<?php if(Auth::Instance()->logged_in())
 {
 ?>
 		
@@ -181,14 +177,22 @@ if(Auth::Instance()->logged_in())
 </div>
 </div>
 
-
-
-
 <?php
 	echo Form::close();
 	
 	
-	
+	/* $token2 = Profiler::start('pr', 'ttt');//Профилирую работу другого процесса
+	Profiler::stop($token);
+	Profiler::stop($token2);
+	$stat=Profiler::stats(array($token));
+	echo Debug::vars('188', $stat);
+	$stat=Profiler::stats(array($token2));
+	echo Debug::vars('190-0', $stat);//exit;
+	echo Debug::vars('190-1', $stat);
+	echo Debug::vars('190-2', Arr::get(Arr::get(Profiler::groups(), 'pr'), 'ttt'));
+	//echo Debug::vars('186',  Profiler::application());
+	echo Debug::vars('192', Arr::get(Profiler::groups(), 'pr'));//exit;//похоже, что это информация берется из кеша
+	echo View::factory('profiler/stats') */
 
 ?>
 	
