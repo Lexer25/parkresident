@@ -12,6 +12,90 @@
 class Model_Place extends Model {
 	
 	
+	
+	/**Получить список всех машиномест для указанной парковки
+	*
+	*/
+	public function getPlaceListforParking()
+	{
+	$sql='select hlr.id, hlr.placenumber, hlr.description, hlr.note, hlr.status, hlr.name, hlr.id_parking, hlr.created , hlg.id_garagename
+			from hl_place hlr
+			left join hl_garage hlg on hlg.id_place=hlr.id';
+	$query=array();		
+		try
+		{
+			$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+			
+			
+			//echo Debug::vars('49', $sql, $query, $this); exit;
+			
+		} catch (Exception $e) {
+			////echo Debug::vars('30', $sql, $e->getMessage()); exit;
+			Log::instance()->add(Log::DEBUG, 'Line 40 '. $e->getMessage());
+		
+		}
+		return $query;
+	}
+	
+	/**Получить список всех машиномест для указанного паркинга
+	*
+	*/
+	public function getPlaceListforAllParking()
+	{
+	$sql='select hlr.id, hlr.placenumber, hlr.description, hlr.note, hlr.status, hlr.name, hlr.id_parking, hlr.created , hlg.id_garagename as id_garage,
+     hlp.name as parkingName, hlgn.name as garageName
+            from hl_place hlr
+            left join hl_parking hlp on hlp.id =hlr.id_parking
+            left join hl_garage hlg on hlg.id_place=hlr.id
+            left join hl_garagename hlgn on hlgn.id=hlg.id_garagename';
+	$query=array();		
+		try
+		{
+			$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+			
+			
+			//echo Debug::vars('49', $sql, $query, $this); exit;
+			
+		} catch (Exception $e) {
+			////echo Debug::vars('30', $sql, $e->getMessage()); exit;
+			Log::instance()->add(Log::DEBUG, 'Line 40 '. $e->getMessage());
+		
+		}
+		return $query;
+	}
+	
+	/**Получить список всех машиномест
+	*
+	*/
+	public function _getPlaceListforAllParking()
+	{
+	$sql='select hlr.id, hlr.placenumber, hlr.description, hlr.note, hlr.status, hlr.name, hlr.id_parking, hlr.created , hlg.id_garagename
+			from hl_place hlr
+			left join hl_garage hlg on hlg.id_place=hlr.id';
+	$query=array();		
+		try
+		{
+			$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+			
+			
+			//echo Debug::vars('49', $sql, $query, $this); exit;
+			
+		} catch (Exception $e) {
+			////echo Debug::vars('30', $sql, $e->getMessage()); exit;
+			Log::instance()->add(Log::DEBUG, 'Line 40 '. $e->getMessage());
+		
+		}
+		return $query;
+	}
+	
+	
+	
 	public function get_list()// получить список машиномест
 	{
 		$res=array();

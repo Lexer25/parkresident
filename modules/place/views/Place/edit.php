@@ -2,7 +2,7 @@
  //echo Debug::vars('11', $rp_info); 
 // страница для редактирования сущности
 //echo Debug::vars('4');exit;
-//echo Debug::vars('5', $place);//exit;
+echo Debug::vars('5', $place);//exit;
 echo Form::open('Place/control');
 
 if(Auth::Instance()->logged_in())
@@ -37,9 +37,15 @@ if(Auth::Instance()->logged_in())
 		
 		// сохранить изменения. Однако может быть коллизия, если номер машиноместа уже используется.
 		//вывод: переносить машиноместа из паркинга в паркинг нельзя!!!
+		//список парковочных площадок для выбора
+		$parkingPlace=Model::factory('ParkingPlace')->get_list_for_select();//получил список id жилых комплексов
+		//echo Debug::vars('42', $parkingPlace);exit;
+		$selectList=array();
 		
-		//echo __('ID паркинга ').$place->id_parking.'<br>';
-		echo __('Паркинг ').iconv('windows-1251','UTF-8', $parking->name).'<br>';
+		
+		echo 'Парковочная площадка: '.Form::select('id_parking', $parkingPlace, $parking->parent);
+		echo __('ID паркинга ').$place->id_parking.'<br>';
+		//echo __('Паркинг ').iconv('windows-1251','UTF-8', $parking->name).'<br>';
 		//echo Form::hidden('id_parking', $place->id_parking);
 		//echo Form::hidden('placenumber', $place->placenumber);
 		echo Form::hidden('placenumber', $place->id);

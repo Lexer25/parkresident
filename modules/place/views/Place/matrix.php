@@ -1,7 +1,7 @@
 <?php
 //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по машноместам
-echo Debug::vars('3', $id_place);
+//echo Debug::vars('3', $id_place);
 $_parking=new Parking(Arr::get(Arr::flatten($id_place), 'ID'));//информация о парковочной площадке
 $placeList=Model::factory('Place')->getChild($_parking->id);//список машиномест на этой парковочной площадке
 

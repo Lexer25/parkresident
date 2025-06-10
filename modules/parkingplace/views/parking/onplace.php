@@ -15,7 +15,7 @@ $t1=microtime(true);
 </script>			
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo __('itemInParking_on_parking', array('count_grz'=>count($itemInParking)));?></h3>
+		<h3 class="panel-title"><?php echo __('itemInParking_on_parking :count_item', array(':count_item'=>count($itemInParking)));?></h3>
 	</div>
 	<div class="panel-body">
 

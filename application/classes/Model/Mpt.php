@@ -23,9 +23,7 @@ class Model_mpt extends Model {
 		$mqtt = new phpMQTT($server, $port, $client_id);
 		if ($mqtt->connect(true, NULL, $username, $password)) {
 			$mqtt->publish($topik, $mess, 0, false);
-			//Log::instance()->add(Log::NOTICE, '19 Mqtt subscribe '. $topik);
-			//Log::instance()->add(Log::NOTICE, '19 Mqtt subscribe '. Debug::vars($mqtt->subscribe($topik, 0)));
-			//Log::instance()->add(Log::NOTICE, '19 Mqtt subscribe '. Debug::vars($mqtt->subscribeAndWaitForMessage($topik, 0)));
+			
 			
 			$mqtt->close();
 			$res=' Connect OK, send = OK.';

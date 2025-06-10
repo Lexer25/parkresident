@@ -1,0 +1,22 @@
+9-10.06/2025 работы по выводу видео на экран браузера
+
+В файл C:\xampp\apache\conf\httpd.conf надо добавить строки
+	AddType application/vnd.apple.mpegurl .m3u8
+	AddType video/mp2t .ts
+
+
+
+Настройка для видеокамеры rtsp://user:user1234@172.16.101.106:554/H264?ch=1&subtype=2
+C:\ffmpeg-master-latest-win64-gpl-shared\bin\ffmpeg.exe -i "rtsp://user:user1234@172.16.101.106:554/H264?ch=1&subtype=2" -c:v libx264 -preset ultrafast -c:a aac -f hls -hls_time 2 -hls_list_size 5 -hls_flags delete_segments -hls_segment_filename "C:\\xampp\\htdocs\\parkresident\\stream\\stream1_%03d.ts" C:\\xampp\\htdocs\\parkresident\\stream\\stream1.m3u8
+
+
+Настройка для видеокамеры rtsp://user:user1234@172.16.101.109:554/H264?ch=1&subtype=2
+C:\ffmpeg-master-latest-win64-gpl-shared\bin\ffmpeg.exe -i "rtsp://user:user1234@172.16.101.109:554/H264?ch=1&subtype=2" -c:v libx264 -preset ultrafast -c:a aac -f hls -hls_time 2 -hls_list_size 5 -hls_flags delete_segments -hls_segment_filename "C:\\xampp\\htdocs\\parkresident\\stream\\stream2_%03d.ts" C:\\xampp\\htdocs\\parkresident\\stream\\stream2.m3u8
+
+Для каждой камеры надо указать свой *.ts и свой m3u8. В приведенных выше примерах это stream1 и stream2.
+
+
+
+
+
+

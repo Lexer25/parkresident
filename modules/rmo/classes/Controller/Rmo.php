@@ -16,7 +16,7 @@ rmo - рабочее место охраны
 class Controller_Rmo extends Controller_Template { // класс описывает въезды и вызды (ворота) для парковочных площадок
 	
 	
-	public $template = 'template';
+	public $template = 'templateWidth';
 	public function before()
 	{
 			
@@ -38,11 +38,13 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 	
 	public function action_index()// управление гаражом
 	{
+		
+		//$this->template = 'templateWidth';
 		$_SESSION['menu_active']='rmo';
 		$id_garage = $this->request->param('id');
 		//echo Debug::vars('30', $id_garage); //exit;
 		//если номер гаража указан, то вывожу данные по этому гаражу (для организации управления).
-		if($id_garage>1)
+		if($id_garage>=1)
 		{
 			$id_parking=1;
 			
@@ -55,7 +57,7 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 
 			//echo Debug::vars('2', $garage_info, $place_income_garage, $org_income_garage, $get_grz_in_parking, $place_grz_garage_); exit;
 			
-			$content = View::factory('rubic/rmo', array(
+			$content = View::factory('rmo/rmo', array(
 				'garage_info'=>$garage_info,
 				'place_income_garage'=>$place_income_garage,
 				'org_income_garage'=>$org_income_garage,
@@ -71,7 +73,7 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 		if(is_null($id_garage))//а если номер гаража не указан, то вывожу предложение поиска
 		{
 			Session::instance()->delete('place_for_search');
-			$content = View::factory('rubic/rmo', array(
+			$content = View::factory('rmo/rmo', array(
 			));
 	        $this->template->content = $content;
 		}
@@ -383,7 +385,7 @@ public function action_opengateCVS()//передача команды на от�
 	public function action_control()// просмотр списка ГРЗ и их свойств
 	{
 		$_SESSION['menu_active']='grz';
-		echo Debug::vars('30', $_GET, $_POST); exit;	
+		//echo Debug::vars('30', $_GET, $_POST); exit;	
 		$todo = $this->request->post('todo');
 		
 		switch ($todo){
@@ -539,7 +541,7 @@ public function action_opengateCVS()//передача команды на от�
 		
 		//echo Debug::vars('155', $grz, $list_grz); exit;
 		//вывод страницы для выбора ГРЗ
-		$content = View::factory('rubic/rmo_list', array(
+		$content = View::factory('rmo/rmo_list', array(
 				'list_grz'=>$list_grz,
 				
 				));
@@ -549,6 +551,33 @@ public function action_opengateCVS()//передача команды на от�
 	}
 
 	
+	  //отправка http post запроса на открытие двери
+	 public function action_sendOpen()
+	 {	
+		//echo Debug::vars('136', $_POST);exit;
+		
+		$data=array (
+				'id' => Arr::get($_POST, 'id'),
+				);
+			//	echo Debug::vars('138', $data); exit;
+			
+			
+			//$this->redirect('emul/grz');
+			
+			$request = Request::factory('emul/sendOpen')
+				->method(Request::POST)
+				->post($_POST);
+				//echo Debug::vars('570', $response=$request->execute());//exit;
+				//echo Debug::vars('571', $response);exit;
+				;
+			$response=$request->execute();
+			// Получить результат
+			$result = $response->body();
+			
+			
+			
+			$this->redirect($this->request->referrer());
+	 }
 	
 	
 } 

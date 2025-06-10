@@ -133,14 +133,15 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	  //отправка http post запроса на открытие двери
 	 public function action_sendOpen()
 	 {	
+		//echo Debug::vars('136', $_POST);exit;
 		
-		
-	$data=array (
-			'id' => Arr::get($_POST, 'id'),
-			);
-		//	echo Debug::vars('138', $data); exit;
-		$this->sendRequestPostJson($data, 'dashboard/opengate');
-		$this->redirect('emul/grz');
+		$data=array (
+				'id' => Arr::get($_POST, 'id'),
+				);
+			//	echo Debug::vars('138', $data); exit;
+			$this->sendRequestPostJson($data, 'dashboard/opengate');
+			//$this->redirect('emul/grz');
+			$this->redirect($this->request->referrer());
 	 }
 	 
 	 
@@ -162,8 +163,18 @@ class Controller_Emul extends Controller_Template { // класс для про�
 					->method(Request::POST)
 					//->body($data)
 					->post($data);
-			$response=$request->execute();
 			
-			return $request->body();
+			try{
+				//echo Debug::vars('166', $request->execute());exit;
+				$response=$request->execute();
+				return true;
+			} catch (Exception $e) {
+			Log::instance()->add(Log::DEBUG, '#31 '.$e->getMessage());
+			//echo Debug::vars('171', $e->getMessage());exit;
+			return false;
+
+		}	
+			
+			//return $request->body();
 	} 
 }

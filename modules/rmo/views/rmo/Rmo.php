@@ -9,6 +9,57 @@ echo Debug::vars(Session::instance()->as_array());
 */
 
 ?>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .camera-view {
+            width: 48%;
+            min-width: 300px;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .camera-view h3 {
+            color: white;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 соотношение */
+        }
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 0 5px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 <div class="panel panel-primary"> 
 
   <div class="panel-heading">
@@ -163,28 +214,121 @@ if(isset($garage_info))
 	</table>
 	
 <?php
-	//echo Debug::vars('132', $garage_info, $place_grz_garage_, $get_grz_in_parking, $place_income_garage, $get_garage_parking_list );
 	}
-
-
 ?>
-<!--
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" viewBox="0 0 100 100" >
 
-  <symbol id="sym01" viewBox="0 0 150 110">
-    <circle cx="50" cy="50" r="40" stroke-width="8" stroke="red" fill="red"/>
-    <circle cx="90" cy="60" r="40" stroke-width="8" stroke="green" fill="white"/>
-  </symbol>
-  <use xlink:href="#sym01" x="0" y="0" width="100" height="50"/>
-  <use xlink:href="#sym01" x="0" y="50" width="75" height="38"/>
-  <use xlink:href="#sym01" x="0" y="100" width="50" height="25"/>
-</svg>
--->
 	
 	
 
 </div>	
 </div>
 	
-  
+ <div class="panel panel-primary"> 
 
+  <div class="panel-heading">
+    <h3 class="panel-title"><?php echo __('Панель управления и контроля').' '.Session::instance()->get('place_for_search');?></h3>
+    <h3 class="panel-title"><?php //echo __('Разрешить проезд выбранного ГРЗ на машиноместо').' '.Session::instance()->get('place_for_search');?></h3>
+  </div>
+  <div class="panel-body"> 
+	Управление и контроль
+	<?php
+		//получаю список ворот gate.
+		$_gateList=Arr::get(Model::factory('gates')->get_list_gate(), 'res');
+		//echo Debug::vars('187', $_gateList);exit;
+		//далее строю для них таблицу.
+		//на первом этапе - все ворота в ряд.
+		
+	?>
+	 <table>
+		<?php
+		
+		
+		?>
+		<tr>
+			<?php
+			$count=0;
+				foreach(array_slice($_gateList, 0, 6) as $key)
+				{
+					//echo Debug::vars('196', $key);//exit;
+				echo '<td>';
+				echo '<h2>'.++$count.'</h2>';
+				echo '<div class="camera-view">';
+				echo '<h3>Камера'.Arr::get($key, 'name').'</h3>
+					<div class="video-wrapper">
+						<video id="camera'.Arr::get($key, 'id_cam').'" controls muted></video>
+					</div>
+				</div>
+				<div class="controls">
+				
+					<button onclick="toggleFullscreen(\'camera'.Arr::get($key, 'id_cam').'\')">Полный экран Камера 1.1</button>';
+					//echo Form::button('opendoor', 'Открыть ворота', array('value'=>Arr::get($value, 'GRZ'), 'disabled'=>'disabled', 'class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+					echo Form::open('rmo/sendOpen');
+							echo Form::hidden('id', Arr::get($key, 'id_cam'));
+							echo Form::button('todo', 'Открыть ворота', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+						echo Form::close();
+					echo '
+					
+				</div>
+			</td>';
+					
+				}
+				?>
+			
+			
+    </tr>
+	</table>
+   </div>
+
+    <!-- Подключаем HLS.js -->
+    <script src="hls.js@latest"></script>
+    
+    <script>
+        // Инициализация плееров
+        function initCamera(videoId, streamUrl) {
+            const video = document.getElementById(videoId);
+            
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(streamUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(e => {
+                        console.error("Автовоспроизведение запрещено:", e);
+                        // Показываем кнопку воспроизведения
+                        video.controls = true;
+                    });
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Для Safari
+                video.src = streamUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play().catch(e => {
+                        console.error("Автовоспроизведение запрещено:", e);
+                        video.controls = true;
+                    });
+                });
+            }
+        }
+
+        // Полноэкранный режим
+        function toggleFullscreen(videoId) {
+            const video = document.getElementById(videoId);
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            } else if (video.webkitRequestFullscreen) {
+                video.webkitRequestFullscreen();
+            } else if (video.msRequestFullscreen) {
+                video.msRequestFullscreen();
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Замените URL на ваши HLS-потоки
+            initCamera('camera1', 'http://localhost:8080/stream/stream1.m3u8');
+            initCamera('camera2', 'http://localhost:8080/stream/stream2.m3u8');
+           
+        });
+    </script>
+</div>	
+</div>

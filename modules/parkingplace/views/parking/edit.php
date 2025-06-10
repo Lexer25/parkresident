@@ -32,7 +32,7 @@ if(Auth::Instance()->logged_in())
 		echo __('ID'). ' '. $parking->id.'<br>';
 		//echo __('parent'). ' '. $parking->parent.'<br>';
 		$residenceList=Model::factory('ResidentPlace')->get_list();//получил список id жилых комплексов
-		//echo Debug::vars('35', $residenceList);//exit;
+		//список ЖК для выбора
 		$selectList=array();
 		
 		foreach ($residenceList as $key=>$value)
