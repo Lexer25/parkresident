@@ -36,19 +36,7 @@
 
 		<ul class="nav navbar-nav navbar-right">
 	
-		<li>
-		<?php 
-			if(Kohana::$config->load('artonitparking_config')->direct_gate_control)
-			{
-					echo Form::open('rmo/control');
-					 echo  Form::button('todo', __('-1'), array('value'=>'open_gate_1', 'class'=>'btn btn-info btn-sm', 'type' => 'submit'));
-					 echo ' ';
-					 echo  Form::button('todo', __('-2'), array('value'=>'open_gate_2','class'=>'btn btn-info btn-sm', 'type' => 'submit'));
-					 //echo  Form::hidden('action', Request::current()->controller().'/'.Request::current()->action().' '.Request::current()->directory());
-					echo Form::close();
-			}
-			?>			
-		</li>
+		
 		<li>
 					<div class="navbar-collapse collapse">
 					<?php

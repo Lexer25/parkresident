@@ -22,8 +22,8 @@ else
  * @link http://kohanaframework.org/guide/using.configuration
  * @link http://www.php.net/manual/timezones
  */
-date_default_timezone_set('Europe/Moscow');
-//date_default_timezone_set('Europe/Minsk');
+//date_default_timezone_set('Europe/Moscow');
+date_default_timezone_set('Europe/Minsk');
 
 
 /**

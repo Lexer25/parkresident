@@ -37,7 +37,7 @@ echo Debug::vars(Session::instance()->as_array());
         }
         .video-wrapper {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 соотношение */
+            padding-bottom: 75%; /* 16:9 соотношение */
         }
         video {
             position: absolute;
@@ -60,6 +60,14 @@ echo Debug::vars(Session::instance()->as_array());
             cursor: pointer;
         }
     </style>
+	
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
 <div class="panel panel-primary"> 
 
   <div class="panel-heading">
@@ -226,7 +234,7 @@ if(isset($garage_info))
  <div class="panel panel-primary"> 
 
   <div class="panel-heading">
-    <h3 class="panel-title"><?php echo __('Панель управления и контроля').' '.Session::instance()->get('place_for_search');?></h3>
+    <h3 class="panel-title"><?php echo __('Панель управления и контроля воротами').' '.Session::instance()->get('place_for_search');?></h3>
     <h3 class="panel-title"><?php //echo __('Разрешить проезд выбранного ГРЗ на машиноместо').' '.Session::instance()->get('place_for_search');?></h3>
   </div>
   <div class="panel-body"> 
@@ -239,6 +247,7 @@ if(isset($garage_info))
 		//на первом этапе - все ворота в ряд.
 		
 	?>
+	<div class="container">
 	 <table>
 		<?php
 		
@@ -246,24 +255,35 @@ if(isset($garage_info))
 		?>
 		<tr>
 			<?php
+			$order_gate=array(3, 4, 2, 7, 5, 6);//порядок вывода ворот на экран
+			//echo Debug::vars('261 order_gate', $order_gate);//exit;
+			//echo Debug::vars('262 _gateList', $_gateList);exit;
 			$count=0;
-				foreach(array_slice($_gateList, 0, 6) as $key)
+				//foreach(array_slice($_gateList, 0, 6) as $key)
+				foreach($order_gate as $key2)
 				{
 					//echo Debug::vars('196', $key);//exit;
+					foreach($_gateList as $key3)
+					{
+						//echo Debug::vars('270', $key3);exit;
+						if(Arr::get($key3, 'id') == $key2) $key=$key3; 
+						
+					}
+					
 				echo '<td>';
-				echo '<h2>'.++$count.'</h2>';
+				//echo '<h2>'.++$count.' кам'.Arr::get($key, 'id_cam').' id_gate='.$key2.'</h2>';
 				echo '<div class="camera-view">';
-				echo '<h3>Камера'.Arr::get($key, 'name').'</h3>
+				echo '<h3>'.Arr::get($key, 'name').'</h3>
 					<div class="video-wrapper">
 						<video id="camera'.Arr::get($key, 'id_cam').'" controls muted></video>
 					</div>
 				</div>
 				<div class="controls">
 				
-					<button onclick="toggleFullscreen(\'camera'.Arr::get($key, 'id_cam').'\')">Полный экран Камера 1.1</button>';
+					<button onclick="toggleFullscreen(\'camera'.Arr::get($key, 'id_cam').'\')">Полный экран Камера '.Arr::get($key, 'id_cam').'</button>';
 					//echo Form::button('opendoor', 'Открыть ворота', array('value'=>Arr::get($value, 'GRZ'), 'disabled'=>'disabled', 'class'=>'btn btn-success btn-xs', 'type' => 'submit'));
 					echo Form::open('rmo/sendOpen');
-							echo Form::hidden('id', Arr::get($key, 'id_cam'));
+							echo Form::hidden('id', Arr::get($key, 'id_cam')).'<br>';
 							echo Form::button('todo', 'Открыть ворота', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
 						echo Form::close();
 					echo '
@@ -278,9 +298,13 @@ if(isset($garage_info))
     </tr>
 	</table>
    </div>
+  </div>
+   
+   
 
     <!-- Подключаем HLS.js -->
-    <script src="hls.js@latest"></script>
+    <script src="/parkresident/hls.js"></script>
+	
     
     <script>
         // Инициализация плееров
@@ -325,8 +349,12 @@ if(isset($garage_info))
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
             // Замените URL на ваши HLS-потоки
-            initCamera('camera1', 'http://localhost:8080/stream/stream1.m3u8');
-            initCamera('camera2', 'http://localhost:8080/stream/stream2.m3u8');
+            initCamera('camera1', 'http://172.16.20.252:8080/stream/stream6.m3u8');
+            initCamera('camera2', 'http://172.16.20.252:8080/stream/stream8.m3u8');
+            initCamera('camera3', 'http://172.16.20.252:8080/stream/stream9.m3u8');
+            initCamera('camera4', 'http://172.16.20.252:8080/stream/stream10.m3u8');
+            initCamera('camera5', 'http://172.16.20.252:8080/stream/stream11.m3u8');
+            initCamera('camera6', 'http://172.16.20.252:8080/stream/stream7.m3u8');
            
         });
     </script>
