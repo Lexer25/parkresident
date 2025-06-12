@@ -1,4 +1,4 @@
-<? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
+<?php //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
 // страница отображения данных по машноместам
 //echo Debug::vars('3', $id_place);
 
@@ -34,7 +34,7 @@ $t1=microtime(true);
 						':regPlace'=> Model_ParkingPlace::getCountParking(),
 						':countPlace'=>count($placeList)
 						));
-
+echo Form::open('place/control');
 ?>
 <script type="text/javascript">
      
@@ -43,8 +43,12 @@ $t1=microtime(true);
   	});	
 	
 </script> 
-<?php if(Auth::Instance()->logged_in() and false)
+<?php if(Auth::Instance()->logged_in())
 {
+	
+	$parkingPlace=Model::factory('ParkingPlace')->get_list_for_select();//получил список парковочных площадок
+	$selectList=array();
+			
 	?>
 	<div class="panel panel-primary">
 		  <div class="panel-heading">
@@ -53,16 +57,33 @@ $t1=microtime(true);
 		  <div class="panel-body">
 			<div id="my-alert" class="alert alert-success alert-dismissible" role="alert">
 					<?php 
-						//echo 'Номер парковочного места вводится как длинное десятичное число: 000123456789.<br>Остальные варианты ввода будут игнорироваться.';
+						echo 'Номер машиноместа вводится как длинное десятичное число: 000123456789.<br>Остальные варианты ввода будут игнорироваться.';
 					?>
 					
 					
 			</div>
 			<?
 			echo __('Регистрация парковочного места').'<br>';
-			echo Form::input('placenumber','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'disabled'=>'disabled')).'<br>';
-			//echo Form::input('new_place_name', 'Название машиноместа').'<br>';
-			echo Form::button('todo', 'Зарегистрировать новое машиноместо', array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit','disabled'=>'disabled'));	
+			?>
+			<table>
+				<tr>
+					<th>Парковочная площадка</th>
+					<th>Номер машиноместа</th>
+					<th>Комментарий машиноместа</th>
+				</tr>
+				<tr>
+					<td><?php echo Form::select('id_parking', $parkingPlace);?></td>
+					<td><?php echo Form::input('placenumber','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number' ));?></td>
+					<td><?php echo Form::input('new_place_name', '', array('placeholder'=>'Комментарий машиноместа','maxlength  '=>205));?></td>
+				</tr>
+				</table>
+		<?php
+				
+		
+			
+			
+			echo '<br>';
+			echo Form::button('todo', 'Зарегистрировать новое машиноместо', array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
 			
 			?>	
 
@@ -71,8 +92,8 @@ $t1=microtime(true);
 	</div>
 <?php
 }
-echo Form::close();
-echo Form::open('place/control');
+
+
 ?>
 
 
@@ -94,7 +115,7 @@ echo Form::open('place/control');
 			<th><?echo __('Выбор');?></th>
 			<th><?echo 'Название парковки';?></th>
 			<th><?echo __('Номер машиноместа');?></th>
-			<th><?echo __('Название машиноместа');?></th>
+			
 			<th><?echo __('Комментарий машиноместа');?></th>
 			<th><?echo 'Прим.';?></th>
 			<th><?echo 'Гараж';?></th>

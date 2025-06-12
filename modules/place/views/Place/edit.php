@@ -26,8 +26,8 @@ if(Auth::Instance()->logged_in())
 	<div class="panel-body">
 		
 		<?php 
-		//echo __('Номер машиноместа').Form::input('placenumber', $place->placenumber).'<br>';
-		echo __('Номер машиноместа: ').$place->placenumber.'<br>';
+		echo __('Номер машиноместа').Form::input('placenumber', $place->placenumber).' '.__('(ID').$place->id.')<br>';
+		//echo __('Номер машиноместа: ').$place->placenumber.'<br>';
 		//echo __('Название машиноместа').Form::input('name', iconv('windows-1251','UTF-8', $place->name), array('maxlength'=>50)).'<br>';
 		//echo __('Статус').Form::input('status', iconv('windows-1251','UTF-8', $place->status), array('maxlength'=>50)).'<br>';
 		$parking=new Parking($place->id_parking);
@@ -41,18 +41,19 @@ if(Auth::Instance()->logged_in())
 		$parkingPlace=Model::factory('ParkingPlace')->get_list_for_select();//получил список id жилых комплексов
 		//echo Debug::vars('42', $parkingPlace);exit;
 		$selectList=array();
-		
-		
-		echo 'Парковочная площадка: '.Form::select('id_parking', $parkingPlace, $parking->parent);
-		echo __('ID паркинга ').$place->id_parking.'<br>';
+		echo 'Парковочная площадка: '.Form::select('id_parking', $parkingPlace, $place->id_parking).' '.__('(ID').$place->id_parking.')';
+		echo '<br>';
+		//echo __('ID паркинга ').$place->id_parking.'<br>';
+		//echo '<br>';
+		echo __('ID машиноместа ').$place->id.'<br>';
 		//echo __('Паркинг ').iconv('windows-1251','UTF-8', $parking->name).'<br>';
 		//echo Form::hidden('id_parking', $place->id_parking);
 		//echo Form::hidden('placenumber', $place->placenumber);
-		echo Form::hidden('placenumber', $place->id);
+		//echo Form::hidden('placenumber', $place->id);
 		echo __('Описание').Form::input('description', iconv('windows-1251','UTF-8', $place->description), array('maxlength'=>50)).'<br>';
 		//echo __('Описание2').Form::input('note', iconv('windows-1251','UTF-8', $place->note), array('maxlength'=>50)).'<br>';
 			
-		echo __('Дата создания'). ' '. $place->created.'<br>';
+		//echo __('Дата создания'). ' '. $place->created.'<br>';
 		
 		?>
 			<?php

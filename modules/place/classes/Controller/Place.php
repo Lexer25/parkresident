@@ -109,6 +109,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 		
 		//echo Debug::vars('90',$place_list );exit;
 		$content = View::factory('place/list', array(
+		//$content = View::factory('place/placeList', array(
 			//'id_place'=>$id_place,
 			'place_list'=>$place_list,
 		));
@@ -151,8 +152,8 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	
 	public function action_control()
 	{
-		//echo Debug::vars('130', $_POST);exit;
-		//echo Debug::vars('131',  $this->request->referrer());exit;
+		//echo Debug::vars('155', $_POST);exit;
+		//echo Debug::vars('156',  $this->request->referrer());exit;
 		$requestFrom=$this->request->referrer();
 		$post=Validation::factory($this->request->post());
 					$post->rule('todo', 'not_empty')
@@ -174,18 +175,18 @@ class Controller_Place extends Controller_Template { // класс описыв�
 			case 'add'://добавление нового машиноместа
 
 				$_data=Validation::factory($this->request->post());
-				$_data->rule('place', 'not_empty')
-						->rule('place', 'digit')
-						->rule('parking', 'not_empty')
-						->rule('parking', 'digit')
+				$_data->rule('placenumber', 'not_empty')
+						->rule('placenumber', 'digit')
+						->rule('id_parking', 'not_empty')
+						->rule('id_parking', 'digit')
 							;
 					if($_data->check())
 					{
 						
 						$entity = new Place();
-						$entity->name='Новое машиноместо_'.Arr::get($_data, 'place');
-						$entity->placenumber=Arr::get($_data, 'place');
-						$entity->id_parking=Arr::get($_data, 'parking');
+						$entity->name='Новое машиноместо_'.Arr::get($_data, 'new_place_name');
+						$entity->placenumber=Arr::get($_data, 'placenumber');
+						$entity->id_parking=Arr::get($_data, 'id_parking');
 						$entity->description="";
 						$entity->note="";
 						$entity->status=0;
@@ -312,7 +313,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						;
 				if($_data->check())
 				{
-					//echo Debug::vars('208', $_data);//exit;
+					//echo Debug::vars('316', $_data);exit;
 					$entity = new Place (Arr::get($_data, 'id'));
 					$entity->placenumber=Arr::get($_data, 'placenumber');
 					$entity->name=Arr::get($_data, 'name');
