@@ -263,6 +263,7 @@ if(isset($garage_info))
 				foreach($order_gate as $key2)
 				{
 					//echo Debug::vars('196', $key);//exit;
+					$key=array();
 					foreach($_gateList as $key3)
 					{
 						//echo Debug::vars('270', $key3);exit;
