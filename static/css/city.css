@@ -1,6 +1,7 @@
 body {
   min-height: 2000px;
   padding-top: 90px;
+  padding-top: 70px;
 }
 :target:before { 
   display: block; 

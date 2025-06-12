@@ -18,7 +18,7 @@
 	<?= HTML::style('static/css/modal.css'); ?>
     <?//= HTML::style('static/css/admin.css'); ?>
 	<?//= HTML::style('static/css/timesheet.css'); ?>
-	<?= HTML::style('static/css/city.css'); ?>
+
 	<?//= HTML::style('static/css/modal.css'); ?>
 	<link rel="stylesheet" href="/parkresident/static/css/themes/blue/style.css" type="text/css" />
 	
@@ -42,6 +42,7 @@
   <link rel="stylesheet" href="/parkresident/static/css/bootstrap.min.css" />
   <!-- 6. Подключить CSS виджета "Bootstrap datetimepicker" -->  
   <link rel="stylesheet" href="/parkresident/static/css/bootstrap-datetimepicker.min.css" />
+  	<?php echo  HTML::style('static/css/city.css'); ?>
   
  
   
@@ -59,9 +60,7 @@
      <script type="text/javascript" src="/city/static/js/sort/jquery-latest.js"></script> --> 
 	<script type="text/javascript" src="/parkresident/static/js/sort/jquery.tablesorter.js"></script>
 	 
- <style>
-   body { padding-top: 120px; }
-  </style>
+
 	
 
 
@@ -100,6 +99,11 @@
 			document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 		}
 	
+	
+	$(document).ready(function() {
+  var navbarHeight = $('.navbar-fixed-top').outerHeight();
+  $('body').css('padding-top', navbarHeight + 20);
+});
 	</script>
   </body>
 </html>

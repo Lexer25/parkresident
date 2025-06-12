@@ -109,7 +109,6 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	 public function action_sendUHF()
 	 {	
 		//echo Debug::vars('71', $_POST);exit;
-		//echo Debug::vars('108', Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate')));exit;
 		$gate=Model::factory('Gates')->get_info_gate(Arr::get($_POST, 'gate'));
 		
 		//в режиме ТЕСТ добавляю данные IP и PORT из базы данных. В реальных условиях эти данные будут извлекаться из запроса от контроллера.
@@ -129,16 +128,46 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	 
 	 
 	  //отправка http post запроса на открытие двери
+	  //Запрос отправляется в другую систему, которая управляет реальным оборудованием.
+	  //ответ передается назад, в ответе на request
 	 public function action_sendOpen()
 	 {	
 		//echo Debug::vars('136', $_POST);exit;
 		
-		$data=array (
+		/* $data=array (
 				'id' => Arr::get($_POST, 'id'),
 				);
 			//	echo Debug::vars('138', $data); exit;
-			$this->sendRequestPostJson($data, 'dashboard/opengate');
+			$answer=$this->sendRequestPostJson($data, 'dashboard/opengate');
+			Log::instance()->add(Log::NOTICE, '142 '. Debug::vars($answer));
+			 if($answer)
+			{
+				if($answer->result=='OK') 
+				{
+					Log::instance()->add(Log::NOTICE, '143 ворота открылись, все в порядке.');
+				} else {
+					Log::instance()->add(Log::NOTICE, '144 ворота не открылись. Причина: '. $answer->edesc);
+				}
+
+			}	else {
+				Log::instance()->add(Log::NOTICE, '146 ворота Не открылись, смотри ошибку в логах.');
+				Log::instance()->add(Log::NOTICE, '148 '. Debug::vars($answer));
+			}				
+			 
+			
 			//$this->redirect('emul/grz');
+			
+			
+			$this->response
+            ->headers('Content-Type', 'application/json')
+            ->body(json_encode($answer)); */
+			
+			//===================
+			
+			
+			$result=Model::factory('Emul')->sendOpen(Arr::get($_POST, 'id'));//открыть указанные ворота
+			echo Debug::vars('169', $result);exit;
+			
 			$this->redirect($this->request->referrer());
 	 }
 	 
@@ -147,32 +176,5 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	 
 		
 		
-	//Отправк POST запроса. Данные должны быть в формате json
-	public function sendRequestPostJson($data, $url)
-	{
-			 Log::instance()->add(Log::NOTICE, '167 отправлен тестовый запрос на адрес http://localhost:'.$this->requestPort.'/cvs/'. $url);
-			 Log::instance()->add(Log::NOTICE, '168 '.Debug::vars($data));
-			
-			$request = Request::factory('http://localhost:'.$this->requestPort.'/cvs/'. $url)
-					//->headers("Accept", "application/json")
-					//->headers("Content-Type", "application/json")
-					//->headers("Accept", "application/json")
-					//->headers("Content-Type", "application/x-www-form-urldecode")
-					->method(Request::POST)
-					//->body($data)
-					->post($data);
-			
-			try{
-				//echo Debug::vars('166', $request->execute());exit;
-				$response=$request->execute();
-				return true;
-			} catch (Exception $e) {
-			Log::instance()->add(Log::DEBUG, '#31 '.$e->getMessage());
-			//echo Debug::vars('171', $e->getMessage());exit;
-			return false;
-
-		}	
-			
-			//return $request->body();
-	} 
+	
 }

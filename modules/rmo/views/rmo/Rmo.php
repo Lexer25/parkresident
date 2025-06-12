@@ -61,14 +61,8 @@ echo Debug::vars(Session::instance()->as_array());
         }
     </style>
 	
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-<div class="panel panel-primary"> 
+
+<div class="panel panel-primary container-fluid"> 
 
   <div class="panel-heading">
     <h3 class="panel-title"><?php echo __('Найдена информация по машиноместу № ').' '.Session::instance()->get('place_for_search');?></h3>
@@ -255,24 +249,24 @@ if(isset($garage_info))
 		?>
 		<tr>
 			<?php
-			$order_gate=array(3, 4, 2, 7, 5, 6);//порядок вывода ворот на экран
+			//$order_gate=array(3, 4, 2, 7, 5, 6);//порядок вывода ворот на экран
+			$order_gate=array(9, 10, 14, 15, 13, 18);//порядок вывода ворот на экран
 			//echo Debug::vars('261 order_gate', $order_gate);//exit;
 			//echo Debug::vars('262 _gateList', $_gateList);exit;
 			$count=0;
 				//foreach(array_slice($_gateList, 0, 6) as $key)
-				foreach($order_gate as $key2)
+				foreach($order_gate as $key2)// для ворот в указанном порядке организую вывод информации. $key2 - id ворот
 				{
 					//echo Debug::vars('196', $key);//exit;
 					$key=array();
-					foreach($_gateList as $key3)
+					foreach($_gateList as $key3)//делаю перебор массива с перечнем ворот. Цель - найти $key3, у которого номер ворот совпадает с тем, что надо выводить.
 					{
-						//echo Debug::vars('270', $key3);exit;
 						if(Arr::get($key3, 'id') == $key2) $key=$key3; 
-						
 					}
-					
+				
 				echo '<td>';
-				//echo '<h2>'.++$count.' кам'.Arr::get($key, 'id_cam').' id_gate='.$key2.'</h2>';
+				
+				
 				echo '<div class="camera-view">';
 				echo '<h3>'.Arr::get($key, 'name').'</h3>
 					<div class="video-wrapper">
@@ -284,8 +278,8 @@ if(isset($garage_info))
 					<button onclick="toggleFullscreen(\'camera'.Arr::get($key, 'id_cam').'\')">Полный экран Камера '.Arr::get($key, 'id_cam').'</button>';
 					//echo Form::button('opendoor', 'Открыть ворота', array('value'=>Arr::get($value, 'GRZ'), 'disabled'=>'disabled', 'class'=>'btn btn-success btn-xs', 'type' => 'submit'));
 					echo Form::open('rmo/sendOpen');
-							echo Form::hidden('id', Arr::get($key, 'id_cam')).'<br>';
-							echo Form::button('todo', 'Открыть ворота', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+							echo Form::hidden('id', Arr::get($key, 'id')).'<br>';
+							echo Form::button('todo', 'Открыть ворота '.Arr::get($key, 'id'), array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
 						echo Form::close();
 					echo '
 					

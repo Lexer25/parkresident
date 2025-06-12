@@ -154,9 +154,71 @@ class Model_Emul extends Model {
 	}
 	
 	
+	//Отправк POST запроса. Данные должны быть в формате json
+	public function sendRequestPostJson($data, $url)
+	{
+			 Log::instance()->add(Log::NOTICE, '153 отправлен тестовый запрос на адрес http://localhost:'.$this->requestPort.'/cvs/'. $url);
+			 Log::instance()->add(Log::NOTICE, '154 '.Debug::vars($data));
+			
+			$request = Request::factory('http://localhost:'.$this->requestPort.'/cvs/'. $url)
+					//->headers("Accept", "application/json")
+					//->headers("Content-Type", "application/json")
+					//->headers("Accept", "application/json")
+					//->headers("Content-Type", "application/x-www-form-urldecode")
+					->method(Request::POST)
+					//->body($data)
+					->post($data);
+			
+			try{
+				//echo Debug::vars('166', $request->execute());exit;
+				$response=$request->execute();
+				Log::instance()->add(Log::NOTICE, '168 ответ sendRequestPostJson'.Debug::vars($response));
+				$answer=json_decode($response->body());
+				Log::instance()->add(Log::NOTICE, '169 ответ sendRequestPostJson'.Debug::vars($response->body()));
+				Log::instance()->add(Log::NOTICE, '171 ответ sendRequestPostJson'.Debug::vars($answer));
+				return $answer;
+			} catch (Exception $e) {
+			Log::instance()->add(Log::DEBUG, '#31 '.$e->getMessage());
+			//echo Debug::vars('171', $e->getMessage());exit;
+			return false;
+
+		}	
+			
+			//return $request->body();
+	} 
 	
 	
-	
-	
+	//Команда на открывание ворот. Отправляется в другую систему 
+	public function sendOpen($id_gate)
+	{
+		$data=array (
+				'id' => $id_gate,
+				);
+			//	echo Debug::vars('138', $data); exit;
+			$answer=$this->sendRequestPostJson($data, 'dashboard/opengate');
+			Log::instance()->add(Log::NOTICE, '142 '. Debug::vars($answer));
+			 if($answer)
+			{
+				if($answer->result=='OK') 
+				{
+					Log::instance()->add(Log::NOTICE, '143 ворота открылись, все в порядке.');
+				} else {
+					Log::instance()->add(Log::NOTICE, '144 ворота не открылись. Причина: '. $answer->edesc);
+				}
+
+			}	else {
+				Log::instance()->add(Log::NOTICE, '146 ворота Не открылись, смотри ошибку в логах.');
+				Log::instance()->add(Log::NOTICE, '148 '. Debug::vars($answer));
+			}				
+			 
+			
+			//$this->redirect('emul/grz');
+			
+			
+			$this->response
+            ->headers('Content-Type', 'application/json')
+            ->body(json_encode($answer));
+		
+	}
 	
 }

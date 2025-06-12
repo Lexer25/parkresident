@@ -33,6 +33,7 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 			//echo Debug::vars('9', $_POST, $_GET, Auth::instance()->logged_in(), $_SESSION);
 			I18n::load('rubic');
 			
+			
 	}
 	
 	
@@ -40,7 +41,6 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 	{
 		
 		//$this->template = 'templateWidth';
-		//$_SESSION['menu_active']='rmo';
 		$id_garage = $this->request->param('id');
 		//echo Debug::vars('30', $id_garage); //exit;
 		//если номер гаража указан, то вывожу данные по этому гаражу (для организации управления).
@@ -86,7 +86,6 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 	
 	public function action_opengate_unknow()//передача команды на открытие ворот
 	{
-	//$_SESSION['menu_active']='grz';
 		//echo Debug::vars('82', $_GET, $_POST); exit;	
 		$todo = $this->request->post('opendoor');
 		
@@ -158,7 +157,6 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 */
 	public function action_mqtt()//передача команды на открытие ворот
 	{
-	//$_SESSION['menu_active']='grz';
 		//echo Debug::vars('66', $_GET, $_POST); exit;	
 		$todo = $this->request->post('opendoor');
 		
@@ -260,7 +258,6 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 
 public function action_opengateCVS()//передача команды на открытие ворот
 	{
-	//$_SESSION['menu_active']='grz';
 		//echo Debug::vars('66', $_GET, $_POST); exit;	
 		$todo = $this->request->post('opendoor');
 		
@@ -353,8 +350,7 @@ public function action_opengateCVS()//передача команды на от�
 
 	public function action_mpt()
 	{
-	//$_SESSION['menu_active']='grz';
-		echo Debug::vars('136', $_GET, $_POST); exit;	
+		echo Debug::vars('352', $_GET, $_POST); exit;	
 		$todo = $this->request->post('opendoor');
 		
 		$post=Validation::factory($this->request->post());
@@ -382,9 +378,8 @@ public function action_opengateCVS()//передача команды на от�
 	}
 
 	
-	public function action_control()// просмотр списка ГРЗ и их свойств
+	public function action_control()// 
 	{
-		//$_SESSION['menu_active']='grz';
 		//echo Debug::vars('30', $_GET, $_POST); exit;	
 		$todo = $this->request->post('todo');
 		
@@ -554,28 +549,21 @@ public function action_opengateCVS()//передача команды на от�
 	  //отправка http post запроса на открытие двери
 	 public function action_sendOpen()
 	 {	
-		//echo Debug::vars('136', $_POST);exit;
+		//echo Debug::vars('551', $_POST);exit;
 		
-		$data=array (
-				'id' => Arr::get($_POST, 'id'),
-				);
-			//	echo Debug::vars('138', $data); exit;
-			
-			
-			//$this->redirect('emul/grz');
-			
-			$request = Request::factory('emul/sendOpen')
-				->method(Request::POST)
-				->post($_POST);
-				//echo Debug::vars('570', $response=$request->execute());//exit;
-				//echo Debug::vars('571', $response);exit;
-				;
-			$response=$request->execute();
-			// Получить результат
-			$result = $response->body();
-			
-			
-			
+			$result=Model::factory('Rmo')->sendOpen(Arr::get($_POST, 'id'));//открыть указанные ворота
+			//echo Debug::vars('559', $result);exit;
+			if(Arr::get($result, 'result'))
+			{
+				//команда выполнена успешно
+				
+				Session::instance()->set('ok_mess', array('Команда выпонена успешно.'));
+				
+			} else {
+				//комнада не выполнена
+				Session::instance()->set('e_mess', array(Arr::get($result, 'edesc')));
+			}
+			//echo Debug::vars('567 надо возращать ответ');exit;
 			$this->redirect($this->request->referrer());
 	 }
 	

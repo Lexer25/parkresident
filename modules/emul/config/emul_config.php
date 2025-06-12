@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
  
 return array(
-   	'requestPort'=>8080,
+   	'requestPort'=>80,
 	
 );

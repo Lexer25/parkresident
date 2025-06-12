@@ -163,7 +163,8 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 			Session::instance()->set('e_mess', $post->errors('Valid_mess'));
 			$this->redirect('grz');
 		}
-		$this->redirect('grz');
+		//$this->redirect('grz');
+		$this->redirect($this->request->referrer());
 		
 	}
 	

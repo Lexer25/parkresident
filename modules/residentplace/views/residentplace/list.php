@@ -103,10 +103,10 @@ echo Form::open('ResidentPlace/control');
 	  <div class="panel-body">
 	  
 		<?
-		echo Kohana::message('rubic','rp_add_rubic');
-		echo Form::input('name',null , array('placeholder'=>'Новый жилой комплекс'));
-		echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
-		
+		//echo Kohana::message('rubic','rp_add_rubic');
+		//echo Form::input('name',null , array('placeholder'=>'Новый жилой комплекс'));
+		//echo Form::button('todo', Kohana::message('rubic','rubic_add','rubic_add'), array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
+		echo __('Запрещено.');
 		?>	
 
 	  </div>

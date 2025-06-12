@@ -118,22 +118,7 @@ $t1=microtime(true);
 					
 				echo '<td>';	
 					
-					//echo Debug::vars('115', Arr::get($value, 'parkingList'));
-					/* foreach (Arr::get($value, 'parkingList') as $key1=>$value2)
-					{
-						
-						//echo Debug::vars('115', Arr::get($value2, 'ID_PARKING'), Arr::get($value2, 'PARKING_NAME'));
-						//echo Debug::vars('115', $value2);
-						
-					
-					echo Form::open('grz/car_in_parking');
-					echo Form::hidden('id_parking', Arr::get($value2,'ID_PARKING'));
-					//echo Debug::vars('100',Arr::get($value,'accessList') );
-					echo Form::button('car_in_parking', 'IN '.iconv('windows-1251','UTF-8', Arr::get($value2, 'PARKING_NAME')), array('value'=>Arr::get($value,'ID_CARD'),'class'=>'btn btn-success btn-xs', 'type' => 'submit'));
-					//echo '<br><br>';
-					//echo Form::button('car_in_parking', 'IN Парковка -2', array('value'=>Arr::get($value,'ID_CARD'),'class'=>'btn btn-success btn-sm', 'type' => 'submit'));
-					echo Form::close();
-					} */
+				
 					
 				echo '</td>';
 					

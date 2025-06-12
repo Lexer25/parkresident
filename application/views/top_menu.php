@@ -17,6 +17,9 @@
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='ParkingPlace/index') echo 'class="active"';?>><?php echo  HTML::anchor('parkingPlace', __('Паркинг'), array('class'=>'active')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='Place/list') echo 'class="active"';?>><?php  echo  HTML::anchor('place/list', __('Машиноместа'));?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='Garage/index') echo 'class="active"';?>><?php echo  HTML::anchor('garage', __('Гараж'), array('class'=>'active')); ?></li>
+					
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='ParkingPlace/index') echo 'class="active"';?>><?php echo  HTML::anchor('parkingPlace/onplace', __('На территории'), array('class'=>'active')); ?></li>
+					
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='Rubic/event') echo 'class="active"';?>><?php  echo  HTML::anchor('rubic/event', __('События')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='Gate/list') echo 'class="active"';?>><?php  echo  HTML::anchor('gate/list', __('gate_menu')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='Grz/index') echo 'class="active"';?>><?php  echo  HTML::anchor('grz', __('grz')); ?></li>
