@@ -2,7 +2,7 @@
  //echo Debug::vars('11', $rp_info); 
 // страница для редактирования сущности
 //echo Debug::vars('4');exit;
-echo Debug::vars('5', $place);//exit;
+//echo Debug::vars('5', $place);//exit;
 echo Form::open('Place/control');
 
 if(Auth::Instance()->logged_in())
@@ -43,17 +43,7 @@ if(Auth::Instance()->logged_in())
 		$selectList=array();
 		echo 'Парковочная площадка: '.Form::select('id_parking', $parkingPlace, $place->id_parking).' '.__('(ID').$place->id_parking.')';
 		echo '<br>';
-		//echo __('ID паркинга ').$place->id_parking.'<br>';
-		//echo '<br>';
-		echo __('ID машиноместа ').$place->id.'<br>';
-		//echo __('Паркинг ').iconv('windows-1251','UTF-8', $parking->name).'<br>';
-		//echo Form::hidden('id_parking', $place->id_parking);
-		//echo Form::hidden('placenumber', $place->placenumber);
-		//echo Form::hidden('placenumber', $place->id);
 		echo __('Описание').Form::input('description', iconv('windows-1251','UTF-8', $place->description), array('maxlength'=>50)).'<br>';
-		//echo __('Описание2').Form::input('note', iconv('windows-1251','UTF-8', $place->note), array('maxlength'=>50)).'<br>';
-			
-		//echo __('Дата создания'). ' '. $place->created.'<br>';
 		
 		?>
 			<?php

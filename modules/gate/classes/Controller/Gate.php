@@ -34,7 +34,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 	public function action_index()// просмотр ворот и их настроек
 	{
 		echo Debug::vars('28', $_POST);exit;
-		$_SESSION['menu_active']='gate';
+		//$_SESSION['menu_active']='gate';
 		$query=Validation::factory($this->request->query());
 					$query->rule('id_parking', 'not_empty')
 							->rule('id_parking', 'digit')
@@ -264,7 +264,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 				{
 					//echo Debug::vars('167', $_data, Arr::get($_data, 'id_rp'));//exit;
 					$entity = new Gate(Arr::get($_data, 'id'));
-					//echo Debug::vars('227', $entity);exit;
+					//echo Debug::vars('267', $entity);exit;
 					$content = View::factory('gate/edit', array(
 							'info_gate'=>$entity,
 							));
@@ -327,7 +327,7 @@ class Controller_Gate extends Controller_Template { // класс описыва
 	
 	public function action_edit()//редактировать и просматривать  ворота
 	{
-		$_SESSION['menu_active']='kp_park_menu';
+		//$_SESSION['menu_active']='kp_park_menu';
 		
 		$id_gate = $this->request->param('id');
 		$info_gate=Model::Factory('gates')->get_info_gate($id_gate); //получить общую информацию о воротах

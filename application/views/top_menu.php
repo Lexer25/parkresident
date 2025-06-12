@@ -9,25 +9,25 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		  <?= HTML::anchor('residentPlace', __('City'),  array('class'=>'navbar-brand')) ?>
+		  <?php echo HTML::anchor('residentPlace', __('City'),  array('class'=>'navbar-brand')) ?>
     </div>
 	<div class="navbar-collapse collapse">
 		
 				<ul class="nav navbar-nav">
-					<li <?php if (Arr::get($_SESSION,'menu_active')=='garage') echo 'class="active"';?>><?php echo  HTML::anchor('parkingPlace', __('Паркинг'), array('class'=>'active')); ?></li>
-					<li <?php if (Arr::get($_SESSION,'menu_active')=='placeList') echo 'class="active"';?>><?php  echo  HTML::anchor('place/list', __('Машиноместа'));?></li>
-					<li <?php if (Arr::get($_SESSION,'menu_active')=='garage') echo 'class="active"';?>><?php echo  HTML::anchor('garage', __('Гараж'), array('class'=>'active')); ?></li>
-					<li <?php if (Arr::get($_SESSION,'menu_active')=='event') echo 'class="active"';?>><?php  echo  HTML::anchor('rubic/event', __('События')); ?></li>
-					<li <?php if (Arr::get($_SESSION,'menu_active')=='gate') echo 'class="active"';?>><?php  echo  HTML::anchor('gate/list', __('gate_menu')); ?></li>
-					<li <?php if (Arr::get($_SESSION,'menu_active')=='grz') echo 'class="active"';?>><?php  echo  HTML::anchor('grz', __('grz')); ?></li>
-					<li <?php if (Arr::get($_SESSION,'menu_active')=='rmo') echo 'class="active"';?>><?php  echo  HTML::anchor('rmo', __('Рабочее место охраны')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='ParkingPlace/index') echo 'class="active"';?>><?php echo  HTML::anchor('parkingPlace', __('Паркинг'), array('class'=>'active')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Place/list') echo 'class="active"';?>><?php  echo  HTML::anchor('place/list', __('Машиноместа'));?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Garage/index') echo 'class="active"';?>><?php echo  HTML::anchor('garage', __('Гараж'), array('class'=>'active')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Rubic/event') echo 'class="active"';?>><?php  echo  HTML::anchor('rubic/event', __('События')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Gate/list') echo 'class="active"';?>><?php  echo  HTML::anchor('gate/list', __('gate_menu')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Grz/index') echo 'class="active"';?>><?php  echo  HTML::anchor('grz', __('grz')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Rmo/index') echo 'class="active"';?>><?php  echo  HTML::anchor('rmo', __('Рабочее место охраны')); ?></li>
 					<li <?php //if (Arr::get($_SESSION,'menu_active')=='monitor') echo 'class="active"';?>><?php  //echo  HTML::anchor('monitor', __('Монитор')); ?></li>
 					<!--<li <?php if (Arr::get($_SESSION,'menu_active')=='grztest') echo 'class="active"';?>><?php  echo  HTML::anchor('grz/test', __('grztest')); ?></li> -->
-					<li <?php echo 'class="active"';?>><?php  if(Kohana::$config->load('artonitparking_config')->checkdb) echo  HTML::anchor('checkdb', __('checkDB')); ?></li>
-					<li <?php echo 'class="active"';?>><?php // echo  HTML::anchor('emul', __('emul')); ?></li>
-					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('emul/grz', __('emul2')); ?></li>
-					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('wizard', __('wizard')); ?></li>
-					<li <?php echo 'class="active"';?>><?php  echo  HTML::anchor('guide', __('Инструкция')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Checkdb/index') echo 'class="active"';;?>><?php  if(Kohana::$config->load('artonitparking_config')->checkdb) echo  HTML::anchor('checkdb', __('checkDB')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Rmo/index') echo 'class="active"';;?>><?php // echo  HTML::anchor('emul', __('emul')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Emul/grz') echo 'class="active"';?>><?php  echo  HTML::anchor('emul/grz', __('emul2')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Wizard/index') echo 'class="active"';?>><?php  echo  HTML::anchor('wizard', __('wizard')); ?></li>
+					<li ><?php  echo  HTML::anchor('guide', __('Инструкция')); ?></li>
 				</ul>
 		<?php
 		if(Auth::Instance()->logged_in())
@@ -91,7 +91,7 @@
 	<div class="navbar-collapse collapse">
       <?php 
 	  
-	  if(Auth::Instance()->logged_in())
+	/*   if(Auth::Instance()->logged_in())
 	  {
       echo __('string_about', array(
       		'db'=> Arr::get(
@@ -107,7 +107,7 @@
 			echo '<br>'.__('Роль Администратор');
 	  } else {
 		  echo __('Роль Контролёр');
-	  }
+	  } */
 /* 	  echo Debug::vars(
     Log::EMERGENCY, 1
     Log::ALERT, 1

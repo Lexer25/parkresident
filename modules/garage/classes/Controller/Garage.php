@@ -34,7 +34,7 @@ class Controller_Garage extends Controller_Template {
 	
 	public function action_index() // получить список гаражей
 	{
-		$_SESSION['menu_active']='garage';
+		//$_SESSION['menu_active']='garage';
 		
 		$id_parking=1;
 		//echo Debug::vars('20', $_SESSION);
@@ -50,7 +50,7 @@ class Controller_Garage extends Controller_Template {
 	
 		public function action_edit_garage()//редактировать и просматривать  гараж
 	{
-		$_SESSION['menu_active']='kp_park_menu';
+		//$_SESSION['menu_active']='kp_park_menu';
 		//echo Debug::vars('43', $_GET, $_POST, $this->request->param('id')); exit;
 		$id_garage = $this->request->param('id');
 		$garage_info=Model::Factory('garage')->get_garage_info($id_garage); //получить информация о гараже

@@ -33,7 +33,7 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 	
 	public function action_index()// просмотр списка ГРЗ и их свойств
 	{
-		$_SESSION['menu_active']='grz';
+		//$_SESSION['menu_active']='grz';
 		$t1=microtime(true);//отмека времени для оценки быстродействия	
 		//echo Debug::vars('38', $_GET, $_POST, $id_parking); //exit;
 		$getGrzInfo=Model::Factory('grz')->getGrzInfoList();//список ГРЗ
@@ -49,7 +49,7 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 	
 	public function action_history()// просмотр истории проездов ГРЗ
 	{
-		$_SESSION['menu_active']='grz';
+		//$_SESSION['menu_active']='grz';
 		$param=array('grz'=>$this->request->param('id'));
 		//echo Debug::vars('263', $param); exit;
 		

@@ -40,7 +40,7 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 	{
 		
 		//$this->template = 'templateWidth';
-		$_SESSION['menu_active']='rmo';
+		//$_SESSION['menu_active']='rmo';
 		$id_garage = $this->request->param('id');
 		//echo Debug::vars('30', $id_garage); //exit;
 		//если номер гаража указан, то вывожу данные по этому гаражу (для организации управления).
@@ -86,7 +86,7 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 	
 	public function action_opengate_unknow()//передача команды на открытие ворот
 	{
-	$_SESSION['menu_active']='grz';
+	//$_SESSION['menu_active']='grz';
 		//echo Debug::vars('82', $_GET, $_POST); exit;	
 		$todo = $this->request->post('opendoor');
 		
@@ -158,7 +158,7 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 */
 	public function action_mqtt()//передача команды на открытие ворот
 	{
-	$_SESSION['menu_active']='grz';
+	//$_SESSION['menu_active']='grz';
 		//echo Debug::vars('66', $_GET, $_POST); exit;	
 		$todo = $this->request->post('opendoor');
 		
@@ -260,7 +260,7 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 
 public function action_opengateCVS()//передача команды на открытие ворот
 	{
-	$_SESSION['menu_active']='grz';
+	//$_SESSION['menu_active']='grz';
 		//echo Debug::vars('66', $_GET, $_POST); exit;	
 		$todo = $this->request->post('opendoor');
 		
@@ -353,7 +353,7 @@ public function action_opengateCVS()//передача команды на от�
 
 	public function action_mpt()
 	{
-	$_SESSION['menu_active']='grz';
+	//$_SESSION['menu_active']='grz';
 		echo Debug::vars('136', $_GET, $_POST); exit;	
 		$todo = $this->request->post('opendoor');
 		
@@ -384,7 +384,7 @@ public function action_opengateCVS()//передача команды на от�
 	
 	public function action_control()// просмотр списка ГРЗ и их свойств
 	{
-		$_SESSION['menu_active']='grz';
+		//$_SESSION['menu_active']='grz';
 		//echo Debug::vars('30', $_GET, $_POST); exit;	
 		$todo = $this->request->post('todo');
 		

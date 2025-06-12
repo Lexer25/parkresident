@@ -557,7 +557,7 @@ $dm="\r\n";
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array();
-		//echo Debug::vars('22', $query); exit;
+		//echo Debug::vars('560', $query); exit;
 		
 		$info_parking['name']=iconv('windows-1251','UTF-8', Arr::get(Arr::get($query, 0), 'NAME'));
 		$info_parking['id_parking']=Arr::get(Arr::get($query, 0), 'ID');
@@ -565,7 +565,7 @@ $dm="\r\n";
 		$info_parking['id_org']=Arr::get(Arr::get($query, 0), 'ID_ORG');
 		$info_parking['POSITION']=Arr::get(Arr::get($query, 0), 'POSITION');
 		$info_parking['org_name']=iconv('windows-1251','UTF-8',Arr::get(Arr::get($query, 0), 'ORG_NAME'));
-		//echo Debug::vars('22', $info_parking); exit;
+		//echo Debug::vars('568', $info_parking); exit;
 		return $info_parking;
 		
 	}

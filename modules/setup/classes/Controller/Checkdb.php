@@ -73,7 +73,7 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 
 	public function action_index()
 	{
-		$_SESSION['menu_active']='rmo';
+		//$_SESSION['menu_active']='rmo';
 		$id_garage = $this->request->param('id');
 		//echo Debug::vars('37');exit;
 		$tableList=$this->tableList;
@@ -241,7 +241,7 @@ class Controller_Checkdb extends Controller_Template { // класс описы�
 		{
 			$table=Arr::get($_POST, 'delTable'); //получил название таблицы
 
-		Log::instance()->add(Log::DEBUG, '225 Удаление  таблицы '.$table);
+		Log::instance()->add(Log::DEBUG, '244 Удаление  таблицы '.$table);
 
 		 if(!$parkDB->checkTableIsPresent($table))// проверка на наличие удаляемой таблицы
 		 {

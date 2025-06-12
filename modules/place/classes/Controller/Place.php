@@ -36,7 +36,6 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	public function action_index()//Показываю список машиномест для указанных паркингов
 	{
 		$id = $this->request->param('id');
-		$_SESSION['menu_active']='rubic';
 		$query=Validation::factory($this->request->query());
 					$query->rule('id_parking', 'not_empty')
 							->rule('id_parking', 'digit')

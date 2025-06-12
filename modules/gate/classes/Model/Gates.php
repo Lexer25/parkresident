@@ -244,7 +244,7 @@ class Model_Gates extends Model {
 		
 		
 			$connect_param= $this->get_info_gate($id_gate);
-		//echo Debug::vars('222', $id_gate, $connect_param, Arr::get($connect_param,'box_ip'), Arr::get($connect_param, 'box_port'), Arr::get($connect_param,'mode'));exit;
+		//echo Debug::vars('247', $id_gate, $connect_param, Arr::get($connect_param,'box_ip'), Arr::get($connect_param, 'box_port'), Arr::get($connect_param,'mode'));exit;
 		
 		//Тут надо отправить запрос на сервер cvs на другом компьютере
 		
@@ -269,7 +269,7 @@ class Model_Gates extends Model {
 		
 		
 			$connect_param= $this->get_info_gate($id_gate);
-		//echo Debug::vars('222', $id_gate, $connect_param, Arr::get($connect_param,'box_ip'), Arr::get($connect_param, 'box_port'), Arr::get($connect_param,'mode'));exit;
+		//echo Debug::vars('272', $id_gate, $connect_param, Arr::get($connect_param,'box_ip'), Arr::get($connect_param, 'box_port'), Arr::get($connect_param,'mode'));exit;
 		//создаю объект MPT
 			$tablo=new phpMPT(Arr::get($connect_param,'box_ip'), Arr::get($connect_param, 'box_port'));
 			

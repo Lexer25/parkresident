@@ -37,7 +37,7 @@ class Controller_Rubic extends Controller_Template {
 
 	public function action_index()// главная страница при входе. Показываю жилые комплексы + возможность добавить ЖК resident_place
 	{
-		$_SESSION['menu_active']='rubic';
+		//$_SESSION['menu_active']='rubic';
 		$query=Validation::factory($this->request->query());
 					$query->rule('id_parking', 'not_empty')
 							->rule('id_parking', 'digit')
@@ -75,7 +75,7 @@ class Controller_Rubic extends Controller_Template {
 	
 	public function action_cardList11() // получить список парковочных мест
 	{
-		$_SESSION['menu_active']='rubic';
+		//$_SESSION['menu_active']='rubic';
 		$id_parking=1;
 		//echo Debug::vars('20', $_SESSION);
 		//$card_list=Model::Factory('rubic')->get_list_parking_card();//список парковочный карт
@@ -95,7 +95,7 @@ class Controller_Rubic extends Controller_Template {
 	
 	public function action_placeList()// перечень парковочных мест.
 	{
-		$_SESSION['menu_active']='placeList';
+		//$_SESSION['menu_active']='placeList';
 		//echo Debug::vars('20', $_SESSION);
 		$place_list=Model::Factory('rubic')->get_list_parking_place();//список парковочный мест
 		//$list_parking=Model::Factory('parking')->get_list_parking();//список паркингов. Нужен для показа расположения машиноместа
@@ -115,7 +115,7 @@ class Controller_Rubic extends Controller_Template {
 	public function action_event()// просмотр событий
 	{
 				
-		$_SESSION['menu_active']='event';
+		//$_SESSION['menu_active']='event';
 		//echo Debug::vars('20', Session::instance());// exit;
 		$eventTable=Validation::factory(Session::instance()->as_array());
 	
@@ -159,7 +159,7 @@ class Controller_Rubic extends Controller_Template {
 	public function action_add_rubic()//Добавить новую парковку
 	{
 		echo Debug::vars('34', $_POST, $_GET); exit;
-		$_SESSION['menu_active']='kp_park_menu';
+		//$_SESSION['menu_active']='kp_park_menu';
 		$rubic_list=Model::Factory('rubic')->get_list();
 		$content = View::factory('rubic/rubic', array(
 			'rubic_list'=>$rubic_list,
@@ -171,7 +171,7 @@ class Controller_Rubic extends Controller_Template {
 	
 	public function action_edit_rubic()//редактировать и просматривать  парковку
 	{
-		$_SESSION['menu_active']='kp_park_menu';
+		//$_SESSION['menu_active']='kp_park_menu';
 		//echo Debug::vars('43', $_GET, $_POST, $this->request->param('id')); exit;
 		$id_rubic = $this->request->param('id');
 		$info_parking=Model::Factory('rubic')->get_info_parking($id_rubic); //получить общую информацию о парковке
@@ -198,7 +198,7 @@ class Controller_Rubic extends Controller_Template {
 	
 	public function action_edit_place()//редактировать и просматривать свойства машиноместа
 	{
-		$_SESSION['menu_active']='kp_mm_menu';
+		//$_SESSION['menu_active']='kp_mm_menu';
 		//echo Debug::vars('69', $_GET, $_POST, $id_rubic = $this->request->param('id')); exit;
 		$id_place = $this->request->param('id');
 		$info_place=Model::Factory('rubic')->get_info_place($id_place); //получить общую информацию о машиноместе

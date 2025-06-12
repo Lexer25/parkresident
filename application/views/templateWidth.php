@@ -21,6 +21,7 @@
 	<?= HTML::style('static/css/city.css'); ?>
 	<?//= HTML::style('static/css/modal.css'); ?>
 	<link rel="stylesheet" href="/parkresident/static/css/themes/blue/style.css" type="text/css" />
+	
 	 
 <!-- ... -->
   <!-- 1. Подключить библиотеку jQuery -->
@@ -58,13 +59,16 @@
      <script type="text/javascript" src="/city/static/js/sort/jquery-latest.js"></script> --> 
 	<script type="text/javascript" src="/parkresident/static/js/sort/jquery.tablesorter.js"></script>
 	 
-
+ <style>
+   body { padding-top: 120px; }
+  </style>
 	
 
 
   </head>
 
   <body>
+
 
   <!--container-fluid -->
 

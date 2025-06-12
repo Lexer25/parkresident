@@ -29,7 +29,7 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 				}
 			}
 			I18n::load('rubic');
-			
+		//$_SESSION['menu_active']=$this->request->action();
 	}
 	
 		
@@ -54,7 +54,7 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 	public function action_index()// главная страница при входе. Показывает все парковочные площадки
 	{
 		$id = $this->request->param('id');
-		//$_SESSION['menu_active']='rubic';
+		
 		
 		$query=Validation::factory($this->request->query());
 					$query->rule('id_resident', 'not_empty')

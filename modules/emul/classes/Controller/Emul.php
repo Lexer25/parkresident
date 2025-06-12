@@ -49,8 +49,6 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	
 	public function action_grz()//
 	{
-		
-		$_SESSION['menu_active']='grz';
 		$t1=microtime(true);//отмека времени для оценки быстродействия	
 		//echo Debug::vars('38', $_GET, $_POST, $id_parking); //exit;
 		$getGrzInfo=array_slice(Model::Factory('grz')->getGrzInfoList(), 0, 1000);//список ГРЗ

@@ -380,7 +380,7 @@ class Model_Garage extends Model {
 			{
 				//echo Debug::vars('157',$data, Arr::get($data, 'id_garage'), implode(",", Arr::get($data, 'id_org_for_add_garage')) ); exit;
 				$sql='INSERT INTO HL_ORGACCESS (ID_ORG, ID_GARAGE) VALUES ('.$key.','.Arr::get($data, 'id_garage').')';
-				//echo Debug::vars('228', $sql); exit;
+				//echo Debug::vars('383', $sql); exit;
 				try
 						{
 						$query = DB::query(Database::DELETE, $sql)

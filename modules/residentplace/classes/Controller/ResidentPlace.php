@@ -33,7 +33,6 @@ class Controller_ResidentPlace extends Controller_Template { // класс оп�
 	public function action_index()//Показываю жилые комплексы + возможность добавить ЖК resident_place
 	{
 		$id = $this->request->param('id');
-		$_SESSION['menu_active']='rubic';
 		$query=Validation::factory($this->request->query());
 					$query->rule('id_parking', 'not_empty')
 							->rule('id_parking', 'digit')

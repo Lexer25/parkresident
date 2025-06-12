@@ -294,7 +294,7 @@ echo Form::open('garage/control');
 		
 		//echo Debug::vars('215', $value2);//exit;
 
-		//echo Debug::vars('227', $value2);//exit;
+		//echo Debug::vars('297', $value2);//exit;
 		foreach($value2 as $key3=>$value3)
 		{
 			

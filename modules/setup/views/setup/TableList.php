@@ -23,7 +23,7 @@
 		echo Form::open('Checkdb/worker');
 			$_connectName='fb';
 			$about=Model::factory('Parkdb')->aboutDB($_connectName);
-			echo Debug::vars('22', $about);
+			//echo Debug::vars('26', $about);
 			
 		?>
 		<table class="table table-striped table-hover table-condensed">
