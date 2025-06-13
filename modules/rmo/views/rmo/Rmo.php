@@ -1,12 +1,12 @@
 <?php
-/*
-echo (isset($garage_info))?  Debug::vars('2', $garage_info) : 'no garage_info';
-echo(isset($place_income_garage))?  Debug::vars('2', $place_income_garage) : 'no place_income_garage';
-echo(isset($org_income_garage))?  Debug::vars('2', $org_income_garage) : 'no org_income_garage';
-echo(isset($get_grz_in_parking))?  Debug::vars('2', $get_grz_in_parking) : 'no get_grz_in_parking';
-echo(isset($place_grz_garage_))?  Debug::vars('2', $place_grz_garage_) : 'no place_grz_garage_';
-echo Debug::vars(Session::instance()->as_array()); 
-*/
+
+//echo (isset($garage_info))?  Debug::vars('2', $garage_info) : 'no garage_info';
+//echo(isset($place_income_garage))?  Debug::vars('2', $place_income_garage) : 'no place_income_garage';
+//echo(isset($org_income_garage))?  Debug::vars('2', $org_income_garage) : 'no org_income_garage';
+//echo(isset($get_grz_in_parking))?  Debug::vars('2', $get_grz_in_parking) : 'no get_grz_in_parking';
+//echo(isset($place_grz_garage_))?  Debug::vars('2', $place_grz_garage_) : 'no place_grz_garage_';
+//echo Debug::vars(Session::instance()->as_array()); 
+
 
 ?>
 <style>
@@ -131,7 +131,7 @@ if(isset($garage_info))
 				echo '<td>';
 					foreach($org_income_garage as $key=>$value)
 					{
-					 echo Arr::get($value, 'NAME').'<br>(id_garage='.Arr::get($value, 'ID').')';
+					 echo Arr::get($value, 'NAME').' (id_garage='.Arr::get($value, 'ID').')<br>';
 					}
 				echo '</td>';
 				
@@ -186,12 +186,13 @@ if(isset($garage_info))
 				$total_place=count($place_income_garage);
 					echo __('Всего машиномест ').' '.$total_place.'<hr>';
 					//echo Debug::vars('94', $place_income_garage);
+					$parking_name='189-189';
 					foreach($place_income_garage as $key=>$value)
 					{
 					 if(Arr::get($value, 'ID_PARKING') == 1) $parking_name='-1 этаж';
 					 if(Arr::get($value, 'ID_PARKING') == 4) $parking_name='-2 этаж';
 					 //echo Arr::get($value, 'ID').' ('.Arr::get($value, 'ID_PARKING').')<br>';
-					 echo Arr::get($value, 'ID').' ('.$parking_name.')<br>';
+					 echo Arr::get($value, 'PLACENUMBER').' ('.Arr::get($value, 'PARKING_NAME').')<br>';
 					}
 				echo '</td>';
 				
@@ -249,8 +250,8 @@ if(isset($garage_info))
 		?>
 		<tr>
 			<?php
-			//$order_gate=array(3, 4, 2, 7, 5, 6);//порядок вывода ворот на экран
-			$order_gate=array(9, 10, 14, 15, 13, 18);//порядок вывода ворот на экран
+			$order_gate=array(3, 4, 2, 7, 5, 6);//порядок вывода ворот на экран
+			//$order_gate=array(9, 10, 14, 15, 13, 18);//порядок вывода ворот на экран
 			//echo Debug::vars('261 order_gate', $order_gate);//exit;
 			//echo Debug::vars('262 _gateList', $_gateList);exit;
 			$count=0;

@@ -91,6 +91,14 @@ class Model_Garage extends Model {
 			join people p on p.id_org=hlo.id_org
 			join card c on c.id_pep=p.id_pep and c.id_cardtype='.$cardType.'
 			where hlo.id_garage='.$id_garage;
+			
+		$sql='select distinct c.id_card, c."ACTIVE", p.surname from hl_orgaccess hlo
+			join people p on p.id_org=hlo.id_org
+			join card c on c.id_pep=p.id_pep
+			where hlo.id_garage='.$id_garage;
+			
+			
+			
 		//echo Debug::vars('38', $sql); exit;
 		try
 		{
@@ -646,7 +654,7 @@ class Model_Garage extends Model {
 	{
 		
 		$sql='select hlg.id_garagename from HL_PLACE hlp
-join hl_garage hlg on hlg.id_place=hlp.placenumber
+join hl_garage hlg on hlg.id_place=hlp.id
 where hlp.placenumber='.$num_place;
 		//echo Debug::vars('815', $sql); exit;
 		$res=array();
