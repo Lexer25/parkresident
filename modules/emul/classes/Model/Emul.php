@@ -10,7 +10,7 @@
 
 class Model_Emul extends Model {
 	
-	
+	Public $requestPort=80;
 	public function get_list()// получить список машиномест
 	{
 		$res=array();
@@ -178,7 +178,7 @@ class Model_Emul extends Model {
 				Log::instance()->add(Log::NOTICE, '171 ответ sendRequestPostJson'.Debug::vars($answer));
 				return $answer;
 			} catch (Exception $e) {
-			Log::instance()->add(Log::DEBUG, '#31 '.$e->getMessage());
+			Log::instance()->add(Log::DEBUG, '#181 '.$e->getMessage());
 			//echo Debug::vars('171', $e->getMessage());exit;
 			return false;
 

@@ -35,12 +35,8 @@ class Model_Rmo extends Model {
 			}	else {
 				Log::instance()->add(Log::NOTICE, '146 ворота Не открылись, смотри ошибку в логах.');
 				Log::instance()->add(Log::NOTICE, '148 '. Debug::vars($answer));
-				return array('result'=>false, 'edesc'=>$answer->edesc);
+				return array('result'=>false, 'edesc'=>'Ошибка при получении ответа.');
 			}				
-			
-			
-			
-		
 	}
 	
 	
@@ -66,35 +62,11 @@ class Model_Rmo extends Model {
 				Log::instance()->add(Log::NOTICE, '171 ответ sendRequestPostJson'.Debug::vars($answer));
 				return $answer;
 			} catch (Exception $e) {
-			Log::instance()->add(Log::DEBUG, '#31 '.$e->getMessage());
+			Log::instance()->add(Log::DEBUG, '#69 '.$e->getMessage());
 			//echo Debug::vars('171', $e->getMessage());exit;
 			return false;
 
 		}	
-			
-			//return $request->body();
-	} 
-	
-	//Отправк POST запроса через CURL. Данные должны быть в формате json
-	public function _sendRequestPostJson($data, $url)
-	{
-			 Log::instance()->add(Log::NOTICE, '153 отправлен тестовый запрос на адрес http://localhost:'.$this->requestPort.'/cvs/'. $url);
-			 Log::instance()->add(Log::NOTICE, '154 '.Debug::vars($data));
-			
-			$response = Request_Curl::post('http://localhost:'.$this->requestPort.'/cvs/'. $url, 
-				$data, 
-				array('Content-Type: application/json')
-			);
-			
-		Log::instance()->add(Log::NOTICE, '91 ответ sendRequestPostJson'.Debug::vars($response));
-				echo Debug::vars('92', $response);exit;
-
-				Log::instance()->add(Log::NOTICE, '168 ответ sendRequestPostJson'.Debug::vars($response));
-				$answer=json_decode($response->body());
-				Log::instance()->add(Log::NOTICE, '169 ответ sendRequestPostJson'.Debug::vars($response->body()));
-				Log::instance()->add(Log::NOTICE, '171 ответ sendRequestPostJson'.Debug::vars($answer));
-				return $answer;
-		
 			
 			//return $request->body();
 	} 
