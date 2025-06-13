@@ -35,7 +35,7 @@ class Controller_Welcome extends Controller {
 			->execute(Database::instance('fb'))
 			->get('GEN_ID');
 		
-		
+		$id_event=$id_event-10;
 		
 		$this->response->headers("Access-Control-Allow-Origin", "*");
 		$this->response->headers("Content-Type", "application/json");
@@ -48,8 +48,8 @@ class Controller_Welcome extends Controller {
 	{
 		$t1=microtime(1);
 		$id = $this->request->param('id');
-		//$id=3209720;
-		Log::instance()->add(Log::DEBUG, '57 запрос события '. $id);
+		$id=13609102;
+		Log::instance()->add(Log::DEBUG, '52 запрос события '. $id);
 		$event=new Eventonline($id);
 		Log::instance()->add(Log::DEBUG, '59 ответ на запрос '.$id.' '.Debug::vars(json_encode(get_object_vars($event))));
 		//echo Debug::vars('26', $event, json_encode(get_object_vars($event))); exit;
@@ -68,7 +68,7 @@ class Controller_Welcome extends Controller {
 		$id = $this->request->param('id');
 		$id=7582;//фиксированное значение для отладки
 		//$id=3209720;
-		Log::instance()->add(Log::DEBUG, '57 запрос события '. $id);
+		Log::instance()->add(Log::DEBUG, '71 запрос события '. $id);
 		$event=new Contact($id);
 		Log::instance()->add(Log::DEBUG, '59 ответ на запрос '.$id.' '.Debug::vars(json_encode(get_object_vars($event))));
 		//echo Debug::vars('26', $event, json_encode(get_object_vars($event))); exit;

@@ -295,7 +295,23 @@ if(isset($garage_info))
 	</table>
    </div>
   </div>
-   
+ </div>
+ 
+ 
+  <div class="panel panel-primary"> 
+
+	  <div class="panel-heading">
+		<h3 class="panel-title"><?php echo __('Панель управления и контроля воротами').' '.Session::instance()->get('place_for_search');?></h3>
+		<h3 class="panel-title"><?php //echo __('Разрешить проезд выбранного ГРЗ на машиноместо').' '.Session::instance()->get('place_for_search');?></h3>
+	  </div>
+	  <div class="panel-body"> 
+		Журнал событий
+		<?php
+			include Kohana::find_file('views/monitor','list');//вывод таблицы с журналом событий
+		
+		?>
+     </div>
+ </div>
    
 
     <!-- Подключаем HLS.js -->
@@ -354,5 +370,4 @@ if(isset($garage_info))
            
         });
     </script>
-</div>	
 </div>

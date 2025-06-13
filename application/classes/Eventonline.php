@@ -27,6 +27,9 @@ class Eventonline {
 		$sql='SELECT first 2 eg.*,et.name as eventname, et.color FROM EVENTS_GETLISTFROMID(1, 1, '.$id.', NULL) eg
 			join eventtype et on eg.id_eventtype=et.id_eventtype
 			 where eg.id_dev in (97, 100, 106, 109)';
+			 
+			$sql='SELECT first 2 eg.*,et.name as eventname, et.color FROM EVENTS_GETLISTFROMID(1, 1, '.$id.', NULL) eg
+			join eventtype et on eg.id_eventtype=et.id_eventtype';
 			//echo Debug::vars('18', $sql); exit;
 		try{
 		$id_event = DB::query(Database::SELECT, $sql)

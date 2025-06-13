@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link rel="icon" href="http://localhost/parkoffice/favicon.ico" type="image/x-icon">
+   
 
     <title>Artonit Парк ЖК <?
 		echo  isset(Kohana::$config->load('artonitparking_config')->city_name)? Kohana::$config->load('artonitparking_config')->city_name : '';

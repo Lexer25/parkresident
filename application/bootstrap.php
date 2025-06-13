@@ -141,6 +141,7 @@ Kohana::modules(array(
 	 'gate'  => MODPATH.'gate',  // Набор инструментов для воротами.
 	 'emul'  => MODPATH.'emul',  // Набор инструментов для эмуляции работы парковочной системы.
 	 'rmo'  => MODPATH.'rmo',  // рабочее место охранника
+	 'monitors'  => MODPATH.'monitors',  // монитор событий онлайн
 	
 	));
 
