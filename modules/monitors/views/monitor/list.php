@@ -221,13 +221,12 @@ define ('_notAllowed', "HTML::image('images/text_lock.png', array('title' => __(
 			<table class="data tablesorter-blue" width="100%" cellpadding="0" cellspacing="0"  >
 			<thead>
 					<tr>
-						<th>ID_EVENT</th>
-						<th>ID_EVENTTYPE</th>
-						<th>DATETIME</th>
-						<th>EVENTTYPE_NAME</th>
-						<th>DEVICE_NAME</th>
-						<th>PEOPLE_NAME</th>
-						<th>ORGANIZATION_NAME</th>
+						<th>Время</th>
+						<th>Событие</th>
+						<th>Прпоуск</th>
+						<th>Точка проезда</th>
+						<th>ФИО</th>
+						<th>Организация</th>
 					</tr>
 			</thead>		
 			<tbody id="txtHint"/>

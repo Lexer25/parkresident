@@ -370,4 +370,3 @@ if(isset($garage_info))
            
         });
     </script>
-</div>

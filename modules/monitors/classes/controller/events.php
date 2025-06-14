@@ -52,7 +52,7 @@ class Controller_events extends Controller {
  where  e.id_event > '.$id.'
   order by e.id_event';
   
-		$sql='select first 30 e.id_event, e.id_eventtype, e.datetime,  et.color, et.name as eventtype_name, 
+		$sql='select first 30 e.id_event, e.id_eventtype, e.datetime,  et.color, et.name as eventtype_name,  e.id_card ,
         d.name as device_name, p.surname, p.surname||\' \'|| p.name||\' \'|| p.patronymic as people_name,
          '.$sqlphoto.' p.post, o.name as organization_name
 from device d
@@ -62,7 +62,7 @@ join events e on e.id_dev=d.id_dev
  left join organization o on o.id_org=e.ess2
 where e.id_event >'.$id;
   
- //Log::instance()->add(Log::DEBUG, 'Line 47.evenrs sql: '. $sql);
+ Log::instance()->add(Log::DEBUG, 'Line 47.evenrs sql: '. $sql);
  //Log::instance()->add(Log::DEBUG, 'Line 49.Запрос событий начиная с : '. $id);
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
@@ -106,10 +106,34 @@ where e.id_event >'.$id;
 					
 			foreach ($tab as $key=>$row)
 			{
+				//цвет фона зависит от типа событий
+				//Код Событие Цвет
+				//50 Действительная карта зеленый
+				//46 Неизвестная карта Красный
+				//65 Недейсвительная карта Синий
+				
+				switch($row['ID_EVENTTYPE']){
+					case 50:
+						$row['COLOR']=13037766;
+					break;
+					case 46:
+						$row['COLOR']=13027056;
+					break;
+					
+					case 65:
+						$row['COLOR']=15779526;
+						
+					break;
+					default:
+						$row['COLOR']=15462640;
+					break;
+				}
 				$style='color: black;background-color: #'.dechex($row['COLOR']).';';
 				$bodyphoto='';
 				if($photo) $bodyphoto='<td id="photo" style="'.$style.'display:none;">'.base64_encode(pack("H*", str_replace("\0", "",$row['PHOTO']))).'</td>';
-				$body.='<tr>
+				
+				
+				/*  $body.='<tr>
 				'.$bodyphoto.'
 				<td id="people_post" style="'.$style.'display:none;">'.iconv('CP1251','UTF-8',$row['POST']).'</td>
 				<td style="'.$style.'">'.$row['ID_EVENT'].'</td>
@@ -119,9 +143,19 @@ where e.id_event >'.$id;
 				<td id="device_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['DEVICE_NAME']).'</td>
 				<td id="people_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['PEOPLE_NAME']).'</td>
 				<td id="org_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['ORGANIZATION_NAME']).'</td>
+				</tr>';	  */
+				
+				$body.='<tr>
+				'.$bodyphoto.'
+				<td id="people_post" style="'.$style.'display:none;">'.iconv('CP1251','UTF-8',$row['POST']).'</td>
+				<td style="'.$style.'">'.$row['DATETIME'].'</td>
+				<td id="even_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['EVENTTYPE_NAME']).'</td>
+				<td style="'.$style.'">'.$row['ID_CARD'].'</td>
+				<td id="device_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['DEVICE_NAME']).'</td>
+				<td id="people_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['PEOPLE_NAME']).'</td>
+				<td id="org_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['ORGANIZATION_NAME']).'</td>
 				</tr>';	
-		
-			
+				
 			}	
 			Cookie::set('id',$tab[0]['ID_EVENT']);
 			
