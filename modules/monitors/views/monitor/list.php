@@ -1,6 +1,6 @@
-<script type="text/javascript" src="../js/modal-window.js"></script>
-<script type="text/javascript" src="../js/modal-photo.js"></script>
-<script type="text/javascript">
+<script  src="../js/modal-window.js"></script>
+<script  src="../js/modal-photo.js"></script>
+<script >
 	
   	$(function(){		
   		$("#tablesorter").tablesorter({ headers: { 7:{sorter: false}},  widgets: ['zebra']});
@@ -218,12 +218,12 @@ define ('_notAllowed', "HTML::image('images/text_lock.png', array('title' => __(
 	Фотографии:
 	<input type="checkbox" id="photomonitor" checked />
 		<form id="form_data" name="form_data" action="" method="post">
-			<table class="data tablesorter-blue" width="100%" cellpadding="0" cellspacing="0"  >
+			<table class="data tablesorter-blue">
 			<thead>
 					<tr>
 						<th>Время</th>
 						<th>Событие</th>
-						<th>Прпоуск</th>
+						<th>Пропуск</th>
 						<th>Точка проезда</th>
 						<th>ФИО</th>
 						<th>Организация</th>
@@ -231,7 +231,7 @@ define ('_notAllowed', "HTML::image('images/text_lock.png', array('title' => __(
 			</thead>		
 			<tbody id="txtHint"/>
 			</table>
-
+	<form>
 			<div id="chart_wrapper" class="chart_wrapper"></div>
 		
 

@@ -60,9 +60,10 @@ join events e on e.id_dev=d.id_dev
  join eventtype et on et.id_eventtype=e.id_eventtype
   left join people p on p.id_pep=e.ess1
  left join organization o on o.id_org=e.ess2
-where e.id_event >'.$id;
+ where  et.id_eventtype in (46, 50, 65, 81, 145)
+and e.id_event >'.$id;
   
- Log::instance()->add(Log::DEBUG, 'Line 47.evenrs sql: '. $sql);
+ //Log::instance()->add(Log::DEBUG, 'Line 66.evenrs sql: '. $sql);
  //Log::instance()->add(Log::DEBUG, 'Line 49.Запрос событий начиная с : '. $id);
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
@@ -91,7 +92,7 @@ where e.id_event >'.$id;
 
 			if(count($tab)==0) 
 			{
-				Log::instance()->add(Log::DEBUG, 'Line 85. Select event from: '. $id.' Receive count: '. count($tab).' Save to ccokie: no_save photo:'.$getPhoto.' time execite:'. round((microtime(true) - $t1), 3));	
+				//Log::instance()->add(Log::DEBUG, 'Line 95. Select event from: '. $id.' Receive count: '. count($tab).' Save to ccokie: no_save photo:'.$getPhoto.' time execite:'. round((microtime(true) - $t1), 3));	
 				
 				return;//выйти при 0 вкладках
 			}
@@ -159,7 +160,7 @@ where e.id_event >'.$id;
 			}	
 			Cookie::set('id',$tab[0]['ID_EVENT']);
 			
-				 Log::instance()->add(Log::DEBUG, 'Line 85. Select event from: '. $id.' Receive count: '. count($tab).' Save to ccokie: '. $tab[0]['ID_EVENT'].' photo:'.$getPhoto.' time execite:'. round((microtime(true) - $t1), 3));	
+				 //Log::instance()->add(Log::DEBUG, 'Line 163. Select event from: '. $id.' Receive count: '. count($tab).' Save to ccokie: '. $tab[0]['ID_EVENT'].' photo:'.$getPhoto.' time execite:'. round((microtime(true) - $t1), 3));	
 				// if($id+count($tab)!=$tab[0]['ID_EVENT']) Log::instance()->add(Log::DEBUG, 'Incorrect');
 			$this->response->body($body);
 		}

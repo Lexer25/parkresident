@@ -30,7 +30,7 @@
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='Rmo/index') echo 'class="active"';;?>><?php // echo  HTML::anchor('emul', __('emul')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='Emul/grz') echo 'class="active"';?>><?php  echo  HTML::anchor('emul/grz', __('emul2')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='Wizard/index') echo 'class="active"';?>><?php  echo  HTML::anchor('wizard', __('wizard')); ?></li>
-					<li ><?php  echo  HTML::anchor('guide', __('Инструкция')); ?></li>
+					<li ><?php  echo  HTML::anchor('guide/parkresident', __('Инструкция')); ?></li>
 				</ul>
 		<?php
 		if(Auth::Instance()->logged_in())

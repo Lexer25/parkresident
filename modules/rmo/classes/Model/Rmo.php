@@ -56,6 +56,7 @@ class Model_Rmo extends Model {
 			try{
 				//echo Debug::vars('166', $request->execute());exit;
 				$response=$request->execute();
+				Log::instance()->add(Log::NOTICE, '168-168 ответ sendRequestPostJson'.Debug::vars($response->status()));
 				Log::instance()->add(Log::NOTICE, '168 ответ sendRequestPostJson'.Debug::vars($response));
 				$answer=json_decode($response->body());
 				Log::instance()->add(Log::NOTICE, '169 ответ sendRequestPostJson'.Debug::vars($response->body()));
