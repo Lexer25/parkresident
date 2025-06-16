@@ -93,13 +93,8 @@
 					
 					//echo Debug::vars(Arr::get($tableListCheck, $value));
 					echo '</td>';
-					if(true){
-						echo '<td>'.Form::button('addTable', 'Добавить таблицу', array('value'=>$value)).'</td>';
-						echo '<td>'.Form::button('delTable', 'Удалить таблицу', array('value'=>$value)).'</td>';
-					} else {
-						echo '<td>'.Form::button('addTable', 'Добавить таблицу', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
-						echo '<td>'.Form::button('delTable', 'Удалить таблицу', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
-					}
+					echo '<td>'.Form::button('addTable', 'Добавить таблицу', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
+					echo '<td>'.Form::button('delTable', 'Удалить таблицу', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
 					if(Arr::get($tableListCheck, $value))
 					{
 						//проверка, что для этой таблицы есть данных для записи (может и не быть)

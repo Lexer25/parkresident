@@ -171,8 +171,7 @@ class Model_Parkdb extends Model {
 		 $retval = null;
 		 $output = null;
 		 $result=exec(iconv('UTF-8', 'CP1251', $query), $retval, $output);
-		 Log::instance()->add(Log::DEBUG, '174-0 makeExec выполнен успешно. Результат выполнения '. $result); 	
-		 Log::instance()->add(Log::DEBUG, '174-1 makeExec выполнен успешно. Результат выполнения '. $output); 	
+		 
 		 if($output==0)
 		 {
 			 Log::instance()->add(Log::DEBUG, '132 makeExec выполнен успешно. Результат выполнения '. $output); 	
@@ -221,7 +220,7 @@ class Model_Parkdb extends Model {
 	public function addTableData($name)
 	{
 		//echo Debug::vars('99', $name.'.sql');exit;
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" '.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.' -user sysdba -pass temp -i "C:\xampp\htdocs\parkresident\modules\setup\config\sql\data\\'.$name.'.sql';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" "'.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\data\\'.$name.'.sql';
 		exec(iconv('UTF-8', 'CP1251', $ttt));
 		
 	}
@@ -233,7 +232,7 @@ class Model_Parkdb extends Model {
 	{
 		$retval=null;	
 		$output=null;		
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" '.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.'  -user sysdba -pass temp -i "C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$tableName.'.sql';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" "'.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.'  -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$tableName.'.sql';
 			
 		Log::instance()->add(Log::DEBUG, Debug::vars('158 выполняю команду добавления таблицы :', iconv('UTF-8', 'CP1251', $ttt)));	
 		$result=exec(iconv('UTF-8', 'CP1251', $ttt), $retval, $output);
@@ -264,7 +263,7 @@ class Model_Parkdb extends Model {
 	//31.03.2025 ДОбавление процедуры сводится к выполнению скрипта, взятого из файлов.
 	public function addProcedure($name)
 	{
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" '.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.'  -user sysdba -pass temp -i "C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql"';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" "'.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.'  -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
 			
 		Log::instance()->add(Log::DEBUG, Debug::vars('226 выполняю команду добавления процедуры :', $name));	
 			

@@ -62,6 +62,35 @@ class Model_ParkingPlace extends Model {
 		return $res;	
 	}
 	
+	/**10.06.2025
+	 * получить список всех парковочных площадок с нужными данными для быстрого вывода в index
+	 * @param   void
+	 * @return  array id_parking, name, parent
+	 */
+	public function get_list_for_index()// получить список всех парковочных площадок
+	{
+		$res=array();
+				
+		$sql='select hlr.id, hlr.name, hlr.parent from hl_parking hlr';
+		$sql='select hlr.id, hlr.name from hl_parking hlr';
+		
+		
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		$res=array();
+		if($query)
+		{
+			foreach($query as $key=>$value)
+			{
+				$res[Arr::get($value, 'ID')] = iconv('windows-1251','UTF-8', Arr::get($value, 'NAME'));
+				
+			}
+		}
+			
+		return $res;	
+	}
+	
 	
 	
 	

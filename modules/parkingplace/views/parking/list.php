@@ -32,6 +32,8 @@ echo Form::open('ParkingPlace/control');
 			<th><?echo __('Жилокй комплекс');?></th>
 			<th><?echo __('Количество машиномест');?></th>
 			<th><?echo __('Зарегистрировано машиномест');?></th>
+			<th><?echo __('Зарегистрировано гаражей');?></th>
+			<th><?echo __('Зарегистрировано машин на стоянке');?></th>
 			
 		</tr>
 		<?php 
@@ -62,9 +64,7 @@ echo Form::open('ParkingPlace/control');
 					echo HTML::anchor('place/matrix/'.Arr::get($value,'ID'), 'Matrix');
 					
 				echo '</td>';
-				//echo '<td>'.$parkingPlace->is_active.'</td>';
-				//echo '<td>'.$parkingPlace->created.'</td>';
-				//echo '<td>'.$parkingPlace->modify.'</td>';
+				
 				$_residence=new Residence($parkingPlace->parent);
 				echo '<td>'.iconv('windows-1251','UTF-8', $_residence->name).'</td>';
 				echo '<td>'.$parkingPlace->count.'</td>';

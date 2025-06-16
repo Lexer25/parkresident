@@ -11,7 +11,7 @@
  
  
 
-class Model_Parkdb extends Model {
+class Model_Wizard extends Model {
 	
 	/*11.04.2025 информация по подключенной базе данных
 	*/
@@ -19,24 +19,42 @@ class Model_Parkdb extends Model {
 	//путь к базе данных
 	public $_connectName='fb';
 	public $db_path;
-	public $serverIP;
-	public $serverPort;
 	public $mess;
 	
 	public function __construct($_connectName='fb')
 	{
 		
 		
-		$this->db_path = iconv('cp866','UTF-8//IGNORE', Arr::get($this->aboutDB($_connectName), 'pathDB'));
-		$this->serverIP = iconv('cp866','UTF-8//IGNORE', Arr::get($this->aboutDB($_connectName), 'Server'));
 		
-		//echo Debug::vars('29', $this->aboutDB()); exit;
-		$this->serverPort=3050;
-		//echo Debug::vars('35', $_connectName, $this); exit;
 	}
 	
+	
+	/**
 		
-	public function aboutDB($sourcename)
+	* @package    dashboard
+	 * @category   Base
+	 * @author     Artonit
+	 * @copyright  (c) 2025 Artonit Team
+	 * @license    http://artonit/ru 
+	 * @desc проверка наличия названия категории доступа в БД СКУД. Если название имеется, то вернется false
+	 
+	 */
+	public static function checkAccessNameIsPresent($name)
+	{
+		$sql='select count(*) from accessname an
+			where an.name=\''.$name.'\'';
+	
+		if(!DB::query(Database::SELECT, iconv('UTF-8', 'CP1251', $sql))
+			->execute(Database::instance('fb'))
+			->get('COUNT')) return true;
+			
+		return false;
+		
+		
+	}
+ 
+		
+	public function _aboutDB($sourcename)
 	{
 		$_fbinfo=Kohana::$config->load('database')->$sourcename;
 		$_connection=Arr::get($_fbinfo, 'connection');
@@ -45,17 +63,10 @@ class Model_Parkdb extends Model {
 
 		//$reg=shell_exec('C:\Windows\system32\reg.exe query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\SDuo" /v "Database"');
 		$reg=shell_exec('C:\Windows\system32\reg.exe query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\\'.Arr::get(explode(":", $_dsn), 1).'" /v "Database"');
-//		echo Debug::vars('43', shell_exec('C:\Windows\system32\reg.exe query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\\'.Arr::get(explode(":", $_dsn), 1)));exit;
 		$_aaa=explode("REG_SZ", $reg);
-	
-		$reg=shell_exec('C:\Windows\system32\reg.exe query "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\ODBC\ODBC.INI\\'.Arr::get(explode(":", $_dsn), 1).'" /v "Server"');
-		$_ip=explode("REG_SZ", $reg);
-
-//		echo Debug::vars('44', $_aaa, $_ip);exit;
 		return array('connectName'=>$sourcename,
 				'dsn'=>$_dsn,
-				'pathDB'=>trim(Arr::get($_aaa, 1)),
-				'Server'=>trim(Arr::get($_ip, 1))
+				'pathDB'=>trim(Arr::get($_aaa, 1))
 				);
 		
 	}
@@ -64,7 +75,7 @@ class Model_Parkdb extends Model {
 	20.03.2025 Проверка наличия указанных таблицы
 	
 	*/
-	public function checkTableIsPresent($table)
+	public function _checkTableIsPresent($table)
 	{
 		$res=array();
 		$sql='select distinct RDB$RELATION_NAME
@@ -85,7 +96,7 @@ class Model_Parkdb extends Model {
 	20.03.2025 Проверка наличия указанных процедур
 	
 	*/
-	public function checkProcedureIsPresent($name)
+	public function _checkProcedureIsPresent($name)
 	{
 		$res=array();
 
@@ -105,7 +116,7 @@ class Model_Parkdb extends Model {
 	20.03.2025 Проверка наличия указанных процедур
 	
 	*/
-	public function checkGeneratorIsPresent($name)
+	public function _checkGeneratorIsPresent($name)
 	{
 		$res=array();
 
@@ -122,29 +133,9 @@ class Model_Parkdb extends Model {
 	}
 	
 	
-	/**
-	20.03.2025 Проверка наличия указанных процедур
 	
+	/**3.05.2025 выполняет подготовленный sql запрос и возвращает true или false
 	*/
-	public function checkTriggerIsPresent($name)
-	{
-		$res=array();
-
-		$sql='select distinct * from rdb$triggers
-    where rdb$trigger_name=\''.$name.'\'';
-		
-		//echo Debug::vars('123', $sql); exit;
-		
-		$query = DB::query(Database::SELECT, $sql)
-			->execute(Database::instance('fb'))
-			->as_array();
-		if($query) return true;
-		return false;
-	}
-	
-	
-	
-	
 	public function makeQuery($query)
 	{
 		Log::instance()->add(Log::DEBUG, '173 makeQuery выполняется запрос: '. $query);
@@ -164,15 +155,14 @@ class Model_Parkdb extends Model {
 	//2.05.2025 единая процедура выполнения exec с анализом ответа.
 	// ответ 0 - команда выполнена успешно.
 	// ответ НЕ 0 - ошибка.
-	public function makeExec($query)
+	public function _makeExec($query)
 	{
 		Log::instance()->add(Log::DEBUG, Debug::vars('124 makeExec выполняет запрос  :', $query));	
 			
 		 $retval = null;
 		 $output = null;
 		 $result=exec(iconv('UTF-8', 'CP1251', $query), $retval, $output);
-		 Log::instance()->add(Log::DEBUG, '174-0 makeExec выполнен успешно. Результат выполнения '. $result); 	
-		 Log::instance()->add(Log::DEBUG, '174-1 makeExec выполнен успешно. Результат выполнения '. $output); 	
+		 
 		 if($output==0)
 		 {
 			 Log::instance()->add(Log::DEBUG, '132 makeExec выполнен успешно. Результат выполнения '. $output); 	
@@ -184,7 +174,7 @@ class Model_Parkdb extends Model {
 		
 	}
 	
-	public function aboutTable($tableName)
+	public function _aboutTable($tableName)
 	{
 		
 		$sql='select Rdb$Description from Rdb$Relations
@@ -200,9 +190,18 @@ class Model_Parkdb extends Model {
 		
 	}
 	
-	public function delTable($tableName)
+	public function _delTable($tableName)
 	{
+		/* Log::instance()->add(Log::DEBUG, '117 Удадение таблицы '.$tableName);
+		if($this->checkGeneratorIsPresent($name)) 
+		{
+			Log::instance()->add(Log::DEBUG, '173 Генератора :gen присутвует. Начинается его удаление.', array(':gen'=>$name));
+			$this->makeQuery('DROP GENERATOR GEN_'. $name.'_ID');
+		} else {
+			Log::instance()->add(Log::DEBUG, '176 Генератора :gen Отсутсвует, удалять ничего не надо.', array(':gen'=>$name));
+		}
 		
+		$this->delGenerator($tableName); */
 		return $this->makeQuery('DROP TABLE '. $tableName);
 		
 	}
@@ -210,7 +209,7 @@ class Model_Parkdb extends Model {
 	
 	
 	
-	public function delTableData($tableName)
+	public function _delTableData($tableName)
 	{
 		$this->delGenerator($tableName);
 		$this->makeQuery('delete from '. $tableName);
@@ -218,10 +217,10 @@ class Model_Parkdb extends Model {
 	}
 	
 	//Добавление данных в указанную таблицу
-	public function addTableData($name)
+	public function _addTableData($name)
 	{
 		//echo Debug::vars('99', $name.'.sql');exit;
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" '.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.' -user sysdba -pass temp -i "C:\xampp\htdocs\parkresident\modules\setup\config\sql\data\\'.$name.'.sql';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\data\\'.$name.'.sql';
 		exec(iconv('UTF-8', 'CP1251', $ttt));
 		
 	}
@@ -229,11 +228,11 @@ class Model_Parkdb extends Model {
 	
 	
 	//31.03.2025 Добавление таблицы сводится к выполнению нескольких sql запросов, взятых из файла конфигурации.
-	public function addTable($tableName)
+	public function _addTable($tableName)
 	{
 		$retval=null;	
 		$output=null;		
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" '.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.'  -user sysdba -pass temp -i "C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$tableName.'.sql';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$tableName.'.sql';
 			
 		Log::instance()->add(Log::DEBUG, Debug::vars('158 выполняю команду добавления таблицы :', iconv('UTF-8', 'CP1251', $ttt)));	
 		$result=exec(iconv('UTF-8', 'CP1251', $ttt), $retval, $output);
@@ -245,7 +244,7 @@ class Model_Parkdb extends Model {
 		// echo Debug::vars('159 результат добавления таблицы :', exec(iconv('UTF-8', 'CP1251', $ttt)));
 	}
 	
-	public function delGenerator($name)
+	public function _delGenerator($name)
 	{
 		
 			return $this->makeQuery('DROP GENERATOR GEN_'. $name.'_ID');
@@ -254,7 +253,7 @@ class Model_Parkdb extends Model {
 		
 	}
 	
-	public function delProcedure($name)
+	public function _delProcedure($name)
 	{
 		
 		return $this->makeQuery('DROP PROCEDURE '. $name);
@@ -262,9 +261,9 @@ class Model_Parkdb extends Model {
 	
 	
 	//31.03.2025 ДОбавление процедуры сводится к выполнению скрипта, взятого из файлов.
-	public function addProcedure($name)
+	public function _addProcedure($name)
 	{
-		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" '.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.'  -user sysdba -pass temp -i "C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql"';
+		$ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" localhost/3050:'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\\'.$name.'.sql';
 			
 		Log::instance()->add(Log::DEBUG, Debug::vars('226 выполняю команду добавления процедуры :', $name));	
 			
@@ -272,17 +271,6 @@ class Model_Parkdb extends Model {
 		return $this->makeExec($ttt);
 	}
 	
-	//31.03.2025 ДОбавление процедуры сводится к выполнению скрипта, взятого из файлов.
-	public function addTrigger($name)
-	{
-		return $this->addProcedure($name);
-	}
-	
-	public function delTrigger($name)
-	{
-		
-		return $this->makeQuery('DROP TRIGGER '. $name);
-	}
 	
 	
 }

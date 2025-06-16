@@ -42,7 +42,7 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 		$id_garage = $this->request->param('id');
 		//echo Debug::vars('30', $id_garage); //exit;
 		//если номер гаража указан, то вывожу данные по этому гаражу (для организации управления).
-		if($id_garage>1)
+		if($id_garage>=1)
 		{
 			$id_parking=1;
 			
@@ -383,7 +383,7 @@ public function action_opengateCVS()//передача команды на от�
 	public function action_control()// просмотр списка ГРЗ и их свойств
 	{
 		$_SESSION['menu_active']='grz';
-		echo Debug::vars('30', $_GET, $_POST); exit;	
+		//echo Debug::vars('386', $_GET, $_POST); exit;	
 		$todo = $this->request->post('todo');
 		
 		switch ($todo){
