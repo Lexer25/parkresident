@@ -43,8 +43,8 @@
 		<li>
 					<div class="navbar-collapse collapse">
 					<?php
-					//echo Debug::vars('35', $_SESSION);
-					if (Arr::get($_SESSION,'checkplaceenable')>0)
+					
+					if (Arr::get($_SESSION,'checkplaceenable')>0 OR true)
 					{
 						echo Form::button('todo', __('Контроль свободных мест включен!'), array('class'=>'btn btn-success btn-sm', 'type' => 'submit'));	
 					} else {
