@@ -2,7 +2,7 @@
  //echo Debug::vars('11', $rp_info); 
 // страница для редактирования сущности
 //echo Debug::vars('4');exit;
-//echo Debug::vars('5', $parking);exit;
+echo Debug::vars('5', $parking);//exit;
 echo Form::open('ParkingPlace/control');
 
 if(Auth::Instance()->logged_in())
@@ -29,6 +29,7 @@ if(Auth::Instance()->logged_in())
 	
 		echo __('Название парковочной площадки').' '.Form::input('name', iconv('windows-1251','UTF-8', $parking->name), array('maxlength'=>50)).'<br>';
 		echo __('Активен ').Form::checkbox( 'is_active', 1, $parking->is_active == 1, array('disabled'=>'disabled')).'<br>';
+		echo __('Контроль направления проезда ').Form::checkbox( 'is_apb', 1, $parking->is_apb == $parking->id).'<br>';
 		echo __('ID'). ' '. $parking->id.'<br>';
 		//echo __('parent'). ' '. $parking->parent.'<br>';
 		$residenceList=Model::factory('ResidentPlace')->get_list();//получил список id жилых комплексов

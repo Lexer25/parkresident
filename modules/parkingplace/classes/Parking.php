@@ -25,6 +25,7 @@ class Parking
 	public $modify;//дата последнего изменения
 	public $mess;//сообщения всякие
 	public $count;//количество машиномест
+	public $is_apb;//контроль направления проезда
 
 	
 	
@@ -34,7 +35,9 @@ class Parking
        if(!is_null($id))//если указан id, то создаю экземпляр класса с данными из БД.
 	   {
 	   $this->id = $id;
-		$sql='select hlr.id, hlr.name, hlr.enabled, hlr.created, hlr.modify, hlr.parent, hlr.maxcount from hl_parking hlr where hlr.id ='.$this->id;
+		$sql='select hlr.id, hlr.name, hlr.enabled, hlr.created, hlr.modify, hlr.parent, hlr.maxcount, s.value_int from hl_parking hlr
+			left join hl_setting s on s.name=\'is_apb\' and s.value_int=hlr.id
+			where hlr.id ='.$this->id;
 		//echo Debug::vars('30', $sql);exit;
 		try
 		{
@@ -47,6 +50,7 @@ class Parking
 			$this->modify=Arr::get($query, 'MODIFY');
 			$this->parent=Arr::get($query, 'PARENT');
 			$this->count=Arr::get($query, 'MAXCOUNT');
+			$this->is_apb=Arr::get($query, 'VALUE_INT');
 			
 			
 			//echo Debug::vars('23', $sql, $query, $this); exit;
