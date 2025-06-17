@@ -272,7 +272,7 @@ echo Form::open('garage/control');
 			$placeList[Arr::get($value, 'ID')] = Model::factory('Place')->getChild(Arr::get($value, 'ID'));
 		}
 		
-		//echo Debug::vars('206', $placeList);//exit;
+		//echo Debug::vars('206', $placeList);exit;
 	
 			
 	foreach($placeList as $key2=>$value2)
@@ -292,9 +292,7 @@ echo Form::open('garage/control');
 			
 		<?php
 		
-		//echo Debug::vars('215', $value2);//exit;
-
-		//echo Debug::vars('297', $value2);//exit;
+		//echo Debug::vars('297', $value2);exit;
 		foreach($value2 as $key3=>$value3)
 		{
 			

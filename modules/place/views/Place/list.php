@@ -79,17 +79,59 @@ echo Form::open('place/control');
 				</table>
 		<?php
 				
-		
-			
-			
 			echo '<br>';
 			echo Form::button('todo', 'Зарегистрировать новое машиноместо', array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
-			
+			echo Form::close();
+			echo Form::open('place/control');
 			?>	
 
 		  </div>
 
 	</div>
+	<div class="panel panel-primary">
+		  <div class="panel-heading">
+			<h3 class="panel-title"><?php echo __('titleAddPlaceArray');?></h3>
+		  </div>
+		  <div class="panel-body">
+			<div id="my-alert" class="alert alert-success alert-dismissible" role="alert">
+					<?php 
+						echo 'Будет добавлено указанное количество машиномест.<br>Уже существующие машиноместа изменены НЕ будут!';
+					?>
+					
+					
+			</div>
+			<?
+			echo __('Регистрация парковочного места').'<br>';
+			?>
+			<table>
+				<tr>
+					<th>Парковочная площадка</th>
+					<th>С какого номера</th>
+					<th>По какой номер</th>
+				</tr>
+				<tr>
+					<td><?php echo Form::select('id_parking', $parkingPlace);?></td>
+					<td><?php echo Form::input('placenumberfrom','', array('placeholder'=>'С какого номера','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number' ));?></td>
+					<td><?php echo Form::input('placenumberto', '', array('placeholder'=>'По какой номер','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number'));?></td>
+				</tr>
+				</table>
+		<?php
+				
+		
+			
+			
+			echo '<br>';
+			echo Form::button('todo', 'Зарегистрировать новые машиноместа', array('value'=>'addarray','class'=>'btn btn-success', 'type' => 'submit'));	
+			
+			echo Form::close();
+			echo Form::open('place/control');
+			?>	
+
+		  </div>
+
+	</div>
+	
+	
 <?php
 }
 

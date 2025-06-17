@@ -169,7 +169,70 @@ class Controller_Place extends Controller_Template { // класс описыв�
 					}
 		switch ($todo){
 			
+			case 'addarray'://регистрация нескольких машиномест начиная с placenumberfrom и до placenumberto. Если такой номер уже есть, то пропускаем его.
+				//echo Debug::vars('173',$_POST);exit;
+				$_data=Validation::factory($this->request->post());
+				$_data->rule('placenumberfrom', 'not_empty')
+						->rule('placenumberfrom', 'digit')
+						->rule('placenumberto', 'not_empty')
+						->rule('id_parking', 'digit')
+						->rule('id_parking', 'not_empty')
+						->rule('id_parking', 'digit')
+							;
+					if($_data->check())
+					{
+					Log::instance()->add(Log::DEBUG, '187 Начинаю добавление машиномест с номера :from по номер :to для паркинга :parking.', 
+								array(
+									':from'=>Arr::get($_data, 'placenumberfrom'),
+									':to'=>Arr::get($_data, 'placenumberto'),
+									':parking'=>Arr::get($_data, 'id_parking'),
+									));
+						for($pn=Arr::get($_data, 'placenumberfrom'); $pn<=Arr::get($_data, 'placenumberto'); $pn++)
+						{
+							
+							$_list=array(':placenum'=>$pn, ':id_parking'=>Arr::get($_data, 'id_parking'));//набор данных для логирования
+							if(!Model_Place::isPresent_numberPlace($pn, Arr::get($_data, 'id_parking')))
+							{
+								echo Debug::vars('185 начинаю регистрацию', $pn, Arr::get($_data, 'id_parking') );
+								$entity = new Place();
+								$entity->name='мм_'.$pn;
+								$entity->placenumber=$pn;
+								$entity->id_parking=Arr::get($_data, 'id_parking');
+								$entity->description="auto";
+								$entity->note="auto";
+								$entity->status=0;
+								echo Debug::vars('196', $entity);//exit;
+								Log::instance()->add(Log::DEBUG, 'Line 197 '. '199 Добавляю машиноместо :placenum.', array(':placenum'=>$pn));
+								
+								if ($entity->add())
+								{
+									Log::instance()->add(Log::DEBUG, '203 Машиноместо :placenum добавлено на площадку :id_parking успешно.', $_list);
+									Session::instance()->set('ok_mess', array('ok_mess' => __('Машиноместо :placenum добавлено успешно.', $_list)));
+									
+								} else {
+									Log::instance()->add(Log::DEBUG, '207 Машиноместо :placenum НЕ добавлено на площадку :id_parking. Ошибка.', $_list);
+									Session::instance()->set('e_mess', array('err_mess' => __('Машиноместо :placenum НЕ добавлено. Ошибка.', $_list)));
+									
+								}
+							} else {
+								//echo Debug::vars('209 повтор номера', $pn, Arr::get($_data, 'id_parking') );
+								Log::instance()->add(Log::DEBUG, '213 Повтор номера :placenum для площадки :id_parking. Ошибка.', $_list);
+							}
+						}
+								
+								
+							
+						
+					} else 	{
+						//echo Debug::vars('137');exit;
+						Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
+						Log::instance()->add(Log::DEBUG, Debug::vars($_data->errors('Valid_mess')));
+						
+					}
+					
+				$this->redirect($requestFrom);
 			
+			break;
 			
 			case 'add'://добавление нового машиноместа
 
@@ -251,7 +314,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 				{
 					//echo Debug::vars('167', $_data, Arr::get($_data, 'id_rp'));//exit;
 					$entity = new Place(Arr::get($_data, 'id'));
-					//echo Debug::vars('183', $entity);exit;
+					
 					$content = View::factory('place/edit', array(
 							'place'=>$entity,
 							));

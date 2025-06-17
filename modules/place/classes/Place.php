@@ -19,13 +19,11 @@ class Place
 {
 	public $id;
 	public $placenumber;
-	//public $id_counters;
 	public $description;
 	public $note;
 	public $status;
 	public $name;
 	public $id_parking;	
-	//public $is_active;
 	public $created;
 	public $modify;//дата последнего изменения
 	public $mess;//сообщения всякие
@@ -53,7 +51,6 @@ class Place
 			$this->note=Arr::get($query, 'NOTE');
 			$this->status=Arr::get($query, 'STATUS');
 			$this->created=Arr::get($query, 'CREATED');
-			//$this->modify=Arr::get($query, 'MODIFY');
 			$this->placenumber=Arr::get($query, 'PLACENUMBER');
 			$this->id_parking=Arr::get($query, 'ID_PARKING');
 			$this->id_garage=Arr::get($query, 'ID_GARAGENAME');
@@ -62,7 +59,7 @@ class Place
 			//echo Debug::vars('49', $sql, $query, $this); exit;
 			
 		} catch (Exception $e) {
-			////echo Debug::vars('30', $sql, $e->getMessage()); exit;
+			
 			Log::instance()->add(Log::DEBUG, 'Line 40 '. $e->getMessage());
 		
 		}
@@ -73,18 +70,15 @@ class Place
 	
 	
 		
-	/*
-	26.08.2023 добавление машиноместа
-	*@input 
+	/**
+	*26.08.2023 добавление машиноместа
+	*@input PLACENUMBER, DESCRIPTION, NOTE, ID_PARKING номер машиноместа, описание, еще одно описание, id паркинга
 	*/
 	
 	public function add()
 	{
-		$sql='INSERT INTO HL_place (PLACENUMBER, ID_PARKING)
-			values ('.$this->placenumber .', '.$this->id_parking .')';
-			
-			
-		//echo Debug::vars('783', $sql);exit;
+		$sql='INSERT INTO HL_place (PLACENUMBER, DESCRIPTION, NOTE, ID_PARKING)
+			values ('.$this->placenumber .', \''.$this->description.'\',\''.$this->note.'\','.$this->id_parking .')';
 		try
 				{
 				$query = DB::query(Database::INSERT, iconv('UTF-8','windows-1251',$sql))
@@ -104,9 +98,7 @@ class Place
 	public function update()
 	{
 		//echo Debug::vars('36', $this);exit;
-		//echo Debug::vars('93', get_object_vars($this));//exit;
-		//hlr.id, hlr.name, hlr.is_active, hlr.created, hlr.modify
-		
+				
 		$sql='UPDATE HL_PLACE
 				SET NAME = \''.$this->name.'\',
 				PLACENUMBER = '.$this->placenumber.',
@@ -133,12 +125,10 @@ class Place
 	
 	/*
 	26.08.2023
-	Удаление указанного ЖК по его id
+	Удаление указанного машиноместа по его id
 	*/
 	public function del()
 	{
-		//echo Debug::vars('36', $this->name, $this->standalone);
-		
 		$sql='delete from hl_place
 			where id='.$this->id;
 		Log::instance()->add(Log::DEBUG, 'Line 72 '. $sql);

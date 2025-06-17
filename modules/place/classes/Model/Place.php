@@ -131,8 +131,9 @@ class Model_Place extends Model {
 	public function getChild($parent)
 	{
 		$sql='select hlp.id from hl_place hlp
-			where hlp.id_parking='.$parent;
-		//echo Debug::vars('41', $sql);//exit;
+			where hlp.id_parking='.$parent.'
+			order by hlp.placenumber';
+		
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array();
@@ -171,21 +172,26 @@ class Model_Place extends Model {
 	
 	
 	/*11.04.2025 Проверка номера машиноместа в указанной парковке на уникальность
+	*если номер машиноместа в парковке есть, то возвращается true
+	*если номера машиноместа в парковке нет, то возвращается false
 	*/	
-	//public static function unique_numberPlace($placenumber, $id_parking)
-	public static function unique_numberPlace($data)
+	public static function isPresent_numberPlace($placenumber, $id_parking)
+	//public static function unique_numberPlace($data)
 		{
-		//echo Debug::vars('68', $data);exit; 
-		 // Check if the username already exists in the database
-			$sql='select * from hl_place hlp
-					where hlp.placenumber=2
-					and hlp.id_parking=1';
-			return ! DB::select(array(DB::expr('COUNT(id)'), 'total'))
-				->from('hl_place')
-				->where('placenumber', '=', $placenumber)
-				->and_where('id_parking', '=', $id_parking)
-				->execute()
-				->get('total');
+		//echo Debug::vars('68', $placenumber, $id_parking, Database::instance('fb'));exit; 
+		
+		 echo Debug::vars('181', $placenumber, $id_parking);//exit; 
+			$sql='select count(id) as total from hl_place hlp
+					where hlp.placenumber='.$placenumber.'
+					and hlp.id_parking='.$id_parking;
+		echo Debug::vars('184', $sql);//exit;			
+			$total= DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->get('TOTAL');	
+		if($total == 0) return false;
+			return true;		
+					
+	
 		}
 	
 	
