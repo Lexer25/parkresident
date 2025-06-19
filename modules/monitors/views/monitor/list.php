@@ -231,7 +231,7 @@ define ('_notAllowed', "HTML::image('images/text_lock.png', array('title' => __(
 			</thead>		
 			<tbody id="txtHint"/>
 			</table>
-	<form>
+	</form>
 			<div id="chart_wrapper" class="chart_wrapper"></div>
 		
 

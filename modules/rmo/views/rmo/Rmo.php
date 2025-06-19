@@ -1,3 +1,32 @@
+<script>
+$(function() {
+	
+     $(".btn").click(
+       function() {
+         var bname = $(this).attr('org_name');
+         var _org_id = $(this).attr('org_id');
+        
+
+	
+         $(".kartka h1").text(bname);
+         $(".kartka h4").html(_org_id);
+         
+		 
+		 document.getElementById("id_gate").value = $(this).attr('org_id');
+		 
+		
+		 
+       });
+	
+
+   });
+ 
+   	$(function() {		
+  		$("#tablesorter").tablesorter({sortList:[[0,0]]});
+  	});	
+	
+ 
+</script>
 <?php
 
 //echo (isset($garage_info))?  Debug::vars('2', $garage_info) : 'no garage_info';
@@ -187,13 +216,10 @@ if(isset($garage_info))
 					echo __('Всего машиномест ').' '.$total_place.'<hr>';
 					//echo Debug::vars('94', $place_income_garage);
 					$parking_name='189-189';
-					foreach($place_income_garage as $key=>$value)
-					{
-					 if(Arr::get($value, 'ID_PARKING') == 1) $parking_name='-1 этаж';
-					 if(Arr::get($value, 'ID_PARKING') == 4) $parking_name='-2 этаж';
-					 //echo Arr::get($value, 'ID').' ('.Arr::get($value, 'ID_PARKING').')<br>';
+					
+					 
 					 echo Arr::get($value, 'PLACENUMBER').' ('.Arr::get($value, 'PARKING_NAME').')<br>';
-					}
+					
 				echo '</td>';
 				
 				echo '<td>';
@@ -220,7 +246,7 @@ if(isset($garage_info))
 	}
 ?>
 
-	
+	123
 	
 
 </div>	
@@ -244,16 +270,9 @@ if(isset($garage_info))
 	?>
 	<div class="container">
 	 <table>
-		<?php
-		
-		
-		?>
 		<tr>
 			<?php
 			$order_gate=array(3, 4, 2, 7, 5, 6);//порядок вывода ворот на экран
-			//$order_gate=array(9, 10, 14, 15, 13, 18);//порядок вывода ворот на экран
-			//echo Debug::vars('261 order_gate', $order_gate);//exit;
-			//echo Debug::vars('262 _gateList', $_gateList);exit;
 			$count=0;
 				//foreach(array_slice($_gateList, 0, 6) as $key)
 				foreach($order_gate as $key2)// для ворот в указанном порядке организую вывод информации. $key2 - id ворот
@@ -277,10 +296,27 @@ if(isset($garage_info))
 				<div class="controls">
 				
 					<button onclick="toggleFullscreen(\'camera'.Arr::get($key, 'id_cam').'\')">Полный экран Камера '.Arr::get($key, 'id_cam').'</button>';
-					//echo Form::button('opendoor', 'Открыть ворота', array('value'=>Arr::get($value, 'GRZ'), 'disabled'=>'disabled', 'class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+					
 					echo Form::open('rmo/sendOpen');
 							echo Form::hidden('id', Arr::get($key, 'id')).'<br>';
-							echo Form::button('todo', 'Открыть ворота '.Arr::get($key, 'id'), array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+							//echo Form::button('todo', 'Открыть ворота '.Arr::get($key, 'id'), array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+						$value=array(
+						'NAME'=>'name',
+						'ORG_ID'=>5,
+						'ORG_ID1'=>6,
+						'IP_DEV'=>7,
+						'LOGIN'=>8,
+						'PASS'=>9,
+						);
+						echo '<label class="btn btn-line dark btn-xs popup-contact btn-success" for="modalm-1"
+							org_name="'. Arr::get($key, 'name').'" 
+							org_id="'.Arr::get($key, 'id').'"
+							org_id1="789"
+							ip_dev="'.long2ip(Arr::get($value, 'IP', 0)).'"
+							login="'.(Arr::get($value, 'LOGIN', 0)).'"
+							pass="'.(Arr::get($value, 'PASS', 0)).'"
+						>Открыть ворота '.Arr::get($key, 'id').'</label>';
+						
 						echo Form::close();
 					echo '
 					
@@ -289,9 +325,7 @@ if(isset($garage_info))
 					
 				}
 				?>
-			
-			
-    </tr>
+		</tr>
 	</table>
    </div>
   </div>
@@ -312,7 +346,53 @@ if(isset($garage_info))
 		?>
      </div>
  </div>
-   
+  
+
+<div class="modalm">
+
+
+	<div class="panel-body">
+	<input class="modalm-open" id="modalm-1" type="checkbox" hidden>
+	<div class="modalm-wrap" aria-hidden="true" role="dialog">
+		
+		<div class="modalm-dialog">
+			<div class="modalm-header">
+				<h2>Управление воротами</h2>
+				<div class="row">
+					<div class="kartka">
+					  <h1></h1>
+						
+					  </div>
+				</div>
+				<label class="btnm-close" for="modalm-1" aria-hidden="true">x</label>
+			</div>
+			<div class="modalm-body">
+			<h2>Укажите причину</h2>
+			
+				
+				
+			<form action="rmo/sendOpen" method="post" enctype="multipart/form-data">
+					
+					<input type="input" name="mess" id="ipp" size="30" required >
+					<input type="hidden" name="id" id="id_gate">
+					
+					<br>
+					<br>
+					<input type="submit" name="submit" value="Открыть ворота">
+			</form> 
+			 <br>
+			  
+		
+			</div>
+			<div class="modalm-footer">
+				<h4>Артонит ПаркРезидент</h4>
+				
+			</div>
+		</div>
+	</div>
+	</div>
+
+</div>  
 
     <!-- Подключаем HLS.js -->
     <script src="/parkresident/hls.js"></script>

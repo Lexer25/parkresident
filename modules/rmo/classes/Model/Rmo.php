@@ -20,7 +20,7 @@ class Model_Rmo extends Model {
 				);
 			//	echo Debug::vars('138', $data); exit;
 			$answer=$this->sendRequestPostJson($data, 'dashboard/opengate');
-			Log::instance()->add(Log::NOTICE, '142 '. Debug::vars($answer));
+			//Log::instance()->add(Log::NOTICE, '142 '. Debug::vars($answer));
 			//echo Debug::vars('41 получил ответ на открытие ворот', $answer, is_object($answer));exit;
 			 if(is_object($answer))
 			{
@@ -44,7 +44,7 @@ class Model_Rmo extends Model {
 	public function sendRequestPostJson($data, $url)
 	{
 			 Log::instance()->add(Log::NOTICE, '153 отправлен тестовый запрос на адрес http://localhost:'.$this->requestPort.'/cvs/'. $url);
-			 Log::instance()->add(Log::NOTICE, '154 '.Debug::vars($data));
+			 //Log::instance()->add(Log::NOTICE, '154 '.Debug::vars($data));
 			
 			$request = Request::factory('http://localhost:'.$this->requestPort.'/cvs/'. $url)
 					
@@ -57,10 +57,10 @@ class Model_Rmo extends Model {
 				//echo Debug::vars('166', $request->execute());exit;
 				$response=$request->execute();
 				Log::instance()->add(Log::NOTICE, '168-168 ответ sendRequestPostJson'.Debug::vars($response->status()));
-				Log::instance()->add(Log::NOTICE, '168 ответ sendRequestPostJson'.Debug::vars($response));
+				//Log::instance()->add(Log::NOTICE, '168 ответ sendRequestPostJson'.Debug::vars($response));
 				$answer=json_decode($response->body());
 				Log::instance()->add(Log::NOTICE, '169 ответ sendRequestPostJson'.Debug::vars($response->body()));
-				Log::instance()->add(Log::NOTICE, '171 ответ sendRequestPostJson'.Debug::vars($answer));
+				//Log::instance()->add(Log::NOTICE, '171 ответ sendRequestPostJson'.Debug::vars($answer));
 				return $answer;
 			} catch (Exception $e) {
 			Log::instance()->add(Log::DEBUG, '#69 '.$e->getMessage());

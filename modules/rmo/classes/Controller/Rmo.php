@@ -547,20 +547,29 @@ public function action_opengateCVS()//передача команды на от�
 
 	
 	  //отправка http post запроса на открытие двери
+	  /**
+	  *string(3) "551"
+	  *array(3) (
+	*	"mess" => string(1) "6"
+	*		"id" => string(1) "4"
+	*		"submit" => string(27) "Открыть ворота"
+	*	)
+	*/
 	 public function action_sendOpen()
 	 {	
 		//echo Debug::vars('551', $_POST);exit;
-		
+		Log::instance()->add(Log::DEBUG, '561-0 sendOpen '.Debug::vars($_POST));
 			$result=Model::factory('Rmo')->sendOpen(Arr::get($_POST, 'id'));//открыть указанные ворота
 			//echo Debug::vars('559', $result);exit;
 			if(Arr::get($result, 'result'))
 			{
 				//команда выполнена успешно
-				
+				Log::instance()->add(Log::DEBUG, '561-1 sendOpen Команда выпонена успешно');
 				Session::instance()->set('ok_mess', array('Команда выпонена успешно.'));
 				
 			} else {
 				//комнада не выполнена
+				Log::instance()->add(Log::DEBUG, '561-2 sendOpen '.Debug::vars(Arr::get($result, 'edesc')));
 				Session::instance()->set('e_mess', array(Arr::get($result, 'edesc')));
 			}
 			//echo Debug::vars('567 надо возращать ответ');exit;
