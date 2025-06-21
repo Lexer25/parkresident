@@ -31,12 +31,14 @@ class Controller_events extends Controller {
 	
 	private function getid()
 	{
-		$sql = 'SELECT GEN_ID( gen_event_id, 0 ) FROM RDB$DATABASE';
+		//$sql = 'SELECT GEN_ID(gen_event_id, 0 ) FROM RDB$DATABASE';//эта строка нужна для работы с общим журналом событий events
+		$sql = 'SELECT GEN_ID(GEN_HL_EVENTS_ID, 0 ) FROM RDB$DATABASE';//тут выбирается генератор таблицы hl_events
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->current();
 		return $query['GEN_ID'];
 	}
+	
 	private function selectevent($id,$photo)
 	{
 		
@@ -55,16 +57,28 @@ class Controller_events extends Controller {
 		$sql='select first 30 e.id_event, e.id_eventtype, e.datetime,  et.color, et.name as eventtype_name,  e.id_card ,
         d.name as device_name, p.surname, p.surname||\' \'|| p.name||\' \'|| p.patronymic as people_name,
          '.$sqlphoto.' p.post, o.name as organization_name
-from device d
-join events e on e.id_dev=d.id_dev
- join eventtype et on et.id_eventtype=e.id_eventtype
-  left join people p on p.id_pep=e.ess1
- left join organization o on o.id_org=e.ess2
- where  et.id_eventtype in (46, 50, 65, 81, 145)
-and e.id_event >'.$id;
+		from device d
+		join events e on e.id_dev=d.id_dev
+		 join eventtype et on et.id_eventtype=e.id_eventtype
+		  left join people p on p.id_pep=e.ess1
+		 left join organization o on o.id_org=e.ess2
+		 where  et.id_eventtype in (46, 50, 65, 81, 145)
+		and e.id_event >'.$id;
+		
+		$sql='select  e.id as id_event, e.event_code as id_eventtype, e.event_time as datetime, e.grz as id_card, e.comment, e.id_gate  , hlec.name as eventtype_name , hlp.name as device_name,
+		p.surname, p.surname||\' \'|| p.name||\' \'|| p.patronymic as people_name,
+         p.photo, p.post, o.name as organization_name
+        from hl_events e
+        left join hl_eventcode hlec on hlec.id=e.event_code
+        left join hl_param hlp on hlp.id=e.id_gate
+        left join card c on c.id_card=e.grz
+        left join people p on p.id_pep=c.id_pep
+        left join organization o on o.id_org=p.id_org
+		where  e.id >'.($id-30);
+		
   
  //Log::instance()->add(Log::DEBUG, 'Line 66.evenrs sql: '. $sql);
- //Log::instance()->add(Log::DEBUG, 'Line 49.Запрос событий начиная с : '. $id);
+ //Log::instance()->add(Log::DEBUG, 'Line 49.select events from : '. $id);
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array();
@@ -77,6 +91,7 @@ and e.id_event >'.$id;
 	*/
 	public function action_getEvent()
 	{
+		
 		$t1=microtime(true);
 		$photo=filter_var($this->request->query('photo'), FILTER_VALIDATE_BOOLEAN);
 		$getPhoto = ($photo)? 'true' : 'false';
@@ -88,13 +103,12 @@ and e.id_event >'.$id;
 				$id=$this->getid();
 				Cookie::set('id',$id);
 			}
-			$tab=$this->selectevent($id,$photo); // взять данные
+			$tab=$this->selectevent($id,$photo); // получил журнал событий
 
 			if(count($tab)==0) 
 			{
-				//Log::instance()->add(Log::DEBUG, 'Line 95. Select event from: '. $id.' Receive count: '. count($tab).' Save to ccokie: no_save photo:'.$getPhoto.' time execite:'. round((microtime(true) - $t1), 3));	
-				
-				return;//выйти при 0 вкладках
+								
+				return;//выйти при 0 вкладках (если нет событий)
 			}
 			//Cookie::set('id', $this->getid());
 
@@ -102,7 +116,7 @@ and e.id_event >'.$id;
 			//Log::instance()->add(Log::DEBUG, Debug::vars($tab));
 			$tab2=$tab;
 			$tab=array_reverse($tab);
-			//Log::instance()->add(Log::DEBUG, Debug::vars($tab));
+			//Log::instance()->add(Log::DEBUG,'118 '. Debug::vars($tab));
 			
 					
 			foreach ($tab as $key=>$row)
@@ -133,19 +147,6 @@ and e.id_event >'.$id;
 				$bodyphoto='';
 				if($photo) $bodyphoto='<td id="photo" style="'.$style.'display:none;">'.base64_encode(pack("H*", str_replace("\0", "",$row['PHOTO']))).'</td>';
 				
-				
-				/*  $body.='<tr>
-				'.$bodyphoto.'
-				<td id="people_post" style="'.$style.'display:none;">'.iconv('CP1251','UTF-8',$row['POST']).'</td>
-				<td style="'.$style.'">'.$row['ID_EVENT'].'</td>
-				<td id="event_type" style="'.$style.'">'.$row['ID_EVENTTYPE'].'</td>
-				<td style="'.$style.'">'.$row['DATETIME'].'</td>
-				<td id="even_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['EVENTTYPE_NAME']).'</td>
-				<td id="device_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['DEVICE_NAME']).'</td>
-				<td id="people_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['PEOPLE_NAME']).'</td>
-				<td id="org_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['ORGANIZATION_NAME']).'</td>
-				</tr>';	  */
-				
 				$body.='<tr>
 				'.$bodyphoto.'
 				<td id="people_post" style="'.$style.'display:none;">'.iconv('CP1251','UTF-8',$row['POST']).'</td>
@@ -155,13 +156,11 @@ and e.id_event >'.$id;
 				<td id="device_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['DEVICE_NAME']).'</td>
 				<td id="people_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['PEOPLE_NAME']).'</td>
 				<td id="org_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['ORGANIZATION_NAME']).'</td>
+				<td id="comment" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['COMMENT']).'</td>
 				</tr>';	
 				
 			}	
 			Cookie::set('id',$tab[0]['ID_EVENT']);
-			
-				 //Log::instance()->add(Log::DEBUG, 'Line 163. Select event from: '. $id.' Receive count: '. count($tab).' Save to ccokie: '. $tab[0]['ID_EVENT'].' photo:'.$getPhoto.' time execite:'. round((microtime(true) - $t1), 3));	
-				// if($id+count($tab)!=$tab[0]['ID_EVENT']) Log::instance()->add(Log::DEBUG, 'Incorrect');
 			$this->response->body($body);
 		}
 		catch (Exception $e) {

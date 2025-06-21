@@ -40,7 +40,7 @@
 			);
 		}
 	}
-	//get запрос
+	//get запрос для получения данных журнала событий
 	xmlhttp.open("GET","/parkresident/events/getEvent?photo="+photoneed,false);
 	// отправка запроса
 	xmlhttp.send();
@@ -216,7 +216,7 @@ define ('_notAllowed', "HTML::image('images/text_lock.png', array('title' => __(
 	Остановить:
 	<input type="checkbox" id="updatemonitor"/>
 	Фотографии:
-	<input type="checkbox" id="photomonitor" checked />
+	<input type="checkbox" id="photomonitor"  />
 		<form id="form_data" name="form_data" action="" method="post">
 			<table class="data tablesorter-blue">
 			<thead>
@@ -227,6 +227,7 @@ define ('_notAllowed', "HTML::image('images/text_lock.png', array('title' => __(
 						<th>Точка проезда</th>
 						<th>ФИО</th>
 						<th>Организация</th>
+						<th>comment.</th>
 					</tr>
 			</thead>		
 			<tbody id="txtHint"/>

@@ -25,7 +25,30 @@ class Events
 	public $not_count=false;//1 - НЕ вести подсчет кол-ва свободных мест. NULL и другие значения - вести подсчет
 	public $div_code;//код уникальные идентификатор гаража
 	public $eventList;//список кодов событий, связанных с этим гаражом
-
+	
+	
+	public $eventCode;//код события
+	public $idGate;//номер ворот
+	public $comment;//комментарий к событию
+	
+		
+	const evOpenDoorOperator=22;//оператор дал команду на открытие ворот
+	const evOpenDoorOperatorOk=23;//Команда evOpenDoorOperator выполнена успешно
+	const evOpenDoorOperatorErr=24;//Команда evOpenDoorOperator выполнена с ошибкой
+	
+	//свойства и соытия, и sql запроса
+//	private $id;
+	public $event_code;
+	public $event_time;
+	public $is_enter = 'null';
+	public $rubi_card = 'null';
+	public $park_card = 'null';
+	public $grz = 'null';
+	//private $comment;
+	public $photo = 'null';
+	public $id_pep = 'null';
+	public $id_gate = 'null';
+	
 	
 	
 	
@@ -55,6 +78,8 @@ class Events
 	   } else { // если не указан id, то создаю пустой экземпляр класса
 			
 	   }
+	   
+	   $this->result=new EventResult();
 	}
 	
 	
@@ -135,6 +160,76 @@ class Events
 	}
 	
 	
+	/**20.06.2025 Вставка событий парковочной системы
+	*
+	*
+	*/
+	public function insert()
+	{
+		Log::instance()->add(Log::DEBUG, 'Line 173 '. Debug::vars($this));
+		switch($this->event_code)
+		{
+			case self::evOpenDoorOperator://зафиксировать событие "Оператор открыл дверь"
+				return $this->makeSql();			
+			break;
+			
+			case self::evOpenDoorOperatorOk:
+				return $this->makeSql();	
+			break;
+			
+			case self::evOpenDoorOperatorErr:
+				return $this->makeSql();	
+			break;
+		}
+		
+	}
+	
+	public function makeSql()
+	{
+		
+	$sql='select gen_id(GEN_HL_EVENTS_ID,1)
+			from RDB$DATABASE';
+		$id = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->get('GEN_ID');
+			
+	$sql=__('INSERT INTO HL_EVENTS (ID,EVENT_CODE,EVENT_TIME,IS_ENTER,RUBI_CARD,PARK_CARD,GRZ,COMMENT,PHOTO,ID_PEP,ID_GATE)
+		VALUES (:ID,:EVENT_CODE,:EVENT_TIME,:IS_ENTER,:RUBI_CARD,:PARK_CARD,:GRZ,:COMMENT,:PHOTO,:ID_PEP,:ID_GATE)', array(
+			':ID'=>$id,
+			':EVENT_CODE'=>$this->event_code,
+			':EVENT_TIME'=>'\'now\'',
+			':IS_ENTER'=>$this->is_enter,
+			':RUBI_CARD'=>$this->rubi_card,
+			':PARK_CARD'=>$this->park_card,
+			':GRZ'=>$this->grz,
+			':COMMENT'=>'\''.$this->comment.'\'',
+			':PHOTO'=>$this->photo,
+			':ID_PEP'=>$this->id_pep,
+			':ID_GATE'=>$this->id_gate
+			));
+			//echo Debug::vars('205', $sql);exit;
+			Log::instance()->add(Log::DEBUG, 'Line 215 '. $sql);
+			try{
+				$result = DB::query(Database::INSERT, iconv('UTF-8', 'windows-1251', $sql))
+				->execute(Database::instance('fb'))
+				;
+				$this->result->result=true;
+				$this->result->id_events=$id;
+				$this->result->errCode=0;
+				$this->result->desc=0;
+				
+				}  catch (Exception $e) {
+				$this->result->result=false;
+				$this->result->id_events=$id;
+				$this->result->errCode=226;
+				$this->result->desc=$e->getMessage();
+				Log::instance()->add(Log::DEBUG, '#228 вставка данных  прошла с ошибкой. SQL='.$sql.' errmess: '. $e->getMessage());
+				
+					
+				}
+			
+		return true;
+	}
 	
 	/*
 	26.08.2023

@@ -14,7 +14,7 @@ class Model_Rmo extends Model {
 	//Команда на открывание ворот. Отправляется в другую систему 
 	public function sendOpen($id_gate)
 	{
-		echo Debug::vars('17 готовлю отправку команды на открытие ворот '.$id_gate);//exit;
+		//echo Debug::vars('17 готовлю отправку команды на открытие ворот '.$id_gate);//exit;
 		$data=array (
 				'id' => $id_gate,
 				);

@@ -53,7 +53,7 @@ $(function() {
         }
         .camera-view {
             width: 48%;
-            min-width: 300px;
+            min-width: 280px;
             background: #000;
             border-radius: 8px;
             overflow: hidden;
@@ -245,10 +245,6 @@ if(isset($garage_info))
 <?php
 	}
 ?>
-
-	123
-	
-
 </div>	
 </div>
 	
@@ -263,21 +259,27 @@ if(isset($garage_info))
 	<?php
 		//получаю список ворот gate.
 		$_gateList=Arr::get(Model::factory('gates')->get_list_gate(), 'res');
-		//echo Debug::vars('187', $_gateList);exit;
-		//далее строю для них таблицу.
-		//на первом этапе - все ворота в ряд.
-		
+		//проверяю: работает ли ffmpeg?
+$processName = "ffmpeg.exe";
+exec("tasklist | findstr \"$processName\"", $output, $returnCode);
+//echo Debug::vars('269', $output);
+//echo Debug::vars('270', $returnCode);
+if (!empty($output)) {
+    //echo "Процесс $processName работает!";
+	$video_set=true;
+} else {
+    //echo "Процесс $processName не найден.";
+	$video_set=false;
+}
 	?>
 	<div class="container">
 	 <table>
 		<tr>
 			<?php
 			$order_gate=array(3, 4, 2, 7, 5, 6);//порядок вывода ворот на экран
-			$count=0;
-				//foreach(array_slice($_gateList, 0, 6) as $key)
+					//foreach(array_slice($_gateList, 0, 6) as $key)
 				foreach($order_gate as $key2)// для ворот в указанном порядке организую вывод информации. $key2 - id ворот
 				{
-					//echo Debug::vars('196', $key);//exit;
 					$key=array();
 					foreach($_gateList as $key3)//делаю перебор массива с перечнем ворот. Цель - найти $key3, у которого номер ворот совпадает с тем, что надо выводить.
 					{
@@ -288,33 +290,27 @@ if(isset($garage_info))
 				
 				
 				echo '<div class="camera-view">';
-				echo '<h3>'.Arr::get($key, 'name').'</h3>
-					<div class="video-wrapper">
+				echo '<h3>'.Arr::get($key, 'name').'</h3>';
+				if($video_set)
+				{
+					echo '<div class="video-wrapper">
 						<video id="camera'.Arr::get($key, 'id_cam').'" controls muted></video>
-					</div>
-				</div>
+						</div>';
+				} else {
+					echo __('no_video');
+				}
+				
+				echo '</div>
 				<div class="controls">
 				
 					<button onclick="toggleFullscreen(\'camera'.Arr::get($key, 'id_cam').'\')">Полный экран Камера '.Arr::get($key, 'id_cam').'</button>';
 					
 					echo Form::open('rmo/sendOpen');
-							echo Form::hidden('id', Arr::get($key, 'id')).'<br>';
-							//echo Form::button('todo', 'Открыть ворота '.Arr::get($key, 'id'), array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
-						$value=array(
-						'NAME'=>'name',
-						'ORG_ID'=>5,
-						'ORG_ID1'=>6,
-						'IP_DEV'=>7,
-						'LOGIN'=>8,
-						'PASS'=>9,
-						);
+						echo Form::hidden('id', Arr::get($key, 'id')).'<br>';
 						echo '<label class="btn btn-line dark btn-xs popup-contact btn-success" for="modalm-1"
 							org_name="'. Arr::get($key, 'name').'" 
 							org_id="'.Arr::get($key, 'id').'"
-							org_id1="789"
-							ip_dev="'.long2ip(Arr::get($value, 'IP', 0)).'"
-							login="'.(Arr::get($value, 'LOGIN', 0)).'"
-							pass="'.(Arr::get($value, 'PASS', 0)).'"
+							
 						>Открыть ворота '.Arr::get($key, 'id').'</label>';
 						
 						echo Form::close();
@@ -341,6 +337,7 @@ if(isset($garage_info))
 	  <div class="panel-body"> 
 		Журнал событий
 		<?php
+			//таблица с журналом событий формируется в другом файле
 			include Kohana::find_file('views/monitor','list');//вывод таблицы с журналом событий
 		
 		?>

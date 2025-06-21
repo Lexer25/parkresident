@@ -558,21 +558,43 @@ public function action_opengateCVS()//передача команды на от�
 	 public function action_sendOpen()
 	 {	
 		//echo Debug::vars('551', $_POST);exit;
+		
 		Log::instance()->add(Log::DEBUG, '561-0 sendOpen '.Debug::vars($_POST));
+				
+				//фиксирую отправку команды на открытие ворот.
+				$event=new Events();
+				$event->event_code=$event::evOpenDoorOperator;
+				$event->id_gate=Arr::get($_POST, 'id');
+				$event->comment=Text::limit_chars(Arr::get($_POST, 'mess'), 255);
+				$event->insert();
+				//echo Debug::vars('575', $event);exit;
 			$result=Model::factory('Rmo')->sendOpen(Arr::get($_POST, 'id'));//открыть указанные ворота
 			//echo Debug::vars('559', $result);exit;
+			
+			//фиксирую результат выполения команды на открытие ворот
 			if(Arr::get($result, 'result'))
 			{
 				//команда выполнена успешно
+				$event->event_code=$event::evOpenDoorOperatorOk;
+				$event->idGate=Arr::get($_POST, 'id');
+				//$event->comment=iconv('UTF-8', 'windows-1251', Text::limit_chars(Arr::get($_POST, 'mess'), 255));
+				$event->insert();
+				//echo Debug::vars('578', $event, $event->insert());//exit;
 				Log::instance()->add(Log::DEBUG, '561-1 sendOpen Команда выпонена успешно');
 				Session::instance()->set('ok_mess', array('Команда выпонена успешно.'));
 				
+				
+				
 			} else {
 				//комнада не выполнена
+				$event->event_code=$event::evOpenDoorOperatorErr;
+				$event->idGate=Arr::get($_POST, 'id');
+				$event->comment=Text::limit_chars(Arr::get($result, 'edesc'), 255);
+				$event->insert();
 				Log::instance()->add(Log::DEBUG, '561-2 sendOpen '.Debug::vars(Arr::get($result, 'edesc')));
 				Session::instance()->set('e_mess', array(Arr::get($result, 'edesc')));
 			}
-			//echo Debug::vars('567 надо возращать ответ');exit;
+			//echo Debug::vars('567');exit;
 			$this->redirect($this->request->referrer());
 	 }
 	

@@ -31,6 +31,37 @@ class Model_Event extends Model {
 	}
 	
 	
+	public function insertEvents()
+	{
+		$sql='INSERT INTO HL_EVENTS (
+			ID,
+			EVENT_CODE,
+			EVENT_TIME,
+			IS_ENTER,
+			RUBI_CARD,
+			PARK_CARD,
+			GRZ,
+			COMMENT,
+			PHOTO,
+			ID_PEP,
+			ID_GATE,CREATED) 
+			VALUES (
+				25,
+				6,
+				'17-MAY-2025 12:10:39',
+				NULL,
+				NULL,
+				NULL,
+				'1922384',
+				NULL,
+				NULL,
+				2413,
+				104,
+				'17-MAY-2025 12:10:39'
+				)';
+		
+	}
+	
 	
 	
 }

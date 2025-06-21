@@ -219,8 +219,8 @@ class Model_Parkdb extends Model {
     public function addTableData($name)
     {
         //echo Debug::vars('99', $name.'.sql');exit;
-        $ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" "'.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.' -user sysdba -pass temp -i C:\xampp\htdocs\parkresident\modules\setup\config\sql\data\\'.$name.'.sql';
-        exec(iconv('UTF-8', 'CP1251', $ttt));
+        $ttt='"C:\Program Files (x86)\Firebird\Firebird_1_5_6\bin\isql.exe" "'.$this->serverIP.'/'.$this->serverPort.':'.$this->db_path.'" -user sysdba -pass temp -i "C:\xampp\htdocs\parkresident\modules\setup\config\sql\data\\'.$name.'.sql"';
+		exec(iconv('UTF-8', 'CP1251', $ttt));
 
     }
 

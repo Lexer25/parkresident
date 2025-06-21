@@ -101,7 +101,8 @@
 						//echo Debug::vars('51', $value, $dataList, in_array($value, $dataList));//exit;
 						if(in_array($value, $dataList))
 						{
-							echo '<td>'.Form::button('addTableData', 'Добавить данные', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
+							//echo '<td>'.Form::button('addTableData', 'Добавить данные', array('value'=>$value, 'disabled'=>'disabled')).'</td>';
+							echo '<td>'.Form::button('addTableData', 'Добавить данные', array('value'=>$value)).'</td>';
 						} else {
 							//echo '<td>'.Form::button('addTableData', 'Добавить данные', array('disabled'=>'disabled')).'</td>';
 							echo '<td>-</td>';
