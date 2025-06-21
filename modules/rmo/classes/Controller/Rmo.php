@@ -569,7 +569,7 @@ public function action_opengateCVS()//передача команды на от�
 				$event->insert();
 				//echo Debug::vars('575', $event);exit;
 			$result=Model::factory('Rmo')->sendOpen(Arr::get($_POST, 'id'));//открыть указанные ворота
-			//echo Debug::vars('559', $result);exit;
+			//echo Debug::vars('559', $result, $event->result->id_events);exit;
 			
 			//фиксирую результат выполения команды на открытие ворот
 			if(Arr::get($result, 'result'))
@@ -577,7 +577,7 @@ public function action_opengateCVS()//передача команды на от�
 				//команда выполнена успешно
 				$event->event_code=$event::evOpenDoorOperatorOk;
 				$event->idGate=Arr::get($_POST, 'id');
-				//$event->comment=iconv('UTF-8', 'windows-1251', Text::limit_chars(Arr::get($_POST, 'mess'), 255));
+				$event->comment=$event->result->id_events;
 				$event->insert();
 				//echo Debug::vars('578', $event, $event->insert());//exit;
 				Log::instance()->add(Log::DEBUG, '561-1 sendOpen Команда выпонена успешно');
@@ -589,7 +589,7 @@ public function action_opengateCVS()//передача команды на от�
 				//комнада не выполнена
 				$event->event_code=$event::evOpenDoorOperatorErr;
 				$event->idGate=Arr::get($_POST, 'id');
-				$event->comment=Text::limit_chars(Arr::get($result, 'edesc'), 255);
+				$event->comment=Text::limit_chars(Arr::get($result, 'edesc'), 255).' '.$event->result->id_events;
 				$event->insert();
 				Log::instance()->add(Log::DEBUG, '561-2 sendOpen '.Debug::vars(Arr::get($result, 'edesc')));
 				Session::instance()->set('e_mess', array(Arr::get($result, 'edesc')));
