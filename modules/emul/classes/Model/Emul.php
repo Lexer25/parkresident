@@ -154,21 +154,32 @@ class Model_Emul extends Model {
 	}
 	
 	
-	//Отправк POST запроса. Данные должны быть в формате json
-	public function sendRequestPostJson($data, $url)
+	//Отправк POST запроса. Данные должны быть в формате array
+	public function sendRequestPostJson($data, $url, $container='post')
 	{
 			 Log::instance()->add(Log::NOTICE, '153 отправлен тестовый запрос на адрес http://localhost:'.$this->requestPort.'/cvs/'. $url);
 			 Log::instance()->add(Log::NOTICE, '154 '.Debug::vars($data));
-			
+			 Log::instance()->add(Log::NOTICE, '154-1 '.Debug::vars($container));
+			 //$data=json_decode($data);
+			//$data=array('1'=>'2');
+			//echo Debug::vars($data);exit;
 			$request = Request::factory('http://localhost:'.$this->requestPort.'/cvs/'. $url)
 					//->headers("Accept", "application/json")
-					//->headers("Content-Type", "application/json")
+					//->headers('Content-Type', 'application/json')
 					//->headers("Accept", "application/json")
 					//->headers("Content-Type", "application/x-www-form-urldecode")
-					->method(Request::POST)
-					//->body($data)
-					->post($data);
+					->method(Request::POST);
+			switch($container)
+			{
+				case 'post':
+							$request->post($data);
+				break;
+				case 'body':
+							$request->body(json_encode($data));
+				break;
+				
 			
+			}
 			try{
 				//echo Debug::vars('166', $request->execute());exit;
 				$response=$request->execute();
@@ -188,6 +199,35 @@ class Model_Emul extends Model {
 	} 
 	
 	
+	public function sendCurl($data, $url)
+	{
+			Log::instance()->add(Log::NOTICE, '193'.Debug::vars($data));
+			$ch = curl_init('http://localhost:'.$this->requestPort.'/cvs/'. $url);
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Content-Type:  text/plain',
+				'Content-Length: ' . strlen($data),
+			));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			try{
+				$response = curl_exec($ch);
+				Log::instance()->add(Log::NOTICE, '203 ответ sendCurl'.Debug::vars($response));
+				//$answer=json_decode($response->body());
+				Log::instance()->add(Log::NOTICE, '205 ответ sendCurl'.Debug::vars($response));
+				//Log::instance()->add(Log::NOTICE, '206 ответ sendCurl'.Debug::vars($answer));
+			} catch(Exception $e) {
+				Log::instance()->add(Log::DEBUG, '#208 '.$e->getMessage());
+				curl_close($ch);
+				return false;
+			}
+				curl_close($ch);
+			return true;
+			
+		
+	}
+	
+	
 	//Команда на открывание ворот. Отправляется в другую систему 
 	public function sendOpen($id_gate)
 	{
@@ -195,7 +235,7 @@ class Model_Emul extends Model {
 				'id' => $id_gate,
 				);
 			//	echo Debug::vars('138', $data); exit;
-			$answer=$this->sendRequestPostJson($data, 'dashboard/opengate');
+			$answer=$this->sendRequestPostJson($data, 'dashboard/opengate', 'post');
 			Log::instance()->add(Log::NOTICE, '142 '. Debug::vars($answer));
 			 if($answer)
 			{

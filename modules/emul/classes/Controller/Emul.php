@@ -99,9 +99,9 @@ class Controller_Emul extends Controller_Template { // класс для про�
 			//echo Debug::vars('98', $data);exit;
 			
 			
-		$data=json_encode($data_0);
+		//$data=json_encode($data_0);
 		//$this->sendRequestPostJson(Array('plate'=>$data), 'dashboard/exec');
-		Model::factory('Emul')->sendRequestPostJson(Array('plate'=>$data), 'dashboard/exec');
+		Model::factory('Emul')->sendRequestPostJson(Array('plate'=>$data_0), 'dashboard/exec', 'body');
 		
 		$this->redirect('emul/grz');
 	 }
@@ -124,7 +124,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	//$data=json_encode($data_0);
 			
 		//$this->sendRequestPostJson($data_0, 'dashboard/sendMPT');
-		Model::factory('Emul')->sendRequestPostJson($data_0, 'dashboard/sendMPT');
+		Model::factory('Emul')->sendRequestPostJson($data_0, 'dashboard/sendMPT', 'post');
 		$this->redirect('emul/grz');
 
 	 }

@@ -65,12 +65,14 @@ class Controller_events extends Controller {
 		 where  et.id_eventtype in (46, 50, 65, 81, 145)
 		and e.id_event >'.$id;
 		
-		$sql='select  e.id as id_event, e.event_code as id_eventtype, e.event_time as datetime, e.grz as id_card, e.comment, e.id_gate  , hlec.name as eventtype_name , hlp.name as device_name,
+		$sql='select  e.id as id_event, e.event_code as id_eventtype, e.event_time as datetime, e.grz as id_card, e.comment, e.id_gate  , hlec.name as eventtype_name ,
+		coalesce(hlp.name, hlp2.name) as device_name,
 		p.surname, p.surname||\' \'|| p.name||\' \'|| p.patronymic as people_name,
          p.photo, p.post, o.name as organization_name
         from hl_events e
         left join hl_eventcode hlec on hlec.id=e.event_code
         left join hl_param hlp on hlp.id=e.id_gate
+		left join hl_param hlp2 on hlp2.id_dev=e.id_gate
         left join card c on c.id_card=e.grz
         left join people p on p.id_pep=c.id_pep
         left join organization o on o.id_org=p.id_org
