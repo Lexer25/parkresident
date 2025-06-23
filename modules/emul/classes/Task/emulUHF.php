@@ -1,7 +1,7 @@
     <?php defined('SYSPATH') or die('No direct script access.');
 	//22.06.2025 Эмуляция работы cvs
 	//задача отправляет в cvs данные точно так, как это делает cvs
-	// C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=emulUHF --grz=A123AA15
+	// C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=emulUHF --grz=123456
  
     class Task_emulUHF extends Minion_Task {
 		
