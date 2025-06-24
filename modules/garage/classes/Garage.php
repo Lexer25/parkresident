@@ -34,7 +34,7 @@ class Garage
 	
 	 public function __construct($id=null)
     {
-       if(!is_null($id))//если указан id, то создаю экземпляр класса с данными из БД.
+       if(filter_var($id, FILTER_VALIDATE_BOOLEAN))//если указан id, то создаю экземпляр класса с данными из БД.
 	   {
 	   $this->id = $id;
 		$sql='select hln.name, hln.created, hln.not_count, hln.div_code from hl_garagename hln
