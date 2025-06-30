@@ -241,16 +241,10 @@ class Model_Gates extends Model {
 	*/
 	public function opengate($id_gate) //открыть ворота (gate)
 	{
-		
-		
-			$connect_param= $this->get_info_gate($id_gate);
-		//echo Debug::vars('247', $id_gate, $connect_param, Arr::get($connect_param,'box_ip'), Arr::get($connect_param, 'box_port'), Arr::get($connect_param,'mode'));exit;
-		
-		//Тут надо отправить запрос на сервер cvs на другом компьютере
-		
-		//создаю объект MPT
-			$mpt=new phpMPT(Arr::get($connect_param,'box_ip'), Arr::get($connect_param, 'box_port'));
-			$mpt->openGate(Arr::get($connect_param,'mode'));// открыть ворота
+			$_data= $this->get_info_gate($id_gate);
+				//создаю объект MPT
+			$mpt=new phpMPT(Arr::get($_data,'box_ip'), Arr::get($connect_param, 'box_port'));
+			$mpt->openGate(Arr::get($_data,'mode'));// открыть ворота с учетом режима работы
 		return $mpt->result;
 	}
 	

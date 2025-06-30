@@ -33,6 +33,7 @@ echo Form::open('ParkingPlace/control');
 			<th><?echo __('Количество машиномест');?></th>
 			<th><?echo __('Зарегистрировано машиномест');?></th>
 			<th><?echo __('Контроль направления проезда');?></th>
+			<th><?echo __('Работа в режиме "Тест"');?></th>
 			
 		</tr>
 		<?php 
@@ -73,6 +74,7 @@ echo Form::open('ParkingPlace/control');
 				$placeList=Model::factory('Place')->getChild($parkingPlace->id);
 				echo '<td>'.count($placeList).'</td>';
 				echo '<td>'.Form::checkbox( 'is_apb', 1, $parkingPlace->is_apb == $parkingPlace->id, array('disabled'=>'disabled')) .'</td>';
+				echo '<td>'.Form::checkbox( 'is_test', 1, $parkingPlace->is_test == $parkingPlace->id, array('disabled'=>'disabled')) .'</td>';
 				
 				
 			echo '</tr>';	

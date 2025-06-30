@@ -158,7 +158,7 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 				$this->redirect('parkingplace');
 			break;
 			
-			case 'del'://удаление Жилого комплекса из списка
+			case 'del'://удаление парковочной площадки из списка
 				//echo Debug::vars('301', $_GET, $_POST); exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('id', 'not_empty')
@@ -168,7 +168,7 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 					{
 						$_entity = new Parking(Arr::get($_data, 'id'));
 						
-						//echo Debug::vars('151',Arr::get($_data, 'id'),  $_entity );exit;
+						//echo Debug::vars('171',Arr::get($_data, 'id'),  $_entity );exit;
 						if($_entity->del())
 						{
 							Session::instance()->set('ok_mess', array('ok_mess' => __('Парковочная площадка :placeName удалена успешно', array(':placeName'=>iconv('windows-1251','UTF-8', $_entity->name)))));
@@ -225,11 +225,14 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 				if($_data->check())
 				{
 					$_entity = new Parking(Arr::get($_data, 'id'));
-					echo Debug::vars('170', $_entity);//exit;
+					//echo Debug::vars('170', $_entity);//exit;
 					$_entity->name=Arr::get($_data, 'name');
 					
 					$_entity->parent=Arr::get($_data, 'parent');
 					$_entity->count=Arr::get($_data, 'count');
+					$_entity->is_apb=Arr::get($_data, 'is_apb');
+					$_entity->is_test=Arr::get($_data, 'is_test');
+					
 					if(is_null(Arr::get($_data, 'is_active'))) $_entity->is_active=0;
 					
 					if(filter_var(Arr::get($_data, 'is_active'), FILTER_VALIDATE_BOOLEAN)) 
@@ -238,6 +241,9 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 					} else{
 						$_entity->is_active=0;
 					}
+					
+					
+
 					//echo Debug::vars('178', $_entity);exit;
 					if($_entity->update())
 						{
