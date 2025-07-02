@@ -255,15 +255,12 @@ if(isset($garage_info))
     <h3 class="panel-title"><?php //echo __('Разрешить проезд выбранного ГРЗ на машиноместо').' '.Session::instance()->get('place_for_search');?></h3>
   </div>
   <div class="panel-body"> 
-	Управление и контроль
 	<?php
 		//получаю список ворот gate.
 		$_gateList=Arr::get(Model::factory('gates')->get_list_gate(), 'res');
 		//проверяю: работает ли ffmpeg?
 $processName = "ffmpeg.exe";
 exec("tasklist | findstr \"$processName\"", $output, $returnCode);
-//echo Debug::vars('269', $output);
-//echo Debug::vars('270', $returnCode);
 if (!empty($output)) {
     //echo "Процесс $processName работает!";
 	$video_set=true;
@@ -271,7 +268,21 @@ if (!empty($output)) {
     //echo "Процесс $processName не найден.";
 	$video_set=false;
 }
+
+//отображаю состояние работы видеосистемы
+if($video_set)
+{
+						echo '<span class="label label-success" id="inputField" title="Видеосистема работает правильно.">Видео работает</span>';
+					} else {
+						
+						echo '<span class="label label-warning" title="Видеосистема не работает, надо запустить ffmpeg">Видео не работает</span>';
+					}
 	?>
+	
+
+
+
+
 	<div class="container">
 	 <table>
 		<tr>
