@@ -461,6 +461,7 @@ echo Form::open('garage/control');
 	<div class="panel-body">
 	<?php
 		$garage = new Garage(Arr::get($garage_info, 'ID'));
+		
 		$events=new Events();
 		$eventsListForGarage=$events->getListEventsForGarage($garage->getEvents());//я передаю список id событий, которые надо вывести на экран
 

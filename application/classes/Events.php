@@ -88,8 +88,9 @@ class Events
 	*/
 	public function getListEventsForGarage($id_events)
 	{
-		
-	$sql='select hle.event_time, hle.event_code, hlp.is_enter, hlp.name as gate_name, hlp.id_parking, hle.grz, hle.id_pep, hle.id_gate, hle.comment, et.name as event_name,  p.surname, p.name, p.PATRONYMIC, hl_org.id_garage
+		if(!empty($id_events))
+		{
+			$sql='select hle.event_time, hle.event_code, hlp.is_enter, hlp.name as gate_name, hlp.id_parking, hle.grz, hle.id_pep, hle.id_gate, hle.comment, et.name as event_name,  p.surname, p.name, p.PATRONYMIC, hl_org.id_garage
             from hl_events  hle
             left join hl_param hlp on hlp.id_dev=hle.id_gate
             left join hl_eventcode  et on et.id=hle.event_code
@@ -99,22 +100,22 @@ class Events
             where hle.id in ('.implode(",", $id_events).')
 			order by hle.event_time desc';	
 			
-
-		
-		try
-		{
-			$query = DB::query(Database::SELECT, $sql)
-			->execute(Database::instance('fb'))
-			->as_array();
+			echo Debug::vars('102', $sql);exit;
 			
-			return $query;
-		} catch (Exception $e) {
-			////echo Debug::vars('30', $sql, $e->getMessage()); exit;
-			Log::instance()->add(Log::DEBUG, 'Line 52 '. $e->getMessage());
-		
+			try
+			{
+				$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+				
+				return $query;
+			} catch (Exception $e) {
+				////echo Debug::vars('30', $sql, $e->getMessage()); exit;
+				Log::instance()->add(Log::DEBUG, 'Line 52 '. $e->getMessage());
+			
+			}
 		}
-		
-		return ($id_events);
+		return array();
 	}
 	
 	/*

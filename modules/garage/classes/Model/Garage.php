@@ -44,7 +44,7 @@ class Model_Garage extends Model {
 			'not_count'=>Arr::get($info, 'NOT_COUNT'),
 			'orgList'=>$this->org_income_garage($id_garage),
 			'placeList'=>$this->place_income_garage($id_garage),
-			'grzList'=>$this->place_grz_garage_($id_garage),
+			'grzList'=>$this->place_grz_garage_($id_garage, 4),
 			'cardList'=>$this->place_grz_garage_($id_garage, 1),
 			'grzInGarageList'=>$this->get_grz_in_parking($id_garage),
 			'parkingList'=>Model::Factory('parking')->get_list_parking($this->rootParking),
@@ -92,7 +92,7 @@ class Model_Garage extends Model {
 			join card c on c.id_pep=p.id_pep and c.id_cardtype='.$cardType.'
 			where hlo.id_garage='.$id_garage;
 			
-		$sql='select distinct c.id_card, c."ACTIVE", p.surname from hl_orgaccess hlo
+		$sql2='select distinct c.id_card, c."ACTIVE", p.surname from hl_orgaccess hlo
 			join people p on p.id_org=hlo.id_org
 			join card c on c.id_pep=p.id_pep
 			where hlo.id_garage='.$id_garage;

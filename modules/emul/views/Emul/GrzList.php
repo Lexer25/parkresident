@@ -57,11 +57,14 @@
 					
 					//готовлю данные по текущему гаражу
 					$garage=Model::Factory('Garage');
-					$data=$garage->getGarageInfo(Arr::get($value, 'ID'));
+					$data=$garage->getGarageInfo(Arr::get($value, 'ID'),4);
 					$cardInGarage=Arr::get($garage->getGarageInfo(Arr::get($value, 'ID')), 'grzInGarageList');
 					//echo Debug::vars('54', $cardInGarage );exit;
 					echo '<td>';
-						foreach(array_slice(Arr::get($data, 'grzList'), 0, 300) as $key2=>$value2)
+					//echo Debug::vars('64', Arr::get($data, 'grzList')); //exit;
+					
+					
+						foreach(array_slice(Arr::get($data, 'grzList'), 0, 10) as $key2=>$value2)
 						{
 								echo Arr::get($value2, 'GRZ');
 								echo ' ';

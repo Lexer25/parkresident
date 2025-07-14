@@ -40,9 +40,10 @@ class Model_Grz extends Model {
 	*/
 	public function getGrzInfoList()
 	{
-		$sql='select c.id_card from card c
+		$sql='select first 10 c.id_card from card c
 		where c.id_cardtype='.$this->id_cardtype.'
 		order by c.id_card';
+		//echo Debug::vars('46', $sql); exit;
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array();

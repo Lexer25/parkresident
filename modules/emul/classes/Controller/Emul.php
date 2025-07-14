@@ -17,6 +17,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	{
 			parent::before();
 			$session = Session::instance();
+			
 			if (!empty($_POST)) {
              	$username = Arr::get($_POST, 'username');
                 $password = Arr::get($_POST, 'password');
@@ -27,6 +28,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 			}
 			I18n::load('rubic');
 			$this->requestPort = Kohana::$config->load('emul_config')->get('requestPort', 80);
+
 	}
 	
 	
@@ -50,7 +52,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	public function action_grz()//
 	{
 		$t1=microtime(true);//отмека времени для оценки быстродействия	
-		//echo Debug::vars('38', $_GET, $_POST, $id_parking); //exit;
+		//echo Debug::vars('38', $_GET, $_POST); exit;
 		$getGrzInfo=array_slice(Model::Factory('grz')->getGrzInfoList(), 0, 1000);//список ГРЗ
 		$garageList=array_slice(Model::Factory('Garage')->get_list_garage(), 0, 1000);//список ГРЗ
 		//echo Debug::vars('57', $garageList);exit;
@@ -115,7 +117,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 		
 		//в режиме ТЕСТ добавляю данные IP и PORT из базы данных. В реальных условиях эти данные будут извлекаться из запроса от контроллера.
 		$data_0=array (
-				'key' => Arr::get($_POST, 'card'),
+				'key' => strtoupper(dechex(Arr::get($_POST, 'card'))),
 				'test' => Arr::get($_POST, 'test'),
 				'ip'=>Arr::get($gate, 'box_ip'),
 				'ch'=>Arr::get($gate,'channel'),

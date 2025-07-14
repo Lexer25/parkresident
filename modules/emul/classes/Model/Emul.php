@@ -10,7 +10,7 @@
 
 class Model_Emul extends Model {
 	
-	Public $requestPort=80;
+	Public $requestPort=8080;
 	public function get_list()// получить список машиномест
 	{
 		$res=array();
