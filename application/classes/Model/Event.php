@@ -48,16 +48,16 @@ class Model_Event extends Model {
 			VALUES (
 				25,
 				6,
-				'17-MAY-2025 12:10:39',
+				\'17-MAY-2025 12:10:39\',
 				NULL,
 				NULL,
 				NULL,
-				'1922384',
+				\'1922384\',
 				NULL,
 				NULL,
 				2413,
 				104,
-				'17-MAY-2025 12:10:39'
+				\'17-MAY-2025 12:10:39\'
 				)';
 		
 	}
