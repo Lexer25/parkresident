@@ -227,14 +227,16 @@ class Controller_Garage extends Controller_Template {
 			
 			
 			case 'del_garage'://удаление гаража
-				//echo Debug::vars('176', $_GET, $_POST); exit;
+			case 'delete_garage'://удаление гаража
+				//echo Debug::vars('231', $_GET, $_POST); exit;
 							
 					$post=Validation::factory($this->request->post());
-					$post->rule('name', 'not_empty');
+					$post->rule('id', 'not_empty');
 					if($post->check())
 					{
 						//echo Debug::vars('415', 'valid OK'); exit;
-						$res=Model::factory('garage')->del_garage(Arr::get($post, 'id_garage'));
+						//$res=Model::factory('garage')->del_garage(Arr::get($post, 'id_garage'));
+						$res=Model::factory('garage')->del_garage_without_check_child(Arr::get($post, 'id'));
 						if($res==0)
 						{
 							Session::instance()->set('ok_mess', array('desc'=>'Команда удаления гаража выполнена успешно.'));

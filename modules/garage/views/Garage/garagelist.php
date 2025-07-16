@@ -1,3 +1,8 @@
+<script>
+function confirmSubmit() {
+  return confirm("Необходимо подтверждение операции удаления гаража.");
+}
+</script>
 <?php
 // список гаражей
 //echo Debug::vars('2', $get_stat_garage_place);
@@ -24,7 +29,7 @@ echo Form::open('garage/control');
 		echo __('Регстрация нового гаража');
 		echo Form::input('name', 'Новый гараж5');
 		echo Form::button('todo', 'Зарегистрировать новый гараж---', array('value'=>'add_new_garage','class'=>'btn btn-success', 'type' => 'submit'));	
-		
+		echo Form::close();?>	
 		?>	
 
 	  </div>
@@ -54,6 +59,7 @@ echo Form::open('garage/control');
 			<th><?php echo __('Кол-во машиномест<br>(номера машиномест)');?></th>
 			<th><?php echo __('Количество ГРЗ на территории<br>Перечень<br>Дата въезда');?></th>
 			<th><?php echo __('Осталось<br>свободных<br>мест');?></th>
+			<th><?php echo __('Удалить');?></th>
 			
 		</tr>
 
@@ -154,6 +160,18 @@ echo Form::open('garage/control');
 				echo '<td>';
 					echo count(Arr::get($value, 'placeList')) - count(Arr::get($value, 'grzInGarageList'));
 				echo '</td>';
+				
+				echo '<td>';
+				//echo Debug::vars('160', $value);
+					if(Auth::Instance()->logged_in()){
+							echo Form::open('garage/control', array('onsubmit'=>'return confirmSubmit()'));
+							echo Form::hidden('id', Arr::get($value,'id_garage'));	
+							echo Form::button('todo', 'Удалить', array('value'=>'delete_garage','class'=>'btn btn-danger', 'type' => 'submit'));	
+							echo Form::close();
+						} else {			
+							echo Form::button('todo', 'Удалить', array('value'=>'delete_garage','class'=>'btn btn-light', 'type' => 'submit', "disabled"=>"disabled"));	
+						}
+				echo '</td>';
 			
 				
 			echo '</tr>';	
@@ -182,7 +200,7 @@ echo Form::open('garage/control');
 
 
 
-<?echo Form::close();?>
+<?php echo Form::close();?>
 	
   
 

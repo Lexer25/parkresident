@@ -344,6 +344,26 @@ class Model_Garage extends Model {
 		}
 	}
 	
+	//16.07.2025 удаление гаража безо всяких проверок на родственность.
+	public function del_garage_without_check_child($id_garage)// удалдение гаража из таблицы HL_GARAGENAME. Удаление возможно только для "пустого" гаража.
+	{
+		//echo Debug::vars('23', $data);
+			
+		$sql='delete from hl_garagename hlg
+				where hlg.id='.$id_garage;
+		//echo Debug::vars('12', $sql); exit;
+		try
+				{
+				$query = DB::query(Database::DELETE, $sql)
+				->execute(Database::instance('fb'));
+				return 0;
+				} catch (Exception $e) {
+					Log::instance()->add(Log::ERROR, $e);
+					return 1;
+				}
+
+	}
+	
 	/*
 	удаление одного машиноместа id_place из гаража
 	$id_place - номер машиноместа
