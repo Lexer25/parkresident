@@ -12,7 +12,7 @@
 
 class Model_Garage extends Model {
 	
-	public $rootParking=14;
+	public $rootParking=1;
 	
 	public function getAllGarageInfo()
 	{

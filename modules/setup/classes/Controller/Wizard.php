@@ -254,4 +254,26 @@ class Controller_Wizard extends Controller_Template {
 
         $this->redirect('wizard');
     }
+	
+	/**
+	*Прием настроек дл
+	*
+	*/
+	public function action_cvs()
+	{
+		//echo Debug::vars('260', $_POST);exit;
+		$setting=new Setting();
+		$setting->Update(Arr::get($_POST, 'name'), Arr::get($_POST, 'value'), Arr::get($_POST, 'type'));
+	
+		
+		$referrer = Request::initial()->referrer();
+		// Если Referer есть – делаем редирект, иначе – на дефолтную страницу
+		if ($referrer) {
+			$this->redirect($referrer);
+		} else {
+			$this->redirect('wizard'); // или другая страница по умолчанию
+		}
+		
+		
+	}
 }
