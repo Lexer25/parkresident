@@ -41,7 +41,6 @@
 			
 			
 		$data=json_encode(Array('plate'=>$data_0));
-		//$this->sendRequestPostJson($data, 'dashboard/exec');
 		Model::factory('Emul')->sendRequestPostJson($data, 'dashboard/exec', 'body');
 		//Model::factory('Emul')->sendCurl($data, 'dashboard/exec');
 		

@@ -10,7 +10,13 @@
 
 class Model_Emul extends Model {
 	
-	Public $requestPort=8080;
+	Public $requestPort;
+	
+	 public function __construct()
+	 {
+		  $this->requestPort = Setting::get('port_cvs', 80);
+		 
+	 }
 	public function get_list()// получить список машиномест
 	{
 		$res=array();
@@ -157,12 +163,10 @@ class Model_Emul extends Model {
 	//Отправк POST запроса. Данные должны быть в формате array
 	public function sendRequestPostJson($data, $url, $container='post')
 	{
-			 Log::instance()->add(Log::NOTICE, '153 отправлен тестовый запрос на адрес http://localhost:'.$this->requestPort.'/cvs/'. $url);
+	
+			Log::instance()->add(Log::NOTICE, '153 отправлен тестовый запрос на адрес http://localhost:'.$this->requestPort.'/cvs/'. $url);
 			 Log::instance()->add(Log::NOTICE, '154 '.Debug::vars($data));
 			 Log::instance()->add(Log::NOTICE, '154-1 '.Debug::vars($container));
-			 //$data=json_decode($data);
-			//$data=array('1'=>'2');
-			//echo Debug::vars($data);exit;
 			$request = Request::factory('http://localhost:'.$this->requestPort.'/cvs/'. $url)
 					//->headers("Accept", "application/json")
 					//->headers('Content-Type', 'application/json')
@@ -187,10 +191,13 @@ class Model_Emul extends Model {
 				$answer=json_decode($response->body());
 				Log::instance()->add(Log::NOTICE, '169 ответ sendRequestPostJson'.Debug::vars($response->body()));
 				Log::instance()->add(Log::NOTICE, '171 ответ sendRequestPostJson'.Debug::vars($answer));
+				Session::instance()->set('ok_mess', array('desc'=>'Комнда выполнена успешно.'));
 				return $answer;
 			} catch (Exception $e) {
-			Log::instance()->add(Log::DEBUG, '#181 '.$e->getMessage());
+				Log::instance()->add(Log::DEBUG, '#181 '.$e->getMessage());
 			//echo Debug::vars('171', $e->getMessage());exit;
+			Session::instance()->set('e_mess', array('desc'=>$e->getMessage()));
+
 			return false;
 
 		}	

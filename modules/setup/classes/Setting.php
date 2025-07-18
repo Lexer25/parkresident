@@ -17,18 +17,7 @@
 
 class Setting
 {
-   private $result_ok='OK';
-	private $result_err='Err';
-	public $result;//результат выполнение метода OK - выполнен правильно, Err - выполнен с ошибкой
-	public $rdesc;// результат выполнения метода: набор данных или ошибок
-	
-	public $id;// id указатель на уникальной номер сущности
-	public $name;//имя сущности
-	public $is_present=false;//true - есть данные для указанного id, false - нет данных для указанного id
-	public $not_count=false;//1 - НЕ вести подсчет кол-ва свободных мест. NULL и другие значения - вести подсчет
-	public $div_code;//код уникальные идентификатор гаража
-	public $eventList;//список кодов событий, связанных с этим гаражом
-
+   private $ver='1.0';
 	
 	
 	
@@ -67,10 +56,9 @@ class Setting
 	*30.08.2023
 	*получить данные из таблицы hl_setting
 	*@input $name - имя переменной, которое надо получить.
-	*@input $type - тип данных, которые надо взять. Значения: str и int
-	*@input $smallname - поиск по короткому имени
+	*@input $default - значение по умолчанию, передается в ответ если значение для $name не найдено
 	*/
-	public function get($name)
+	public static function get($name, $default=null)
 	{
 		$sql='select coalesce(hls.value_str, hls.value_int) from hl_setting hls
 			where hls.name=\''.$name.'\'';
@@ -81,12 +69,18 @@ class Setting
 			$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->get('COALESCE');
-			$res=$query;
-			
+			if(is_null($query)){
+				$res=$default;
+			} else {
+				$res=$query;
+			}
+						
 		} catch (Exception $e) {
 			////echo Debug::vars('30', $sql, $e->getMessage()); exit;
 			Log::instance()->add(Log::DEBUG, 'Line 52 '. $e->getMessage());
+			$res=$default;
 		}
+		//echo Debug::vars('80', $res);exit;
 		return $res;
 	}
 	
@@ -133,22 +127,26 @@ class Setting
 		//если ключа нет, то добавляю его.
 		//если ключ есть, то обновляю его.
 		
-		$sql='select * from hl_setting hls
+		$sql='select count(*) from hl_setting hls
 			where hls.name=\''.$name.'\'';
-		if(!DB::query(Database::INSERT, iconv('UTF-8', 'CP1251',$sql))
+
+		if(DB::query(Database::INSERT, iconv('UTF-8', 'CP1251',$sql))
 				->execute(Database::instance('fb')))
 				{//ключ есть в базе данных. надо просто обновить.
+			//	echo Debug::vars('135');exit;
 					switch($type){
 						case 'int':
-							 $sql=__('INSERT INTO hl_setting (NAME, VALUE_INT)
-								VALUES (\':NAME\', :value)', array(
+						$sql=__('update hl_setting hls
+									set hls.value_int=:value 
+									where hls.name=\':NAME\'', array(
 									':NAME'=>$name,
 									':value'=>$value
 								)); 
 						break;
 						case 'str':
-						 $sql=__('INSERT INTO hl_setting (NAME, VALUE_str)
-								VALUES (\':NAME\', \':value\')', array(
+						$sql=__('update hl_setting hls
+									set hls.value_str=:value 
+									where hls.name=\':NAME\'', array(
 									':NAME'=>$name,
 									':value'=>$value
 								)); 
@@ -159,14 +157,17 @@ class Setting
 							{
 								$query = DB::query(Database::UPDATE, iconv('UTF-8', 'CP1251',$sql))
 								->execute(Database::instance('fb'));
+								Session::instance()->set('ok_mess', array('desc'=>'Данные обновлены успешно'));
 							} catch (Exception $e) {
 								Log::instance()->add(Log::DEBUG, 'Line 83 '. $e->getMessage());
+								Session::instance()->set('e_mess', array('desc'=>$e->getMessage()));
 							}
 							
 						
 					
 				} else {
 					//если ключа нет, то добавляю его.
+			//		echo Debug::vars('165');exit;
 					switch($type){
 						case 'int':
 							 $sql=__('INSERT INTO hl_setting (NAME, VALUE_INT)

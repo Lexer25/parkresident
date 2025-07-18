@@ -27,8 +27,10 @@ class Controller_Emul extends Controller_Template { // класс для про�
 				}
 			}
 			I18n::load('rubic');
-			$this->requestPort = Kohana::$config->load('emul_config')->get('requestPort', 80);
-
+			$setting=new Setting;
+			//$this->requestPort = Kohana::$config->load('emul_config')->get('requestPort', 80);
+			$this->requestPort = $setting->get('port_cvs_', 80);
+		
 	}
 	
 	
@@ -100,9 +102,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 			);
 			//echo Debug::vars('98', $data);exit;
 			
-			
-		//$data=json_encode($data_0);
-		//$this->sendRequestPostJson(Array('plate'=>$data), 'dashboard/exec');
+
 		Model::factory('Emul')->sendRequestPostJson(Array('plate'=>$data_0), 'dashboard/exec', 'body');
 		
 		$this->redirect('emul/grz');
@@ -122,10 +122,7 @@ class Controller_Emul extends Controller_Template { // класс для про�
 				'ip'=>Arr::get($gate, 'box_ip'),
 				'ch'=>Arr::get($gate,'channel'),
 				);
-			
-	//$data=json_encode($data_0);
-			
-		//$this->sendRequestPostJson($data_0, 'dashboard/sendMPT');
+
 		Model::factory('Emul')->sendRequestPostJson($data_0, 'dashboard/sendMPT', 'post');
 		$this->redirect('emul/grz');
 
@@ -137,37 +134,6 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	  //ответ передается назад, в ответе на request
 	 public function action_sendOpen()
 	 {	
-		//echo Debug::vars('136', $_POST);exit;
-		
-		/* $data=array (
-				'id' => Arr::get($_POST, 'id'),
-				);
-			//	echo Debug::vars('138', $data); exit;
-			$answer=$this->sendRequestPostJson($data, 'dashboard/opengate');
-			Log::instance()->add(Log::NOTICE, '142 '. Debug::vars($answer));
-			 if($answer)
-			{
-				if($answer->result=='OK') 
-				{
-					Log::instance()->add(Log::NOTICE, '143 ворота открылись, все в порядке.');
-				} else {
-					Log::instance()->add(Log::NOTICE, '144 ворота не открылись. Причина: '. $answer->edesc);
-				}
-
-			}	else {
-				Log::instance()->add(Log::NOTICE, '146 ворота Не открылись, смотри ошибку в логах.');
-				Log::instance()->add(Log::NOTICE, '148 '. Debug::vars($answer));
-			}				
-			 
-			
-			//$this->redirect('emul/grz');
-			
-			
-			$this->response
-            ->headers('Content-Type', 'application/json')
-            ->body(json_encode($answer)); */
-			
-			//===================
 			
 			
 			$result=Model::factory('Emul')->sendOpen(Arr::get($_POST, 'id'));//открыть указанные ворота
