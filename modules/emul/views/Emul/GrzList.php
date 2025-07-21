@@ -63,7 +63,7 @@
 					//echo Debug::vars('54', $cardInGarage );exit;
 					echo '<td>';
 					//echo Debug::vars('64', Arr::get($data, 'grzList')); //exit;
-					
+					echo 'ГРЗ<br>';
 					
 						foreach(array_slice(Arr::get($data, 'grzList'), 0, 10) as $key2=>$value2)
 						{
@@ -82,7 +82,7 @@
 								echo '<br>';
 								
 						}
-						echo '---<br>';
+						echo '---UHF<br>';
 						foreach(array_slice(Arr::get($data, 'cardList'), 0, 300) as $key2=>$value2)
 						{
 								echo Form::hidden('test', true);
@@ -109,6 +109,7 @@
 				{
 					
 					echo '<td>';
+					echo 'ГРЗ<br>';
 						foreach(array_slice(Arr::get($data, 'grzList'), 0, 300) as $key2=>$value2)
 						{
 							//echo Debug::vars('41', $value4);
@@ -121,10 +122,10 @@
 								//Form::button('todo', 'OUT', array('value'=>'out','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
 							echo Form::close();
 							 //echo HTML::anchor('emul/test?card='.Arr::get($value2, 'GRZ').'&gate='.Arr::get($value4, 'id'), Arr::get($value2, 'GRZ'));
-							 echo '<br>';
+							// echo '<br>';
 						}
 						//вывожу список CARD
-						echo '---';
+						echo '---UHF';
 						foreach(array_slice(Arr::get($data, 'cardList'), 0, 300) as $key2=>$value2)
 						{
 							//echo Debug::vars('41', $value3);
@@ -171,9 +172,6 @@
 							//echo Debug::vars('41', $value3);
 							echo Arr::get($uhf, 'ID_CARD').' ';
 							echo Arr::get($uhf, 'COUNTERID')? Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit')) : Form::button('todo', 'OUT', array('value'=>'in','class'=>'btn btn-warning btn-xs', 'type' => 'submit'));
-							
-													
-							 //echo HTML::anchor('emul/test?card='.Arr::get($value2, 'GRZ').'&gate='.Arr::get($value4, 'id'), Arr::get($value2, 'GRZ'));
 							 echo '<br>';
 						}
 					echo '</td>';
