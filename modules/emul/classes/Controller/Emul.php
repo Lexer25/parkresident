@@ -55,8 +55,8 @@ class Controller_Emul extends Controller_Template { // класс для про�
 	{
 		$t1=microtime(true);//отмека времени для оценки быстродействия	
 		//echo Debug::vars('38', $_GET, $_POST); exit;
-		$getGrzInfo=array_slice(Model::Factory('grz')->getGrzInfoList(), 0, 1000);//список ГРЗ
-		$garageList=array_slice(Model::Factory('Garage')->get_list_garage(), 0, 1000);//список ГРЗ
+		$getGrzInfo=array_slice(Model::Factory('grz')->getGrzInfoList(), 0, 10);//список ГРЗ
+		$garageList=array_slice(Model::Factory('Garage')->get_list_garage(), 0, 10);//список ГРЗ
 		//echo Debug::vars('57', $garageList);exit;
 		$content = View::factory('emul/grzList', array(
 			'grz_list'=>$getGrzInfo,

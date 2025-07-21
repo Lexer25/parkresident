@@ -22,9 +22,9 @@
 			<th> Идентификаторы/<BR>IN - в гараже, OUT - не в гараже</th>
 			<?php
 			
-				$list=Model::factory('Gates')->get_list_gate();//список гаражей
+				$list=Model::factory('Gates')->get_list_gate();//список ворот
 				//echo Debug::vars('35', $list);exit;
-				foreach(Arr::get($list, 'res') as $key=>$value)
+				foreach(Arr::get($list, 'res') as $key=>$value)//колонки - названия ворот.
 				{
 					echo '<th>';
 						//echo Debug::vars('39', $value);//exit;
@@ -44,6 +44,7 @@
 			?>
 		</tr>
 	</thead>
+	<tbody>
 		<?php 
 			foreach($garageList as $key=>$value)
 			{
@@ -57,8 +58,8 @@
 					
 					//готовлю данные по текущему гаражу
 					$garage=Model::Factory('Garage');
-					$data=$garage->getGarageInfo(Arr::get($value, 'ID'),4);
-					$cardInGarage=Arr::get($garage->getGarageInfo(Arr::get($value, 'ID')), 'grzInGarageList');
+					$data=$garage->getGarageInfo(Arr::get($value, 'ID'),4);//список ГРЗ, принадлежащих гаражу
+					$cardInGarage=Arr::get($garage->getGarageInfo(Arr::get($value, 'ID')), 'grzInGarageList');//ГРЗ в гараже?
 					//echo Debug::vars('54', $cardInGarage );exit;
 					echo '<td>';
 					//echo Debug::vars('64', Arr::get($data, 'grzList')); //exit;
@@ -102,7 +103,7 @@
 						
 						//вывожу список CARD
 						
-					echo '</td>';	
+					//echo '</td>';	
 								
 				foreach(Arr::get($list, 'res') as $key4=>$value4)
 				{
@@ -138,18 +139,85 @@
 							echo Form::close();
 							
 							 //echo HTML::anchor('emul/test?card='.Arr::get($value2, 'GRZ').'&gate='.Arr::get($value4, 'id'), Arr::get($value2, 'GRZ'));
-							 echo '<br>';
+							 //echo '<br>';
 						}
 						
 					echo '</td>';
 				}
 					
 				echo '</tr>'; 
-				
-				
-			}
+				}
+				//эта строка - список идентификаторов, которые не входят ни в какие гаражи
+				echo '<tr>';
+					echo '<td>';
+						echo 'список карт не из гаражей'; 
+					echo '</td>';
+					$_data_grz=Model::factory('Emul')->getListCardNonGarage(10, 4);//беру ГРЗ
+					//echo Debug::vars('155', $_data);exit;
+					
+					echo '<td>';//перечень ГРЗ и состояние на территории или не на территории
+						echo 'ГРЗ<br>';
+						foreach($_data_grz as $key3=>$grz)
+						{
+							//echo Debug::vars('41', $value3);
+							echo Arr::get($grz, 'ID_CARD').' ';
+							echo Arr::get($grz, 'COUNTERID')? Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit')) : Form::button('todo', 'OUT', array('value'=>'in','class'=>'btn btn-warning btn-xs', 'type' => 'submit'));
+							 echo '<br>';
+						}
+						echo '---UHF<br>';
+						$_data_uhf=Model::factory('Emul')->getListCardNonGarage(10, 1);
+						foreach($_data_uhf as $key3=>$uhf)
+						{
+							//echo Debug::vars('41', $value3);
+							echo Arr::get($uhf, 'ID_CARD').' ';
+							echo Arr::get($uhf, 'COUNTERID')? Form::button('todo', 'IN', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit')) : Form::button('todo', 'OUT', array('value'=>'in','class'=>'btn btn-warning btn-xs', 'type' => 'submit'));
+							
+													
+							 //echo HTML::anchor('emul/test?card='.Arr::get($value2, 'GRZ').'&gate='.Arr::get($value4, 'id'), Arr::get($value2, 'GRZ'));
+							 echo '<br>';
+						}
+					echo '</td>';
+					foreach(Arr::get($list, 'res') as $key4=>$value4)
+					{
+					echo '<td>';
+					echo 'ГРЗ<br>';
+						foreach($_data_grz as $key5=>$value5)
+						{
+							//echo Debug::vars('41', $value5);
+							echo Form::open('emul/sendGRZ');
+								echo Arr::get($value5, 'ID_CARD');
+								echo Form::hidden('test', 1);
+								echo Form::hidden('card', Arr::get($value5, 'ID_CARD'));
+								echo Form::hidden('gate', Arr::get($value4, 'id'));
+								
+								echo Form::button('todo', 'send', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+								 
+							echo Form::close();
+							
+							 //echo '<br>';
+						}
+					echo '---UHF<br>';
+						foreach($_data_uhf as $key5=>$value5)
+						{
+							//echo Debug::vars('41', $value5);
+							echo Form::open('emul/sendUHF');
+								echo Arr::get($value5, 'ID_CARD');
+								echo Form::hidden('test', 1);
+								echo Form::hidden('card', Arr::get($value5, 'ID_CARD'));
+								echo Form::hidden('gate', Arr::get($value4, 'id'));
+								
+								echo Form::button('todo', 'send', array('value'=>'in','class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+								 
+							echo Form::close();
+							
+							 //echo '<br>';
+						}
+						echo '</td>';
+					}
+						
+				echo '</tr>'; 
 		?>
-	<tbody>
+	
 	</tbody>
 		
 </table>

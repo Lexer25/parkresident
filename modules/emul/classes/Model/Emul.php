@@ -268,4 +268,23 @@ class Model_Emul extends Model {
 		
 	}
 	
+	
+	/**20.07.2025
+	* список карт людей, не входящих в гаражи
+	*/
+	public function getListCardNonGarage($count=10, $type=1)
+	{
+		$sql='select first '.$count.' skip 25 distinct c.id_card, hli.counterid from hl_orgaccess hlo
+				join people p on p.id_org<>hlo.id_org
+				join card c on c.id_pep=p.id_pep
+				left join hl_inside hli on hli.id_card=c.id_card
+				where c.id_cardtype='.$type;
+			
+			$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+
+		return $query;
+		
+	}
 }
