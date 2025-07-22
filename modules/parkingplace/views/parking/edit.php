@@ -27,29 +27,58 @@ if(Auth::Instance()->logged_in())
 		
 		<?php 
 	
-		echo __('Название парковочной площадки').' '.Form::input('name', iconv('windows-1251','UTF-8', $parking->name), array('maxlength'=>50)).'<br>';
-		echo __('Активен ').Form::checkbox( 'is_active', 1, $parking->is_active == 1, array('disabled'=>'disabled')).'<br>';
+		 echo __('Название парковочной площадки').' '.Form::input('name', iconv('windows-1251','UTF-8', $parking->name), array('maxlength'=>50)).'<br>';
+	/*	echo __('Активен ').Form::checkbox( 'is_active', 1, $parking->is_active == 1, array('disabled'=>'disabled')).'<br>';
 		echo __('Контроль направления проезда ').Form::checkbox( 'is_apb', 1, $parking->is_apb).'<br>';
+		echo __('Уменьшать счетчик занятых мест при выезде').Form::checkbox( 'is_decrementCount', 1, $parking->is_decrementCount).'<br>';
 		echo __('Работа в режиме "Тест" ').Form::checkbox( 'is_test', 1, $parking->is_test).'<br>';
-		echo __('ID'). ' '. $parking->id.'<br>';
+	*/	echo __('ID'). ' '. $parking->id.'<br>'; 
 		//echo __('parent'). ' '. $parking->parent.'<br>';
 		$residenceList=Model::factory('ResidentPlace')->get_list();//получил список id жилых комплексов
 		//список ЖК для выбора
 		$selectList=array();
-		
+		//вывожу список жилых комплексов для вывода
 		foreach ($residenceList as $key=>$value)
 		{
 			$residence=new Residence(Arr::get($value, 'ID'));
 			$selectList[Arr::get($value, 'ID')]=iconv('windows-1251','UTF-8', $residence->name);
 			
 		}
-		
-		//echo Debug::vars('44', $selectList, $parking->parent);
 		echo 'Жилой комплекс: '.Form::select('parent', $selectList, $parking->parent);
-		//echo __('parent').' '.Form::input('parent', $parking->parent).'<br>';
+
+				?>
+		
+		<table class="table table-striped table-hover table-condensed">
+			<tr>
+				<th>Параметр</th>
+				<th>Значение</th>
+				<th>Прим.</th>
+			</tr>
+			<tr>
+				<td><?php echo __('Активен ');?></td>
+				<td><?php echo Form::checkbox( 'is_active', 1, $parking->is_active == 1, array('disabled'=>'disabled'));?></td>
+			</tr>
+			<tr>
+				<td><?php echo __('Контроль направления проезда');?></td>
+				<td><?php echo Form::checkbox( 'is_apb', 1, $parking->is_apb);?></td>
+			</tr>
+			<tr>
+				<td><?php echo __('Уменьшать счетчик занятых мест при выезде');?></td>
+				<td><?php echo Form::checkbox( 'is_decrementCount', 1, $parking->is_decrementCount);?></td>
+			</tr>
+			<tr>
+				<td><?php echo __('Работа в режиме "Тест"');?></td>
+				<td><?php echo Form::checkbox( 'is_test', 1, $parking->is_test)?></td>
+			</tr><tr>
+				<td><?php echo __('Количество мест (по проектной документации)');?></td>
+				<td><?php echo Form::input('count',  $parking->count);?></td>
+			</tr>
+			
+		</table>
+		<?php
 		echo '<br>';
 		echo __('Дата создания'). ' '. $parking->created.'<br>';
-		echo __('Количество мест'). ' '.Form::input('count',  $parking->count).'<br>';
+		echo __('Количество мест'). ' '.$parking->count.'<br>';
 		
 		?>
 			<?php

@@ -232,6 +232,7 @@ class Controller_ParkingPlace extends Controller_Template { // класс опи
 					$_entity->count=Arr::get($_data, 'count');
 					$_entity->is_apb=Arr::get($_data, 'is_apb');
 					$_entity->is_test=Arr::get($_data, 'is_test');
+					$_entity->is_decrementCount=Arr::get($_data, 'is_decrementCount');
 					
 					if(is_null(Arr::get($_data, 'is_active'))) $_entity->is_active=0;
 					

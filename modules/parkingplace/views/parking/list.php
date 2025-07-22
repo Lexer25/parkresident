@@ -30,9 +30,10 @@ echo Form::open('ParkingPlace/control');
 			<th><?echo __('ID парковочной площадки');?></th>
 			<th><?echo __('Название парковочной площадки');?></th>
 			<th><?echo __('Жилокй комплекс');?></th>
-			<th><?echo __('Количество машиномест');?></th>
+			<th><?echo __('Количество машиномест по документации');?></th>
 			<th><?echo __('Зарегистрировано машиномест');?></th>
 			<th><?echo __('Контроль направления проезда');?></th>
+			<th><?echo __('decrement_place_count');?></th>
 			<th><?echo __('Работа в режиме "Тест"');?></th>
 			
 		</tr>
@@ -51,22 +52,11 @@ echo Form::open('ParkingPlace/control');
 			
 			$parkingPlace=new Parking(Arr::get($value, 'ID'));
 			echo '<tr>';
-				//if($i==0) echo '<td>'.Debug::vars('53', $parkingPlace).' '.Form::radio('id', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
+			//echo Debug::vars('55', $parkingPlace);
 				if($i==0) echo '<td>'.Form::radio('id', Arr::get($value,'ID'), FALSE, array('checked'=>$checked)).'</td>';
 				if($i>0) echo '<td>'.Form::radio('id', Arr::get($value,'ID'), FALSE).'</td>';
 				echo '<td>'.$parkingPlace->id.'</td>';
 				echo '<td>'. HTML::anchor('place/list/'.Arr::get($value,'ID'), iconv('windows-1251','UTF-8', $parkingPlace->name)).'</td>';
-				/* echo '<td>';
-					echo iconv('windows-1251','UTF-8', $parkingPlace->name);
-					echo ' ';
-					echo HTML::anchor('place/list/'.Arr::get($value,'ID'), 'List');
-					echo ' ';
-					echo HTML::anchor('place/matrix/'.Arr::get($value,'ID'), 'Matrix');
-					
-				echo '</td>'; */
-				//echo '<td>'.$parkingPlace->is_active.'</td>';
-				//echo '<td>'.$parkingPlace->created.'</td>';
-				//echo '<td>'.$parkingPlace->modify.'</td>';
 				$_residence=new Residence($parkingPlace->parent);
 				echo '<td>'.iconv('windows-1251','UTF-8', $_residence->name).'</td>';
 				echo '<td>'.$parkingPlace->count.'</td>';
@@ -74,6 +64,7 @@ echo Form::open('ParkingPlace/control');
 				$placeList=Model::factory('Place')->getChild($parkingPlace->id);
 				echo '<td>'.count($placeList).'</td>';
 				echo '<td>'.Form::checkbox( 'is_apb', 1, $parkingPlace->is_apb == $parkingPlace->id, array('disabled'=>'disabled')) .'</td>';
+				echo '<td>'.Form::checkbox( 'is_decrementCount', 1, $parkingPlace->is_decrementCount == $parkingPlace->id, array('disabled'=>'disabled')) .'</td>';
 				echo '<td>'.Form::checkbox( 'is_test', 1, $parkingPlace->is_test == $parkingPlace->id, array('disabled'=>'disabled')) .'</td>';
 				
 				

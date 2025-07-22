@@ -130,8 +130,12 @@ class Setting
 		$sql='select count(*) from hl_setting hls
 			where hls.name=\''.$name.'\'';
 
-		if(DB::query(Database::INSERT, iconv('UTF-8', 'CP1251',$sql))
-				->execute(Database::instance('fb')))
+		$ccount=DB::query(Database::SELECT, iconv('UTF-8', 'CP1251',$sql))
+				->execute(Database::instance('fb'))
+				->get('COUNT');
+		
+		if($ccount>0)
+				
 				{//ключ есть в базе данных. надо просто обновить.
 			//	echo Debug::vars('135');exit;
 					switch($type){
@@ -145,14 +149,14 @@ class Setting
 						break;
 						case 'str':
 						$sql=__('update hl_setting hls
-									set hls.value_str=:value 
+									set hls.value_str=\':value\' 
 									where hls.name=\':NAME\'', array(
 									':NAME'=>$name,
 									':value'=>$value
 								)); 
 						break;
 					}
-					//echo Debug::vars('179', $sql);exit;
+					echo Debug::vars('179', $sql);exit;
 						try
 							{
 								$query = DB::query(Database::UPDATE, iconv('UTF-8', 'CP1251',$sql))

@@ -27,10 +27,12 @@ class Parking
 	public $count;//количество машиномест
 	public $is_apb=false;//контроль направления проезда
 	public $is_test=false;//режим работы ТЕСТ (т.е. пропускает всех)
+	public $is_decrementCount=false;//режим работы ТЕСТ (т.е. пропускает всех)
 	
 	
 	private $is_apb_mask=0;//маска бита apb
 	private $is_test_mask=1;//маска бита test
+	private $is_decrementCount_mask=2;//маска бита is_decrementCount_mask - уменьшать счетчик при выезде ГРЗ, которого нет на парковке
 
 	
 	
@@ -47,7 +49,11 @@ class Parking
 			
 		$sql='select hlr.id, hlr.name, hlr.enabled, hlr.created, hlr.modify, hlr.parent, hlr.maxcount, coalesce(hlr.mode, 0) as mode from hl_parking hlr
 			where hlr.id ='.$this->id;
-			
+		
+			$sql2='select hlr.id, hlr.name, hlr.enabled, hlr.created, hlr.modify, hlr.parent, coalesce(hlr.mode, 0) as mode , count(hlp.id) from hl_parking hlr
+			join hl_place hlp on hlp.id_parking=hlr.id
+						where hlr.id ='.$this->id.'
+            group by  hlr.id, hlr.name, hlr.enabled, hlr.created, hlr.modify, hlr.parent , mode';		
 			
 		//echo Debug::vars('30', $sql);exit;
 		try
@@ -62,6 +68,7 @@ class Parking
 			$this->parent=Arr::get($query, 'PARENT');
 			$this->count=Arr::get($query, 'MAXCOUNT');
 			$this->is_apb=$this->isBitSet(Arr::get($query, 'MODE'), $this->is_apb_mask);
+			$this->is_decrementCount=$this->isBitSet(Arr::get($query, 'MODE'), $this->is_decrementCount_mask);
 			$this->is_test=$this->isBitSet(Arr::get($query, 'MODE'), $this->is_test_mask);
 			//$this->is_test=Arr::get($query, 'IS_TEST');
 			
@@ -113,7 +120,7 @@ class Parking
 		//Получаю текущее значение MODE
 		$mode=0;
 		$sql='select coalesce(hlr.mode, 0) as mode from hl_parking hlr
-            where hlr.id =4';
+            where hlr.id ='.$this->id;
 		$mode = DB::query(Database::SELECT, $sql)
 				->execute(Database::instance('fb'))
 				->get('MODE')
@@ -134,6 +141,16 @@ class Parking
 		} else {
 			$mode=$this->clearBit($mode, $this->is_test_mask);
 		}
+		
+		if(filter_var($this->is_decrementCount, FILTER_VALIDATE_BOOLEAN))
+		{
+			
+			$mode=$this->setBit($mode, $this->is_decrementCount_mask);
+		} else {
+			$mode=$this->clearBit($mode, $this->is_decrementCount_mask);
+		}
+		
+		
 		//echo Debug::vars('137', $this, $mode);exit;
 		
 		$sql='UPDATE HL_PARKING
@@ -143,7 +160,7 @@ class Parking
 				MAXCOUNT = '.$this->count.',
 				MODE='.$mode.'
 			WHERE (ID = '.$this->id.')';
-		Log::instance()->add(Log::DEBUG, 'Line 101 '. $sql);
+		//Log::instance()->add(Log::DEBUG, 'Line 101 '. $sql);
 		//echo Debug::vars('147', $sql); exit;
 		try
 			{
