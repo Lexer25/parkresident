@@ -1,22 +1,21 @@
     <?php defined('SYSPATH') or die('No direct script access.');
  
-    class Task_CheckDubleIdUHF extends Minion_Task {
+    class Task_CheckUhfExit31 extends Minion_Task {
 		/**
 		
 		Тест для имитации обработки быстро пришедших идентификаторов.
-		номер идентификатора надо передавать в десятичной форме.
-		C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=123456
+		C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckUhfExit31
 		
 		*/
 		
 		    protected $_options = array(
         // param name => default value
-        'cam'   => 3,
+        'cam'   => 6,//'это камера выезда
         'grz'   => 'A005BB177',
-        'key'   => '50500505',
-        //'key'   => '8696164',
-        'ip'   => '172.16.101.105',
-        'ch'   => 1,
+     //   'key'   => '50500505',
+        'key'   => '8696164',
+        'ip'   => '172.16.101.105',//шкаф выезда
+        'ch'   => 0,
   
 		);
 	

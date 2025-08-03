@@ -260,62 +260,6 @@ class Events
 			}
 	}
 	
-	/*
-	26.08.2023
-	Изменение данных для указанного id
-	*/
-	public function update()
-	{
-		//echo Debug::vars('36', $this->name, $this->standalone);
-		
-		$sql='UPDATE TABLE
-				SET NAME = \''.$this->name.'\',
-				STANDALONE = '.$this->standalone.'
-			WHERE (ID_DEVTYPE = '.$this->id.') AND (ID_DB = 1)';
-		Log::instance()->add(Log::DEBUG, 'Line 101 '. $sql);
-		//echo Debug::vars('65', $sql); exit;
-		try
-			{
-			$query = DB::query(Database::UPDATE, iconv('UTF-8', 'CP1251',$sql))
-			->execute(Database::instance('fb'));
-			
-			$this->result=$this->result_ok;
-			$this->edesc=$this->id;
-			
-			} catch (Exception $e) {
-				Log::instance()->add(Log::DEBUG, 'Line 112 '. $e->getMessage());
-				$this->result=$this->result_err;
-				$this->edesc=$e->getMessage();				
-			}
-	}
-	
-	
-	/*
-	26.08.2023
-	Удаление данных для указанного id
-	*/
-	public function delete()
-	{
-		//echo Debug::vars('36', $this->name, $this->standalone);
-		
-		$sql='delete from ...';
-		Log::instance()->add(Log::DEBUG, 'Line 72 '. $sql);
-		//echo Debug::vars('65', $sql); exit;
-		try
-			{
-			$query = DB::query(Database::DELETE, iconv('UTF-8', 'CP1251',$sql))
-			->execute(Database::instance('fb'));
-			
-			$this->result=$this->result_ok;
-			$this->edesc=$this->id;
-			
-			} catch (Exception $e) {
-				Log::instance()->add(Log::DEBUG, 'Line 139 '. $e->getMessage());
-				$this->result=$this->result_err;
-				$this->edesc=$e->getMessage();				
-			}
-	}
-	
-	
+
    
 }

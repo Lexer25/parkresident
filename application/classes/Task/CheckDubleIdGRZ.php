@@ -4,7 +4,7 @@
 		/**
 		
 		Тест для имитации обработки быстро пришедших идентификаторов.
-		C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ
+		C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=A000AA00
 		
 		*/
 		

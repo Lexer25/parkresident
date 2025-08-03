@@ -156,7 +156,7 @@ class Setting
 								)); 
 						break;
 					}
-					echo Debug::vars('179', $sql);exit;
+					//echo Debug::vars('159', $sql);exit;
 						try
 							{
 								$query = DB::query(Database::UPDATE, iconv('UTF-8', 'CP1251',$sql))
