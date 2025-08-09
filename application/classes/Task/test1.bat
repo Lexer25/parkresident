@@ -1,50 +1,3 @@
-rem "очищаю" гараж
-rem тест 1-1: оба идентификатора принадлежа одному автомобилю. Перый идет UHF, затем ГРЗ. Ожидаю в таблице только один UHF
-REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF
-REM ping localhost -n 1 > null
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ
-
-rem тест 1-2: оба идентификатора принадлежа одному автомобилю. Перый идет ГРЗ, затем UHF. ОЖидаю в таблице ГРЗ
-REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ
-REM ping localhost -n 1 > null				
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF	
-
-rem тест 1-3: оба идентификатора принадлежат одному автомобилю. Перый идет ГРЗ, затем UHF. ГРЗ уже на парковке. Ожидаю Повторный въезд, в таблице будет ГРЗ
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ
-REM ping localhost -n 1 > null				
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF	
-
-
-rem тест 1-4: оба идентификатора принадлежа одному автомобилю. Перый идет UHF, затем ГРЗ. ГРЗ уже на парковке. Ожидаю Повторный въезд, в таблице будет UHF
-			
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=50500505	
-REM ping localhost -n 1 > null	
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ
-
-rem ==================== идентификаторы действительный и недействительный
-rem оба идентификатора чужие. Ожидаю: события о неизвестных идентификаторов.
-rem test 2-0
-REM set key=123456
-REM set grz=A111AA99
-REM echo test 2-0
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key%	
-REM ping localhost -n 1 > null	
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
-
-rem test 2-1 сперва неизвестный UHF,  затем известный ГРЗ. Ожидаю ГРЗ на парковке
-REM set key=123456
-REM set grz=D014DD71
-REM echo test 2-1
-rem очищаю гаража
-REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key%	
-REM ping localhost -n 1 > null	
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
-
-
-rem test 2-2 сперва неизвестный ГРЗ,  затем известный UHF. Ожидаю ГРЗ на парковке
 set key=123456
 set grz=D213DD71
 
@@ -56,24 +9,106 @@ set key005=50500505
 
 set keyT=11223344
 
+rem C:\xampp\php\php.exe c:\xampp\htdocs\cvs\modules\minion\minion --task=eventInsert --id=100
+rem "очищаю" гараж
+rem тест 1-1: оба идентификатора принадлежа одному автомобилю. Перый идет UHF, затем ГРЗ. Ожидаю в таблице только один UHF, заянто только одно место.
+REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%	--ch=1
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz014% --cam=3
+
+rem тест 1-2: оба идентификатора принадлежа одному автомобилю. Перый идет ГРЗ, затем UHF. ОЖидаю в таблице ГРЗ, т.к. он был первым, занято одно место.
+REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz014% --cam=3
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%	--ch=1
+
+rem тест 1-3: оба идентификатора принадлежат одному автомобилю. Перый идет ГРЗ, затем UHF. ГРЗ уже на парковке. Ожидаю событие Повторный въезд, в таблице будет ГРЗ
+REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%	--ch=1
+REM ping localhost -n 8
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz014% --cam=3
+rem ping localhost -n 1			
+rem start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF  --key=%key014%	--ch=1	
+
+
+rem тест 1-4: оба идентификатора принадлежа одному автомобилю. Перый идет UHF, затем ГРЗ. ГРЗ уже на парковке. Ожидаю Повторный въезд, в таблице будет UHF
+			
+REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz014% --cam=3
+REM ping localhost -n 8
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%	--ch=1
+
+rem ==================== идентификаторы действительный и недействительный
+rem оба идентификатора чужие. Ожидаю: события о неизвестных идентификаторов.
+rem test 2-0
+REM set key=123456
+REM set grz=A111AA99
+REM echo test 2-0
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key%	
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
+
+
+REM echo test 2-0-0 Поток неизвестных идентификаторов. Сначало ожидаю событие Неизвестная карта, а затем отказ из-за повторов
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key%	
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key%	
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key%	
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key%	
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key%	
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key%	
+REM ping localhost -n 1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
+REM ping localhost -n 1
+
+
+
+
+rem test 2-1 сперва неизвестный UHF,  затем известный ГРЗ. Ожидаю ГРЗ на парковке
+
+REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz014% --cam=3
+REM ping localhost -n 8
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key%	--ch=1
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz014% --cam=3
+
+
+
 rem тест 2-3. Два разных валидных UHF . Первый 014, затем 005. Ожидаю в списке 014.
 REM echo test 2-3
 rem очищаю гаража
 REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
 REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%	
-REM ping localhost -n 1 > null	
+REM ping localhost -n 2
 REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key005%
+REM ping localhost -n 2
 REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
 
 
 rem тест 2-4. Два разных валидных UHF . Первый 005, затем 014. Ожидаю в списке 005.
 REM echo test 2-4
 rem очищаю гаража
-REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key005%	
-REM ping localhost -n 1 > null	
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%
-rem start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
+C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
+start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key005%	
+ping localhost -n 2
+start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%
+ping localhost -n 2
+start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
 
 rem ============ имитация последовательного проезда =====================
 rem test 2-4 последовательный проезд одного и того же UHF на въезд и последующий выезд через ворота 3.1 Отказ в обработке повторного идентификатора
@@ -107,12 +142,12 @@ REM echo test 4-0
 
 REM ch=1 - въезд
 REM ch=0 - выезд
-C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
-start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%	--ch=1
-ping localhost -n 1 > null
-start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key005%	--ch=1
-ping localhost -n 1 > null
-start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%keyT%	--ch=1
+rem C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
+rem start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%	--ch=1
+REM ping localhost -n 1 > null
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key005%	--ch=1
+REM ping localhost -n 1 > null
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%keyT%	--ch=1
 
 
 rem ============================Счетчики тест серии 5 ==========================

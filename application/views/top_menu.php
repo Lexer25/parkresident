@@ -28,8 +28,8 @@
 					<!--<li <?php if (Arr::get($_SESSION,'menu_active')=='grztest') echo 'class="active"';?>><?php  echo  HTML::anchor('grz/test', __('grztest')); ?></li> -->
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='Checkdb/index') echo 'class="active"';;?>><?php  if(Kohana::$config->load('artonitparking_config')->checkdb) echo  HTML::anchor('checkdb', __('checkDB')); ?></li>
 					<li <?php if (Arr::get($_SESSION,'menu_active')=='Rmo/index') echo 'class="active"';;?>><?php // echo  HTML::anchor('emul', __('emul')); ?></li>
-					<li <?php if (Arr::get($_SESSION,'menu_active')=='Emul/grz') echo 'class="active"';?>><?php  echo  HTML::anchor('emul/grz', __('emul2')); ?></li>
-					<li <?php if (Arr::get($_SESSION,'menu_active')=='Wizard/index') echo 'class="active"';?>><?php  echo  HTML::anchor('wizard', __('wizard')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Emul/grz') echo 'class="active"';?>><?php  //echo  HTML::anchor('emul/grz', __('emul2')); ?></li>
+					<li <?php if (Arr::get($_SESSION,'menu_active')=='Wizard/index') echo 'class="active"';?>><?php  echo  HTML::anchor('wizard', __('Настройки')); ?></li>
 					<li ><?php  echo  HTML::anchor('guide/parkresident', __('Инструкция')); ?></li>
 				</ul>
 		<?php
