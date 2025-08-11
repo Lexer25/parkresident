@@ -343,7 +343,7 @@ class Controller_Rubic extends Controller_Template {
 				$this->redirect('rubic/edit_rubic/'.Arr::get($post, 'id_parking', 0));
 				}
 				else {
-					echo Debug::vars('318', $post->errors('Valid_mess')); exit;	
+					//echo Debug::vars('318', $post->errors('Valid_mess')); exit;	
 				}
 				$this->redirect('rubic/edit_rubic/'.$id_rubic);
 		

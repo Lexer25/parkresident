@@ -66,16 +66,7 @@
 								echo '<td>'.Form::button('cvs', 'Сохранить').'</td>';
 							 echo Form::close();	
                         echo '</tr>';
-						echo '<tr>';
-							echo '<td>'.++$i.'</td>';
-							echo '<td>Т2 Время блокировки ворот от повторных номеров delayGateRead (сек)</td>';
-							echo Form::open('wizard/cvs');
-								echo Form::hidden('type', 'int');
-								echo Form::hidden('name', 'delayGateRead');
-								echo '<td>'.Form::input('value',$setting->get('delayGateRead')).'</td>';
-								echo '<td>'.Form::button('cvs', 'Сохранить').'</td>';
-							 echo Form::close();	
-                        echo '</tr>';
+						
 						echo '<tr>';
 							echo '<td>'.++$i.'</td>';
 							echo '<td>Т3 Время блокировки второй проезд через ревесивные ворота delayReversRepeat. (сек)</td>';

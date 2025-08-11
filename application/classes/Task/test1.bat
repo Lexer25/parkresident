@@ -89,26 +89,26 @@ REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minio
 
 
 
-rem тест 2-3. Два разных валидных UHF . Первый 014, затем 005. Ожидаю в списке 014.
+rem тест 2-3. Два разных валидных UHF . Первый 014, затем 005. Ожидаю в списке только один, 014 (т.к. он первый).
 REM echo test 2-3
 rem очищаю гаража
-REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%	
-REM ping localhost -n 2
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key005%
-REM ping localhost -n 2
-REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
+C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
+start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%	
+ping localhost -n 2
+start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key005%
+ping localhost -n 2
+start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
 
 
 rem тест 2-4. Два разных валидных UHF . Первый 005, затем 014. Ожидаю в списке 005.
 REM echo test 2-4
 rem очищаю гаража
-C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
-start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key005%	
-ping localhost -n 2
-start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%
-ping localhost -n 2
-start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
+REM C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=clearGarage id=3
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key005%	
+REM ping localhost -n 2
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdUHF --key=%key014%
+REM ping localhost -n 2
+REM start C:\xampp\php\php.exe c:\xampp\htdocs\parkresident\modules\minion\minion --task=CheckDubleIdGRZ --grz=%grz%
 
 rem ============ имитация последовательного проезда =====================
 rem test 2-4 последовательный проезд одного и того же UHF на въезд и последующий выезд через ворота 3.1 Отказ в обработке повторного идентификатора
