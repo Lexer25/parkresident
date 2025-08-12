@@ -66,10 +66,11 @@ class Controller_events extends Controller {
 		and e.id_event >'.$id;
 		
 		$sql='select  e.id as id_event, e.event_code as id_eventtype, e.event_time as datetime, e.grz as id_card, e.comment, e.id_gate  , hlec.name as eventtype_name ,
-		coalesce(hlp.name, hlp2.name) as device_name,
-		p.surname, p.surname||\' \'|| p.name||\' \'|| p.patronymic as people_name,
-         p.photo, p.post, o.name as organization_name
+        coalesce(hlp.name, hlp2.name) as device_name,
+        p.surname, p.surname||\' \'|| p.name||\' \'|| p.patronymic as people_name,
+         p.photo, p.post, o.name as organization_name, e.is_enter, e.park_card , hlg.name as garage_name
         from hl_events e
+        left join HL_GARAGENAME hlg on hlg.id=e.park_card
         left join hl_eventcode hlec on hlec.id=e.event_code
         left join hl_param hlp on hlp.id=e.id_gate
 		left join hl_param hlp2 on hlp2.id_dev=e.id_gate
@@ -130,9 +131,12 @@ class Controller_events extends Controller {
 				//65 Недейсвительная карта Синий
 				
 				switch($row['ID_EVENTTYPE']){
+					case 14:
+					case 15:
 					case 50:
 						$row['COLOR']=13037766;
 					break;
+					case 10:
 					case 46:
 						$row['COLOR']=13027056;
 					break;
@@ -148,6 +152,31 @@ class Controller_events extends Controller {
 				$style='color: black;background-color: #'.dechex($row['COLOR']).';';
 				$bodyphoto='';
 				if($photo) $bodyphoto='<td id="photo" style="'.$style.'display:none;">'.base64_encode(pack("H*", str_replace("\0", "",$row['PHOTO']))).'</td>';
+				if(is_null($row['IS_ENTER'])) $row['IS_ENTER'] = -1;
+				
+					switch($row['IS_ENTER']){
+					case 1:				
+						{
+								$directionEnter='Въезд';
+								$directionExit='';
+						}		
+					break;
+					case 0:				
+						{
+								$directionEnter='';
+								$directionExit='Выезд';
+						}		
+					break;
+					case -1:				
+						{
+								$directionEnter='-';
+								$directionExit='-';
+						}		
+					break;
+					
+					
+					}
+				
 				
 				$body.='<tr>
 				'.$bodyphoto.'
@@ -155,6 +184,9 @@ class Controller_events extends Controller {
 				<td style="'.$style.'">'.$row['DATETIME'].'</td>
 				<td id="even_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['EVENTTYPE_NAME']).'</td>
 				<td style="'.$style.'">'.$row['ID_CARD'].'</td>
+				<td style="'.$style.'">'.$directionEnter.'</td>
+				<td style="'.$style.'">'.$directionExit.'</td>
+				<td style="'.$style.'">'.iconv('CP1251','UTF-8',$row['GARAGE_NAME']).' ('.$row['PARK_CARD'].')</td>
 				<td id="device_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['DEVICE_NAME']).'</td>
 				<td id="people_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['PEOPLE_NAME']).'</td>
 				<td id="org_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['ORGANIZATION_NAME']).'</td>

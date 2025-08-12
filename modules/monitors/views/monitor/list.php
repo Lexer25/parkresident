@@ -223,7 +223,10 @@ define ('_notAllowed', "HTML::image('images/text_lock.png', array('title' => __(
 					<tr>
 						<th>Время</th>
 						<th>Событие</th>
-						<th>Пропуск</th>
+						<th>UHF/ГРЗ</th>
+						<th>Въезд</th>
+						<th>Выезд</th>
+						<th>Гараж</th>
 						<th>Точка проезда</th>
 						<th>ФИО</th>
 						<th>Организация</th>
