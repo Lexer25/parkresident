@@ -1,21 +1,51 @@
+ <style>
+       
+       .input-container {
+            position: relative;
+            margin-bottom: 40px;
+        }
+        .error {
+            border: 1px solid red;
+        }
+        .tooltip {
+            position: absolute;
+            background-color: #ff4444;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            top: -35px;
+            left: 0;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .tooltip.active {
+            opacity: 1;
+        }
+        .tooltip:after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 10px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #ff4444 transparent transparent transparent;
+        }
+    </style>
 <script>
 function confirmSubmit() {
   return confirm("Необходимо подтверждение операции удаления гаража.");
 }
 </script>
-<?php
-// список гаражей
-//echo Debug::vars('2', $get_stat_garage_place);
-echo Form::open('garage/control');
-?>
-
-<script type="text/javascript">
-     
-  	$(function() {		
+<script>
+	$(function() {		
   		$("#tablesorter").tablesorter();
   	});	
 	
-</script> 
+    </script>
+ 
 <div class="panel panel-primary">
 	  <div class="panel-heading">
 		<h3 class="panel-title"><?php echo __('Регистрация нового гаража');?></h3>
@@ -26,15 +56,76 @@ echo Form::open('garage/control');
 				
 		</div>
 		<?
+		echo Form::open('garage/control');
 		echo __('Регстрация нового гаража');
-		echo Form::input('name', 'Новый гараж5');
-		echo Form::button('todo', 'Зарегистрировать новый гараж---', array('value'=>'add_new_garage','class'=>'btn btn-success', 'type' => 'submit'));	
-		echo Form::close();?>	
+		echo Form::input('name', 'Новый гараж 5');
+		echo Form::hidden('not_count', 0);
+		echo Form::hidden('div_code', '');
+		echo Form::button('todo', 'Зарегистрировать новый гараж', array('value'=>'add_new_garage','class'=>'btn btn-success', 'type' => 'submit'));	
+		echo Form::close();
 		?>	
 
 	  </div>
 
 </div>
+	<div class="panel panel-primary">
+		  <div class="panel-heading">
+			<h3 class="panel-title"><?php echo __('garage_titleAddPlaceArray');?></h3>
+		  </div>
+		  <div class="panel-body">
+			<div id="my-alert" class="alert alert-success alert-dismissible" role="alert">
+					<?php 
+						echo 'Будет добавлено указанное количество гаражей.<br>Уже существующие гаражи изменены НЕ будут!';
+					?>
+					
+					
+			</div>
+			<?
+			echo __('Регистрация гаражей').'<br>';
+			echo Form::open('garage/control', array('id'=>"myForm"));
+			?>
+			<table>
+				<tr>
+					<th>Префикс</th>
+					<th>С какого номера</th>
+					<th>По какой номер</th>
+				</tr>
+				<tr>
+					<td>
+						<?php 
+							echo Form::input('prefix', 'Новый гараж', array('maxlength  '=>200));
+							echo Form::hidden('not_count', 0);
+							echo Form::hidden('div_code', '');
+						?></td>
+					<td>
+						<div class="input-container">
+						<?php echo Form::input('number1','', array('placeholder'=>'С какого номера','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number', 'id'=>'number1', 'name'=>'number1' ));?>
+						<div id="tooltip1" class="tooltip"></div>
+						</div>
+					</td>
+					<td>
+						<div class="input-container">
+						<?php echo Form::input('number2', '', array('placeholder'=>'По какой номер','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number', 'id'=>'number2', 'name'=>'number2'));?>
+						<div id="tooltip2" class="tooltip">Должно быть больше первого числа</div>
+						</div>
+					</td>
+				</tr>
+				</table>
+		<?php
+				
+		
+			
+			
+			echo '<br>';
+			echo Form::button('todo', 'Зарегистрировать новые гаражи', array('value'=>'addarray','class'=>'btn btn-success', 'type' => 'submit'));	
+			
+			echo Form::close();
+			
+			?>	
+
+		  </div>
+
+	</div>
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
@@ -187,20 +278,80 @@ echo Form::open('garage/control');
 		<nav class="navbar navbar-default navbar-fixed-bottom disable" role="navigation">
   <div class="container">
 
-		<?php
-			//echo Form::button('todo', Kohana::message('rubic','rubic_edit'), array('value'=>'edit_garage','class'=>'btn btn-success', 'type' => 'submit'));	
-			//echo Form::button('todo', Kohana::message('rubic','rubic_del'), array('value'=>'del_garage','class'=>'btn btn-danger', 'type' => 'submit', 'onclick'=>'return confirm(\''.__('delete').'?\') ? true : false;'));
-		?>
 	
 	</div>
 </nav>
 		
 </div>
 </div>
-
-
-
-<?php echo Form::close();?>
+ <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const number1 = document.getElementById('number1');
+            const number2 = document.getElementById('number2');
+            const tooltip1 = document.getElementById('tooltip1');
+            const tooltip2 = document.getElementById('tooltip2');
+            const form = document.getElementById('myForm');
+            
+            function showTooltip(tooltip) {
+                tooltip.classList.add('active');
+            }
+            
+            function hideTooltip(tooltip) {
+                tooltip.classList.remove('active');
+            }
+            
+            function validateNumbers() {
+                const value1 = parseFloat(number1.value);
+                const value2 = parseFloat(number2.value);
+                
+                if (isNaN(value1) || isNaN(value2)) {
+                    hideTooltip(tooltip1);
+                    hideTooltip(tooltip2);
+                    number1.classList.remove('error');
+                    number2.classList.remove('error');
+                    return true;
+                }
+                
+                if (value1 >= value2) {
+                    showTooltip(tooltip1);
+                    showTooltip(tooltip2);
+                    number1.classList.add('error');
+                    number2.classList.add('error');
+                    return false;
+                } else {
+                    hideTooltip(tooltip1);
+                    hideTooltip(tooltip2);
+                    number1.classList.remove('error');
+                    number2.classList.remove('error');
+                    return true;
+                }
+            }
+            
+            // Проверка при изменении значений
+            number1.addEventListener('input', validateNumbers);
+            number2.addEventListener('input', validateNumbers);
+            
+            // Показываем tooltip при фокусе, если есть ошибка
+            number1.addEventListener('focus', function() {
+                if (number1.classList.contains('error')) {
+                    showTooltip(tooltip1);
+                }
+            });
+            
+            number2.addEventListener('focus', function() {
+                if (number2.classList.contains('error')) {
+                    showTooltip(tooltip2);
+                }
+            });
+            
+            // Проверка при отправке формы
+            form.addEventListener('submit', function(e) {
+                if (!validateNumbers()) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 	
   
 

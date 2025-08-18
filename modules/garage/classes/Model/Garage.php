@@ -615,20 +615,42 @@ class Model_Garage extends Model {
 	}
 	
 	
-	
+	/**добавление гаража
+	* @input $data - массив с параметрами для вставки
+	* @output  - id добавленного гараже если успешно либо -1 если неуспешно
+	*/
 	
 	public function add_garage($data) //добавление гаража
 	{
+		//INSERT INTO HL_GARAGENAME (ID,NAME,CREATED,NOT_COUNT,DIV_CODE) VALUES (3,'Гараж Артсек','14-JUL-2025 20:06:19',0,'garage_3');
 		
-		$sql='INSERT INTO HL_GARAGENAME (NAME) VALUES (\''.Arr::get($data,'name').'\')';
-		//echo Debug::vars('815', $sql); exit;
+		$sql = 'SELECT GEN_ID(GEN_HL_GARAGENAME_ID,1) FROM RDB$DATABASE';//тут выбирается генератор таблицы hl_garagename имена гаражей
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->current();
+		$id=$query['GEN_ID'];
+		
+		$sql=__('INSERT INTO HL_GARAGENAME (ID,NAME,NOT_COUNT,DIV_CODE) VALUES (:ID,:NAME,:NOT_COUNT,:DIV_CODE)', array(
+			':ID'=>$id,
+			':NAME'=>'\''.Arr::get($data,'name').'\'',
+			':NOT_COUNT'=>Arr::get($data, 'not_count', 0),
+			':DIV_CODE'=>Arr::get($data, 'not_count', '\'divcode_'.$id.'\''),
+			
+			));
+		// echo Debug::vars('815',$id); 
+		// echo Debug::vars('815-1',$data);
+		// echo Debug::vars('815-11',Arr::get($data, 'not_count', 0));
+		// echo Debug::vars('815-12',Arr::get($data, 'not_count', '\'divcode_'.$id.'\''));
+		// echo Debug::vars('815-2', $sql); exit;
 		try
 				{
 				$query = DB::query(Database::INSERT, iconv('UTF-8','windows-1251',$sql))
 				->execute(Database::instance('fb'));
+				return $id;
 				} catch (Exception $e) {
+					return -1;
 				}
-		return;
+		
 	}
 	
 	public function get_garage_info($id_garage) //информация о гараже
@@ -674,8 +696,8 @@ class Model_Garage extends Model {
 	{
 		
 		$sql='select hlg.id_garagename from HL_PLACE hlp
-join hl_garage hlg on hlg.id_place=hlp.id
-where hlp.placenumber='.$num_place;
+		join hl_garage hlg on hlg.id_place=hlp.id
+		where hlp.placenumber='.$num_place;
 		//echo Debug::vars('815', $sql); exit;
 		$res=array();
 		$query = DB::query(Database::SELECT, $sql)
@@ -684,6 +706,23 @@ where hlp.placenumber='.$num_place;
 		
 		
 		return $query;
+	}
+	
+	
+	/**18.08.2025 проверить название гаража на уникальность
+	* true - название гаража уже имеется,
+	* false - название гаража нет
+	*/
+	public  static function checkNameIsUnique($name) //проверка указанного имени
+	{
+		
+		$sql='select hlg.id  from hl_garagename hlg
+		where hlg.name=\''.$name.'\'';
+		Log::instance()->add(Log::DEBUG, '721 '.iconv('UTF-8', 'CP1251',$sql));
+		return !( DB::query(Database::SELECT, iconv('UTF-8', 'CP1251',$sql))
+			->execute(Database::instance('fb'))
+			->get('ID') >0);
+			
 	}
 	
 	

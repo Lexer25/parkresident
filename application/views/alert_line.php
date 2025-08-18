@@ -1,5 +1,5 @@
 <?php
-		//echo Debug::vars('2', $_SESSION);
+		//echo Debug::vars('2', $_SESSION); //exit;
 		$e_mess=Validation::Factory(Session::instance()->as_array())
 				->rule('e_mess','is_array')
 				->rule('e_mess','not_empty')
@@ -14,7 +14,7 @@
 				$param.=$value.'<br>';
 			}
 			?>
-			<div id="my-alert" class="alert alert-danger alert-dismissible" role="alert">
+			<div id="my-alert_err" class="alert alert-danger alert-dismissible" role="alert">
 				<?php 
 					echo $param;
 				?>
@@ -37,14 +37,15 @@
 				;
 		if($ok_mess->check())
 		{
-	
 			$param='Команда выполнена успешно<br>';
+			//echo Debug::vars('41', Arr::get($ok_mess, 'ok_mess'));//exit;
 			foreach(Arr::get($ok_mess, 'ok_mess') as $key=>$value)
 			{
+				//echo Debug::vars('44', $key, $value);exit;
 				$param.=$value.'<br>';
 			}
 			?>
-			<div id="my-alert" class="alert alert-success alert-dismissible" role="alert">
+			<div id="my-alert_ok" class="alert alert-success alert-dismissible" role="alert">
 				<?php 
 					echo $param;
 				?>
@@ -62,10 +63,18 @@
 		}
 		Session::instance()->delete('ok_mess');
 		?>
-		<script>
+<script>
     $(function(){
         window.setTimeout(function(){
-            $('#my-alert').alert('close');
+            $('#my-alert_err').alert('close');
         },5000);
     });
 </script>
+<script>
+    $(function(){
+        window.setTimeout(function(){
+            $('#my-alert_ok').alert('close');
+        },5000);
+    });
+</script>
+

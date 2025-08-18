@@ -148,27 +148,69 @@ class Controller_Garage extends Controller_Template {
 					
 			break;
 	
-			
-			case 'add_garage'://добавление нового гаража
-				//echo Debug::vars('671', $_GET, $_POST); exit;
+			/**18.05.2025
+			*/
+			case 'addarray'://добавление массива гаражей
+				//echo Debug::vars('154', $_GET, $_POST); exit;
 							
+					$result_ok=array();
+					$result_err=array();
 					$post=Validation::factory($this->request->post());
-					
-					$post->rule('name', 'not_empty')
+						$post->rule('prefix', 'not_empty')
+							->rule('number1', 'digit')
+							->rule('number2', 'digit')
 							;
 					if($post->check())
 					{
-						//echo Debug::vars('415', 'valid OK'); exit;
-						Model::factory('garage')->add_garage($post);
+						//echo Debug::vars('163', 'valid OK'); exit;
+						$garage=Model::factory('garage');
+						//организую цикл для каждого номера гаража
+						for($i=Arr::get($post, 'number1');$i<=Arr::get($post, 'number2');$i++)
+						{
+							//формирую массив для регистрации гаража
+							
+							$_data=array(
+								'name'=>$name=Arr::get($post, 'prefix').$i,
+							);
+							
+							Log::instance()->add(Log::DEBUG, '171 '.Debug::vars($_data));
+							//проверяю данные для регистрации на уникальность имени
+							$data=Validation::factory($_data);
+								$data->rule('name', 'not_empty')
+								->rule('name', 'Model_garage::checkNameIsUnique')
+							;
+							if($data->check())
+							{
+								//echo Debug::vars('233', 'valid OK'); exit;
+								
+								$result_ok[] = __('Гараж ":name добавлен успешно под id :id".', array(':name'=>$name, ':id'=>Model::factory('garage')->add_garage($data)));
+																
+							} else 
+							{
+								//echo Debug::vars('241', 'valid ERR'); exit;
+								Log::instance()->add(Log::ERROR, $post->errors('garage_Valid_mess'));
+								//Session::instance()->set('e_mess', $post->errors('garage_Valid_mess'));
+								//$this->redirect('garage');
+								$result_err[] = Arr::get($data->errors('garage_Valid_mess'), 'name');
+								
+							}
+							
+							
+							
+						}
+						// echo Debug::vars('200-0', $result_ok);
+						// echo Debug::vars('200-1', $result_err);exit;
+						Session::instance()->set('ok_mess', $result_ok);
+						Session::instance()->set('e_mess', $result_err);
 						
-						$this->redirect('rubic/garage');
+						$this->redirect('garage');
 						
 					} else 
 					{
 						//echo Debug::vars('415', 'valid ERR'); exit;
 						Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
 						Session::instance()->set('e_mess', $post->errors('Valid_mess'));
-						$this->redirect('rubic/event');
+						$this->redirect('garage');
 					}
 			break;
 			
@@ -208,20 +250,22 @@ class Controller_Garage extends Controller_Template {
 					$post=Validation::factory($this->request->post());
 					
 					$post->rule('name', 'not_empty')
+						->rule('name', 'Model_garage::checkNameIsUnique')
 							;
 					if($post->check())
 					{
-						//echo Debug::vars('415', 'valid OK'); exit;
-						Model::factory('garage')->add_garage($post);
-						
+						//echo Debug::vars('233', 'valid OK'); exit;
+
+						$result=Model::factory('garage')->add_garage($post);
+						Session::instance()->set('e_mess', array('Успешно 235'=>$result));
 						$this->redirect('garage');
 						
 					} else 
 					{
-						//echo Debug::vars('415', 'valid ERR'); exit;
-						Log::instance()->add(Log::ERROR, $post->errors('Valid_mess'));
-						Session::instance()->set('e_mess', $post->errors('Valid_mess'));
-						$this->redirect('rubic/event');
+						//echo Debug::vars('241', 'valid ERR'); exit;
+						Log::instance()->add(Log::ERROR, $post->errors('garage_Valid_mess'));
+						Session::instance()->set('e_mess', $post->errors('garage_Valid_mess'));
+						$this->redirect('garage');
 					}
 			break;
 			
