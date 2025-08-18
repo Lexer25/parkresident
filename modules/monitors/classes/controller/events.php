@@ -68,9 +68,9 @@ class Controller_events extends Controller {
 		$sql='select  e.id as id_event, e.event_code as id_eventtype, e.event_time as datetime, e.grz as id_card, e.comment, e.id_gate  , hlec.name as eventtype_name ,
         coalesce(hlp.name, hlp2.name) as device_name,
         p.surname, p.surname||\' \'|| p.name||\' \'|| p.patronymic as people_name,
-         p.photo, p.post, o.name as organization_name, e.is_enter, e.park_card , hlg.name as garage_name
+         p.photo, p.post, o.name as organization_name, e.is_enter, e.id_garage , hlg.name as garage_name
         from hl_events e
-        left join HL_GARAGENAME hlg on hlg.id=e.park_card
+        left join HL_GARAGENAME hlg on hlg.id=e.id_gate
         left join hl_eventcode hlec on hlec.id=e.event_code
         left join hl_param hlp on hlp.id=e.id_gate
 		left join hl_param hlp2 on hlp2.id_dev=e.id_gate
@@ -80,8 +80,8 @@ class Controller_events extends Controller {
 		where  e.id >'.($id-30);
 		
   
- //Log::instance()->add(Log::DEBUG, 'Line 66.evenrs sql: '. $sql);
- //Log::instance()->add(Log::DEBUG, 'Line 49.select events from : '. $id);
+ Log::instance()->add(Log::DEBUG, 'Line 66.evenrs sql: '. $sql);
+ Log::instance()->add(Log::DEBUG, 'Line 49.select events from : '. $id);
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array();
@@ -177,16 +177,22 @@ class Controller_events extends Controller {
 					
 					}
 				
-				
+				if(is_null($row['ID_GARAGE']))
+				{
+					$garageName='---';
+				} else {
+					
+					$garageName=iconv('CP1251','UTF-8',$row['GARAGE_NAME']).' ('.$row['ID_GARAGE'].')';
+				}
 				$body.='<tr>
 				'.$bodyphoto.'
 				<td id="people_post" style="'.$style.'display:none;">'.iconv('CP1251','UTF-8',$row['POST']).'</td>
 				<td style="'.$style.'">'.$row['DATETIME'].'</td>
-				<td id="even_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['EVENTTYPE_NAME']).'</td>
+				<td id="even_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['EVENTTYPE_NAME']).'('.$row['ID_EVENTTYPE'].')</td>
 				<td style="'.$style.'">'.$row['ID_CARD'].'</td>
 				<td style="'.$style.'">'.$directionEnter.'</td>
 				<td style="'.$style.'">'.$directionExit.'</td>
-				<td style="'.$style.'">'.iconv('CP1251','UTF-8',$row['GARAGE_NAME']).' ('.$row['PARK_CARD'].')</td>
+				<td style="'.$style.'">'.$garageName.'</td>
 				<td id="device_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['DEVICE_NAME']).'</td>
 				<td id="people_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['PEOPLE_NAME']).'</td>
 				<td id="org_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['ORGANIZATION_NAME']).'</td>
