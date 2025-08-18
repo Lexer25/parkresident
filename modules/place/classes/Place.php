@@ -64,6 +64,12 @@ class Place
 		
 		}
 	   } else { // если не указан id, то создаётся пустой экземпляр класса
+		   $sql = 'SELECT GEN_ID(GEN_HL_PLACE_ID,1) FROM RDB$DATABASE';//тут выбирается генератор таблицы hl_garagename имена гаражей
+			$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->current();
+			
+			$this->id=$query['GEN_ID'];
 			
 	   }
 	}
@@ -77,8 +83,9 @@ class Place
 	
 	public function add()
 	{
-		$sql='INSERT INTO HL_place (PLACENUMBER, DESCRIPTION, NOTE, ID_PARKING)
-			values ('.$this->placenumber .', \''.$this->description.'\',\''.$this->note.'\','.$this->id_parking .')';
+		$sql='INSERT INTO HL_place (ID, PLACENUMBER, DESCRIPTION, NOTE, ID_PARKING)
+			values ('.$this->id.','.$this->placenumber .', \''.$this->description.'\',\''.$this->note.'\','.$this->id_parking .')';
+			//echo Debug::vars('88 '.$sql);exit;
 		try
 				{
 				$query = DB::query(Database::INSERT, iconv('UTF-8','windows-1251',$sql))

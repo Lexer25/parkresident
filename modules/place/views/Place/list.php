@@ -34,7 +34,7 @@ $t1=microtime(true);
 						':regPlace'=> Model_ParkingPlace::getCountParking(),
 						':countPlace'=>count($placeList)
 						));
-echo Form::open('place/control');
+
 ?>
 <script type="text/javascript">
      
@@ -64,6 +64,7 @@ echo Form::open('place/control');
 			</div>
 			<?
 			echo __('Регистрация парковочного места').'<br>';
+			echo Form::open('place/control');
 			?>
 			<table>
 				<tr>
@@ -76,13 +77,13 @@ echo Form::open('place/control');
 					<td><?php echo Form::input('placenumber','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number' ));?></td>
 					<td><?php echo Form::input('new_place_name', '', array('placeholder'=>'Комментарий машиноместа','maxlength  '=>205));?></td>
 				</tr>
-				</table>
+			</table>
 		<?php
 				
 			echo '<br>';
 			echo Form::button('todo', 'Зарегистрировать новое машиноместо', array('value'=>'add','class'=>'btn btn-success', 'type' => 'submit'));	
 			echo Form::close();
-			echo Form::open('place/control');
+			
 			?>	
 
 		  </div>
@@ -102,6 +103,7 @@ echo Form::open('place/control');
 			</div>
 			<?
 			echo __('Регистрация парковочного места').'<br>';
+			echo Form::open('place/control');
 			?>
 			<table>
 				<tr>
@@ -117,14 +119,15 @@ echo Form::open('place/control');
 				</table>
 		<?php
 				
-		
+		echo Form::checkbox('makeGarage', 1, false);
+		echo __('Создавать автоматически гараж для каждого машиноместа.');
 			
 			
 			echo '<br>';
 			echo Form::button('todo', 'Зарегистрировать новые машиноместа', array('value'=>'addarray','class'=>'btn btn-success', 'type' => 'submit'));	
 			
 			echo Form::close();
-			echo Form::open('place/control');
+			
 			?>	
 
 		  </div>
@@ -146,9 +149,10 @@ echo Form::open('place/control');
 	<div class="panel-body">
 		<?php
 			echo __('Список машиномест');
+			echo Form::open('place/control');
 			//echo Debug::vars('123', $card_list);
 		?>
-<table id="tablesorter" class="table table-striped table-hover table-condensed tablesorter">
+	<table id="tablesorter" class="table table-striped table-hover table-condensed tablesorter">
 
 	<thead allign="center">
 		<tr>
@@ -172,7 +176,7 @@ echo Form::open('place/control');
 		
 		foreach($place_list as $key=>$value)
 		{
-			$place = new MyClass($value);
+			$place = new MyClass($value);//см описание класса выше
 			
 			//echo Debug::vars('68', $key, $value, $place); exit;
 			
@@ -195,7 +199,7 @@ echo Form::open('place/control');
 					echo '<td>'.$place->placenumber.'</td>';
 					
 				}
-				echo '<td>'.iconv('windows-1251','UTF-8', $place->name). '</td>';
+				//echo '<td>'.iconv('windows-1251','UTF-8', $place->name). '1</td>';
 				echo '<td>'.iconv('windows-1251','UTF-8',$place->description).'</td>';
 				echo '<td>'.iconv('windows-1251','UTF-8',$place->note).'</td>';
 				if($place->id_garage) 
@@ -219,10 +223,14 @@ echo Form::open('place/control');
 		
 	
 
-	
+
 		
 <?php 
 echo 'Time execute='.(microtime(true)-$t1);
+?>
+
+
+<?php
 if(Auth::Instance()->logged_in())
 {
 ?>
@@ -232,28 +240,25 @@ if(Auth::Instance()->logged_in())
 
 				<?php
 					echo Form::button('todo', __('place_edit'), array('value'=>'edit','class'=>'btn btn-success', 'type' => 'submit'));	
-					//echo Form::button('todo', __('place_del'), array('disabled'=>'disabled','value'=>'del','class'=>'btn btn-danger', 'type' => 'submit', 'onclick'=>'return confirm(\''.__('delete').'?\') ? true : false;'));
 					echo Form::button('todo', __('place_del'), array('value'=>'del','class'=>'btn btn-danger', 'type' => 'submit', 'onclick'=>'return confirm(\''.__('delete').'?\') ? true : false;'));
 				?>
 			
 			</div>
 		</nav>
-<?php 
-}
-?>	
-</div>
-</div>
+	<?php 
+	}
+	?>	
+
+
 
 
 
 
 <?php
 	echo Form::close();
-	
-	
-	
 
 ?>
-	
+		</div>
+			</div>
   
 

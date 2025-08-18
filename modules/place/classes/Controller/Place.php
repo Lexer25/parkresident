@@ -193,7 +193,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 							$_list=array(':placenum'=>$pn, ':id_parking'=>Arr::get($_data, 'id_parking'));//набор данных для логирования
 							if(!Model_Place::isPresent_numberPlace($pn, Arr::get($_data, 'id_parking')))
 							{
-								echo Debug::vars('185 начинаю регистрацию', $pn, Arr::get($_data, 'id_parking') );
+								//echo Debug::vars('185 начинаю регистрацию', $pn, Arr::get($_data, 'id_parking') );
 								$entity = new Place();
 								$entity->name='мм_'.$pn;
 								$entity->placenumber=$pn;
@@ -201,21 +201,60 @@ class Controller_Place extends Controller_Template { // класс описыв�
 								$entity->description="auto";
 								$entity->note="auto";
 								$entity->status=0;
-								echo Debug::vars('196', $entity);//exit;
-								Log::instance()->add(Log::DEBUG, 'Line 197 '. '199 Добавляю машиноместо :placenum.', array(':placenum'=>$pn));
+								//echo Debug::vars('196', $entity);//exit;
+								Log::instance()->add(Log::DEBUG, 'Line 197 '. '199 Добавляю машиноместо :placenum.', array(':placenum'=>$entity->id));
 								
 								if ($entity->add())
 								{
 									Log::instance()->add(Log::DEBUG, '203 Машиноместо :placenum добавлено на площадку :id_parking успешно.', $_list);
 									Session::instance()->set('ok_mess', array('ok_mess' => __('Машиноместо :placenum добавлено успешно.', $_list)));
 									
+									//проверка свойства makeGarage. Если оно установлено, то надо и гараж создавать для этого места,
+									//и вписывать это место в гаража
+									
+									//echo Debug::vars('214',$_data, Arr::get($_data, 'makeGarage'));exit;
+									if(!is_null(Arr::get($_data, 'makeGarage')))
+									{
+											$garage=array(
+											'name'=>$name='Garage_'.$pn,
+										);
+									
+										Log::instance()->add(Log::DEBUG, '222 '.Debug::vars($garage));
+										//проверяю данные для регистрации на уникальность имени
+										$data=Validation::factory($garage);
+											$data->rule('name', 'not_empty')
+											->rule('name', 'Model_garage::checkNameIsUnique')
+										;
+										if($data->check())//если уникальность имени обеспечено, то записываю текущее машиноместо в этот вновь созданный гараж.
+										{
+											//echo Debug::vars('233', 'valid OK'); exit;
+											$id_garage=Model::factory('garage')->add_garage($data);
+											$result_ok[] = __('Гараж ":name добавлен успешно под id :id".', array(':name'=>$name, ':id'=>$id_garage));
+											//тут надо добавлять машиноместо $entity->id в гараж $id_garage 
+											$_temp=array('id_garage' => $id_garage,
+												"id_place" => array(
+														$entity->id => $entity->id));
+												Model::factory('garage')->add_place_to_garage($_temp);	//добавил новые машиноместа в новый гараж.		
+																			
+										} else 
+										{
+											echo Debug::vars('241', 'valid ERR'); 
+											echo Debug::vars('241', $data->errors('garage_Valid_mess')); exit;
+											Log::instance()->add(Log::ERROR, $post->errors('garage_Valid_mess'));
+											//Session::instance()->set('e_mess', $post->errors('garage_Valid_mess'));
+											//$this->redirect('garage');
+											$result_err[] = Arr::get($data->errors('garage_Valid_mess'), 'name');
+											
+										}
+									}
 								} else {
+									
 									Log::instance()->add(Log::DEBUG, '207 Машиноместо :placenum НЕ добавлено на площадку :id_parking. Ошибка.', $_list);
 									Session::instance()->set('e_mess', array('err_mess' => __('Машиноместо :placenum НЕ добавлено. Ошибка.', $_list)));
 									
 								}
 							} else {
-								//echo Debug::vars('209 повтор номера', $pn, Arr::get($_data, 'id_parking') );
+								
 								Log::instance()->add(Log::DEBUG, '213 Повтор номера :placenum для площадки :id_parking. Ошибка.', $_list);
 							}
 						}

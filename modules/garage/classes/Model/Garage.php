@@ -299,6 +299,7 @@ class Model_Garage extends Model {
 				$sql='INSERT INTO HL_GARAGE (ID_PLACE, ID_GARAGENAME) 
 				VALUES ('.$value.','.Arr::get($data, 'id_garage').')';
 				//echo Debug::vars('10', $sql, $id_place); exit;
+				Log::instance()->add(Log::DEBUG, '302 добавление машиномест :data в гараж. :sql', array(':data'=>Debug::vars($data), ':sql'=>$sql));
 				try
 				{
 					$query = DB::query(Database::INSERT, $sql)

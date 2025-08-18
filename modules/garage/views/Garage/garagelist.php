@@ -142,6 +142,7 @@ function confirmSubmit() {
 
 	<thead allign="center">
 		<tr>
+			<th><?php echo __('№ п/п');?></th>
 			<th><?php echo __('ID гаража');?></th>
 			<th><?php echo __('Название гаража')?></th>
 			<th><?php echo __('Прим.')?></th>
@@ -161,7 +162,7 @@ function confirmSubmit() {
 		<tbody>
 		<?php 
 		//echo Debug::vars('58', $garageLst); 
-		
+		$i=0;
 		$checked='no';
 		foreach($garageLst as $key=>$value)
 		{
@@ -171,10 +172,8 @@ function confirmSubmit() {
 			
 			echo '<tr>';
 				//номер по порядку
-				echo '<td>'.Arr::get($value,'id_garage');
-				//echo Debug::vars('77', $value);
-					
-					echo '</td>';
+				echo '<td>'.++$i.'</td>';
+				echo '<td>'.Arr::get($value,'id_garage');echo '</td>';
 				
 				
 				echo '<td>'. HTML::anchor('/garage/edit_garage/'.Arr::get($value, 'id_garage'), Arr::get($value, 'name')).'</td>';

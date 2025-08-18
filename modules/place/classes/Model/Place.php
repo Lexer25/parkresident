@@ -180,11 +180,11 @@ class Model_Place extends Model {
 		{
 		//echo Debug::vars('68', $placenumber, $id_parking, Database::instance('fb'));exit; 
 		
-		 echo Debug::vars('181', $placenumber, $id_parking);//exit; 
+		// echo Debug::vars('181', $placenumber, $id_parking);//exit; 
 			$sql='select count(id) as total from hl_place hlp
 					where hlp.placenumber='.$placenumber.'
 					and hlp.id_parking='.$id_parking;
-		echo Debug::vars('184', $sql);//exit;			
+		//echo Debug::vars('184', $sql);//exit;			
 			$total= DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->get('TOTAL');	
