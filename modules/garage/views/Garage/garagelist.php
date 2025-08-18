@@ -1,40 +1,4 @@
- <style>
-       
-       .input-container {
-            position: relative;
-            margin-bottom: 40px;
-        }
-        .error {
-            border: 1px solid red;
-        }
-        .tooltip {
-            position: absolute;
-            background-color: #ff4444;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            top: -35px;
-            left: 0;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-        .tooltip.active {
-            opacity: 1;
-        }
-        .tooltip:after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 10px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #ff4444 transparent transparent transparent;
-        }
-    </style>
-<script>
+ <script>
 function confirmSubmit() {
   return confirm("Необходимо подтверждение операции удаления гаража.");
 }
@@ -283,74 +247,6 @@ function confirmSubmit() {
 		
 </div>
 </div>
- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const number1 = document.getElementById('number1');
-            const number2 = document.getElementById('number2');
-            const tooltip1 = document.getElementById('tooltip1');
-            const tooltip2 = document.getElementById('tooltip2');
-            const form = document.getElementById('myForm');
-            
-            function showTooltip(tooltip) {
-                tooltip.classList.add('active');
-            }
-            
-            function hideTooltip(tooltip) {
-                tooltip.classList.remove('active');
-            }
-            
-            function validateNumbers() {
-                const value1 = parseFloat(number1.value);
-                const value2 = parseFloat(number2.value);
-                
-                if (isNaN(value1) || isNaN(value2)) {
-                    hideTooltip(tooltip1);
-                    hideTooltip(tooltip2);
-                    number1.classList.remove('error');
-                    number2.classList.remove('error');
-                    return true;
-                }
-                
-                if (value1 >= value2) {
-                    showTooltip(tooltip1);
-                    showTooltip(tooltip2);
-                    number1.classList.add('error');
-                    number2.classList.add('error');
-                    return false;
-                } else {
-                    hideTooltip(tooltip1);
-                    hideTooltip(tooltip2);
-                    number1.classList.remove('error');
-                    number2.classList.remove('error');
-                    return true;
-                }
-            }
-            
-            // Проверка при изменении значений
-            number1.addEventListener('input', validateNumbers);
-            number2.addEventListener('input', validateNumbers);
-            
-            // Показываем tooltip при фокусе, если есть ошибка
-            number1.addEventListener('focus', function() {
-                if (number1.classList.contains('error')) {
-                    showTooltip(tooltip1);
-                }
-            });
-            
-            number2.addEventListener('focus', function() {
-                if (number2.classList.contains('error')) {
-                    showTooltip(tooltip2);
-                }
-            });
-            
-            // Проверка при отправке формы
-            form.addEventListener('submit', function(e) {
-                if (!validateNumbers()) {
-                    e.preventDefault();
-                }
-            });
-        });
-    </script>
-	
+ 
   
 

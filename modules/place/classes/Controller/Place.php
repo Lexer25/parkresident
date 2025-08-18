@@ -169,29 +169,30 @@ class Controller_Place extends Controller_Template { // класс описыв�
 					}
 		switch ($todo){
 			
-			case 'addarray'://регистрация нескольких машиномест начиная с placenumberfrom и до placenumberto. Если такой номер уже есть, то пропускаем его.
+			case 'addarray'://регистрация нескольких машиномест начиная с number1 и до number2. Если такой номер уже есть, то пропускаем его.
 				//echo Debug::vars('173',$_POST);exit;
 				$mess_ok=array();
 				$mess_err=array();
 				$_data=Validation::factory($this->request->post());
-				$_data->rule('placenumberfrom', 'not_empty')
-						->rule('placenumberfrom', 'digit')
-						->rule('placenumberto', 'not_empty')
+				$_data->rule('number1', 'not_empty')
+						->rule('number1', 'digit')
+						->rule('number2', 'not_empty')
+						->rule('number2', 'digit')
 						->rule('id_parking', 'digit')
 						->rule('id_parking', 'not_empty')
 						->rule('id_parking', 'digit')
-						->rule('name', 'not_empty')
+						
 						
 							;
 					if($_data->check())
 					{
 					Log::instance()->add(Log::DEBUG, '187 Начинаю добавление машиномест с номера :from по номер :to для паркинга :parking.', 
 								array(
-									':from'=>Arr::get($_data, 'placenumberfrom'),
-									':to'=>Arr::get($_data, 'placenumberto'),
+									':from'=>Arr::get($_data, 'number1'),
+									':to'=>Arr::get($_data, 'number2'),
 									':parking'=>Arr::get($_data, 'id_parking'),
 									));
-						for($pn=Arr::get($_data, 'placenumberfrom'); $pn<=Arr::get($_data, 'placenumberto'); $pn++)
+						for($pn=Arr::get($_data, 'number1'); $pn<=Arr::get($_data, 'number2'); $pn++)
 						{
 							
 							$_list=array(':placenum'=>$pn, ':id_parking'=>Arr::get($_data, 'id_parking'));//набор данных для логирования

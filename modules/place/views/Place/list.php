@@ -108,16 +108,32 @@ $t1=microtime(true);
 					<th>По какой номер</th>
 				</tr>
 				<tr>
-					<td><?php echo Form::select('id_parking', $parkingPlace);?></td>
-					<td><?php echo Form::input('placenumberfrom','', array('placeholder'=>'С какого номера','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number' ));?></td>
-					<td><?php echo Form::input('placenumberto', '', array('placeholder'=>'По какой номер','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number'));?></td>
+					<td>
+						<div class="input-container">
+							<?php echo Form::select('id_parking', $parkingPlace);?></td>
+						</div>
+					<td>
+						<div class="input-container">
+						<?php echo Form::input('number1','', array('placeholder'=>'С какого номера','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number', 'id'=>'number1', 'name'=>'number1' ));?>
+						<div id="tooltip1" class="tooltip"></div>
+						</div>
+					</td>
+					<td>
+						<div class="input-container">
+						<?php echo Form::input('number2', '', array('placeholder'=>'По какой номер','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number', 'id'=>'number2', 'name'=>'number2'));?>
+						<div id="tooltip2" class="tooltip">Должно быть больше первого числа</div>
+						</div>
+					</td>
 				</tr>
 				</table>
 		<?php
 				
-		echo Form::input('name', '',array('placeholder'=>'Название гаража','minlength '=>1,'maxlength  '=>200, 'required'=>'required')).'Название для гаражей<br>';
-		echo Form::checkbox('makeGarage', 1, false);
+		echo Form::checkbox('makeGarage', 1, false, array('onchange'=>"document.getElementById('requiredField').required = this.checked;"));
 		echo __('Создавать автоматически гараж для каждого машиноместа.');
+		echo '<br>';
+		echo Form::input('name', '',array('placeholder'=>'Название гаража','minlength '=>1,'maxlength  '=>200, 'id'=>"requiredField")).'Название для гаражей<br>';
+		
+		
 			
 			
 			echo '<br>';
@@ -257,5 +273,3 @@ if(Auth::Instance()->logged_in())
 ?>
 		</div>
 			</div>
-  
-
