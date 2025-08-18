@@ -171,6 +171,8 @@ class Controller_Place extends Controller_Template { // класс описыв�
 			
 			case 'addarray'://регистрация нескольких машиномест начиная с placenumberfrom и до placenumberto. Если такой номер уже есть, то пропускаем его.
 				//echo Debug::vars('173',$_POST);exit;
+				$mess_ok=array();
+				$mess_err=array();
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('placenumberfrom', 'not_empty')
 						->rule('placenumberfrom', 'digit')
@@ -178,6 +180,8 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						->rule('id_parking', 'digit')
 						->rule('id_parking', 'not_empty')
 						->rule('id_parking', 'digit')
+						->rule('name', 'not_empty')
+						
 							;
 					if($_data->check())
 					{
@@ -207,7 +211,8 @@ class Controller_Place extends Controller_Template { // класс описыв�
 								if ($entity->add())
 								{
 									Log::instance()->add(Log::DEBUG, '203 Машиноместо :placenum добавлено на площадку :id_parking успешно.', $_list);
-									Session::instance()->set('ok_mess', array('ok_mess' => __('Машиноместо :placenum добавлено успешно.', $_list)));
+									$mess_ok[]=__('Машиноместо :placenum на парковку :id_parking добавлено успешно.', $_list);
+									//Session::instance()->set('ok_mess', array('ok_mess' => __('Машиноместо :placenum добавлено успешно.', $_list)));
 									
 									//проверка свойства makeGarage. Если оно установлено, то надо и гараж создавать для этого места,
 									//и вписывать это место в гаража
@@ -215,8 +220,10 @@ class Controller_Place extends Controller_Template { // класс описыв�
 									//echo Debug::vars('214',$_data, Arr::get($_data, 'makeGarage'));exit;
 									if(!is_null(Arr::get($_data, 'makeGarage')))
 									{
+											$name=Arr::get($_data, 'name').'_'.$pn;
+											//массив для формирования гаража
 											$garage=array(
-											'name'=>$name='Garage_'.$pn,
+											'name'=>$name,
 										);
 									
 										Log::instance()->add(Log::DEBUG, '222 '.Debug::vars($garage));
@@ -229,12 +236,13 @@ class Controller_Place extends Controller_Template { // класс описыв�
 										{
 											//echo Debug::vars('233', 'valid OK'); exit;
 											$id_garage=Model::factory('garage')->add_garage($data);
-											$result_ok[] = __('Гараж ":name добавлен успешно под id :id".', array(':name'=>$name, ':id'=>$id_garage));
+											$mess_ok[] = __('Гараж ":name для машиноместа :pn добавлен успешно".', array(':name'=>$name, ':pn'=>$pn));
 											//тут надо добавлять машиноместо $entity->id в гараж $id_garage 
 											$_temp=array('id_garage' => $id_garage,
 												"id_place" => array(
 														$entity->id => $entity->id));
-												Model::factory('garage')->add_place_to_garage($_temp);	//добавил новые машиноместа в новый гараж.		
+												Model::factory('garage')->add_place_to_garage($_temp);	//добавил новые машиноместа в новый гараж.	
+											$mess_ok[] = __('Машиноместа :pn в гараж :name добавлено успешно".', array(':name'=>$name, ':pn'=>$pn));												
 																			
 										} else 
 										{
@@ -243,7 +251,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 											Log::instance()->add(Log::ERROR, $post->errors('garage_Valid_mess'));
 											//Session::instance()->set('e_mess', $post->errors('garage_Valid_mess'));
 											//$this->redirect('garage');
-											$result_err[] = Arr::get($data->errors('garage_Valid_mess'), 'name');
+											$mess_err[] = Arr::get($data->errors('garage_Valid_mess'), 'name');
 											
 										}
 									}
@@ -256,6 +264,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 							} else {
 								
 								Log::instance()->add(Log::DEBUG, '213 Повтор номера :placenum для площадки :id_parking. Ошибка.', $_list);
+								$mess_err[]=__('Машиноместо :placenum уже сущесвтует для площадки :id_parking. Операция прервана.', $_list);
 							}
 						}
 								
@@ -268,7 +277,8 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						Log::instance()->add(Log::DEBUG, Debug::vars($_data->errors('Valid_mess')));
 						
 					}
-					
+				Session::instance()->set('ok_mess', $mess_ok);
+				Session::instance()->set('e_mess',$mess_err);
 				$this->redirect($requestFrom);
 			
 			break;
@@ -338,8 +348,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 						
 					}
-					//$this->redirect('place/list');
-					//echo Debug::vars('213', $id_parking);exit;
+					
 					$this->redirect($requestFrom);
 			break;
 			
