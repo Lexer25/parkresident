@@ -44,33 +44,14 @@ class Controller_events extends Controller {
 		
 		$sqlphoto='';
 		if($photo) $sqlphoto='p.photo,';
-		$sql = 'select e.id_event, e.id_eventtype, e.datetime,  et.color, et.name as eventtype_name, 
-		d.name as device_name, p.surname, p.surname||\' \'|| p.name||\' \'|| p.patronymic as people_name,
-		'.$sqlphoto.' p.post, o.name as organization_name from events e
- join eventtype et on et.id_eventtype=e.id_eventtype
- join device d on e.id_dev=d.id_dev
- left join people p on p.id_pep=e.ess1
- left join organization o on o.id_org=e.ess2
- where  e.id_event > '.$id.'
-  order by e.id_event';
-  
-		$sql='select first 30 e.id_event, e.id_eventtype, e.datetime,  et.color, et.name as eventtype_name,  e.id_card ,
-        d.name as device_name, p.surname, p.surname||\' \'|| p.name||\' \'|| p.patronymic as people_name,
-         '.$sqlphoto.' p.post, o.name as organization_name
-		from device d
-		join events e on e.id_dev=d.id_dev
-		 join eventtype et on et.id_eventtype=e.id_eventtype
-		  left join people p on p.id_pep=e.ess1
-		 left join organization o on o.id_org=e.ess2
-		 where  et.id_eventtype in (46, 50, 65, 81, 145)
-		and e.id_event >'.$id;
+		
 		
 		$sql='select  e.id as id_event, e.event_code as id_eventtype, e.event_time as datetime, e.grz as id_card, e.comment, e.id_gate  , hlec.name as eventtype_name ,
         coalesce(hlp.name, hlp2.name) as device_name,
         p.surname, p.surname||\' \'|| p.name||\' \'|| p.patronymic as people_name,
          p.photo, p.post, o.name as organization_name, e.is_enter, e.id_garage , hlg.name as garage_name
         from hl_events e
-        left join HL_GARAGENAME hlg on hlg.id=e.id_gate
+        left join HL_GARAGENAME hlg on hlg.id=e.id_garage
         left join hl_eventcode hlec on hlec.id=e.event_code
         left join hl_param hlp on hlp.id=e.id_gate
 		left join hl_param hlp2 on hlp2.id_dev=e.id_gate
@@ -79,9 +60,11 @@ class Controller_events extends Controller {
         left join organization o on o.id_org=p.id_org
 		where  e.id >'.($id-30);
 		
+				
+		
   
- Log::instance()->add(Log::DEBUG, 'Line 66.evenrs sql: '. $sql);
- Log::instance()->add(Log::DEBUG, 'Line 49.select events from : '. $id);
+ //Log::instance()->add(Log::DEBUG, 'Line 66.evenrs sql: '. $sql);
+ //Log::instance()->add(Log::DEBUG, 'Line 49.select events from : '. $id);
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array();
@@ -133,6 +116,8 @@ class Controller_events extends Controller {
 				switch($row['ID_EVENTTYPE']){
 					case 14:
 					case 15:
+					case 17:
+					case 18:
 					case 50:
 						$row['COLOR']=13037766;
 					break;
@@ -184,6 +169,7 @@ class Controller_events extends Controller {
 					
 					$garageName=iconv('CP1251','UTF-8',$row['GARAGE_NAME']).' ('.$row['ID_GARAGE'].')';
 				}
+				Log::instance()->add(Log::DEBUG, '205 garageName :garageName', array(':garageName'=>$garageName) );
 				$body.='<tr>
 				'.$bodyphoto.'
 				<td id="people_post" style="'.$style.'display:none;">'.iconv('CP1251','UTF-8',$row['POST']).'</td>
