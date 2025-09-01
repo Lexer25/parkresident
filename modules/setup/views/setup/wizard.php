@@ -18,7 +18,7 @@
 
                 <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title"><?php echo __('Интеграция с CVS');?></h3>
+                <h3 class="panel-title"><?php echo __('Настройка параметров');?></h3>
             </div>
             <div class="panel-body">
 			       <table id="tablesorter_ge3" class="table table-striped table-hover table-condensed tablesorter">
@@ -35,7 +35,7 @@
 					$setting=new Setting();
                     $i=0;
 					
-                        echo '<tr>';
+                      /*   echo '<tr>';
 							echo '<td>'.++$i.'</td>';
 							echo '<td>IP адрес интегратора</td>';
 							echo Form::open('wizard/cvs');
@@ -55,7 +55,7 @@
 								echo '<td>'.Form::button('cvs', 'Сохранить').'</td>';
 							 echo Form::close();	
                         echo '</tr>';
-						
+						 */
 						echo '<tr>';
 							echo '<td>'.++$i.'</td>';
 							echo '<td>Т1 Время блокировки повторного распознавания delay_cvs (сек)</td>';
@@ -88,11 +88,11 @@
 	
 
   <?php
-		/* if (Kohana::find_file('views/setup','viewAccessLevel'))  include Kohana::find_file('views/setup','viewAccessLevel');
+		if (Kohana::find_file('views/setup','viewAccessLevel'))  include Kohana::find_file('views/setup','viewAccessLevel');
 		if (Kohana::find_file('views/setup','viewControlBox'))  include Kohana::find_file('views/setup','viewControlBox');
 		if (Kohana::find_file('views/setup','viewTsList'))  include Kohana::find_file('views/setup','viewTsList');
 		if (Kohana::find_file('views/setup','viewDeviceList'))  include Kohana::find_file('views/setup','viewDeviceList');
-		 */
+		
   ?>
     </div>
 </div>

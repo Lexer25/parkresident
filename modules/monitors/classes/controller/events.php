@@ -169,7 +169,7 @@ class Controller_events extends Controller {
 					
 					$garageName=iconv('CP1251','UTF-8',$row['GARAGE_NAME']).' ('.$row['ID_GARAGE'].')';
 				}
-				Log::instance()->add(Log::DEBUG, '205 garageName :garageName', array(':garageName'=>$garageName) );
+				
 				$body.='<tr>
 				'.$bodyphoto.'
 				<td id="people_post" style="'.$style.'display:none;">'.iconv('CP1251','UTF-8',$row['POST']).'</td>
