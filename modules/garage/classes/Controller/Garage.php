@@ -256,8 +256,14 @@ class Controller_Garage extends Controller_Template {
 					{
 						//echo Debug::vars('233', 'valid OK'); exit;
 
-						$result=Model::factory('garage')->add_garage($post);
-						Session::instance()->set('e_mess', array('Успешно 235'=>$result));
+						if($result = Model::factory('garage')->add_garage($post) >0)
+						{
+							Session::instance()->set('ok_mess', array('Успешно 235'=>$result));
+						} else {
+							Session::instance()->set('e_mess', array('Успешно 235'=>$result));
+							
+						}
+							
 						$this->redirect('garage');
 						
 					} else 
