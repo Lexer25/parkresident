@@ -42,24 +42,22 @@ $(function() {
 		<h3 class="panel-title">
 		<?php
 		
-		//чтение набор фильтров необходимо для того, чтобы в разделе Фильт событий показать ранее выделенные события.
-		/* $arr1=array(3=>3, 4=>4, 5=>5, 6=>6, 46=>46, 50=>50, 65=>65);
-		$arr2=array(46=>46, 50=>50, 65=>65,3=>3, 4=>4, 5=>5, 6=>6,  81=>81);
-		
-		echo Debug::vars('46', array_diff($arr2, $arr1)); exit; */
-		$event_income_filter=unserialize(Cookie::get('id_event_filter', null));
+	
+		$_event_income_filter=Cookie::get('id_event_filter', FALSE);//читаю ранее сохранный фильтр выбранных событий
 		
 		
-		//if((count($event_income_filter) == 8) or (is_null($event_income_filter)))
-		if((count($event_income_filter) == 8) or (is_null(Cookie::get('id_event_filter', null))))//если в фильтре всего 8 событий, или если фильта вообще нет, то показываю все события.
+		if(!$_event_income_filter)//если фильта вообще нет, то показываю все события.
 		{
 			echo 'Фильтр событий. Показаны все события.';
-			$event_income_filter=array(3=>3, 4=>4, 5=>5, 6=>6, 46=>46, 50=>50, 65=>65, 81=>81);
+			$event_income_filter=$events_name_list;
+			
+			
 			
 		} else 
 		{
 			echo 'Фильтр событий. Используются фильтры, показаны не все события.';
-			$event_income_filter=unserialize(Cookie::get('id_event_filter', 'no_cookies_0'));
+			$event_income_filter=unserialize($_event_income_filter);
+			
 			
 		}
 		
@@ -82,7 +80,7 @@ $(function() {
 						
 						$i=0;
 						$checked='no';
-						$column=2;// количество колонок в таблице
+						$column=4;// количество колонок в таблице
 						$row= ceil(count($events_name_list)/$column);//количество строк
 						$aaa=array_chunk($events_name_list, $column);//разбиение массива на $column массивов
 						//echo Debug::vars('120', $column, $row); //exit;
@@ -92,7 +90,6 @@ $(function() {
 								foreach(Arr::get($aaa, $i) as $key=>$value)
 								{
 									$value=Arr::flatten($value);
-									;// exit;
 									echo '<td>'.Form::checkbox('id_event_filter['.Arr::get($value, 'ID').']', Arr::get($value, 'ID'), (array_key_exists(Arr::get($value, 'ID'), $event_income_filter))? true : false, array('class'=>'checkbox')).iconv('windows-1251','UTF-8', Arr::get($value, 'NAME')).' ('.Arr::get($value, 'ID').')</td>';
 								}
 							echo '</tr>';	

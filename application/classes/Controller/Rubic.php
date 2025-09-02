@@ -343,7 +343,7 @@ class Controller_Rubic extends Controller_Template {
 				$this->redirect('rubic/edit_rubic/'.Arr::get($post, 'id_parking', 0));
 				}
 				else {
-					//echo Debug::vars('318', $post->errors('Valid_mess')); exit;	
+					echo Debug::vars('318', $post->errors('Valid_mess')); exit;	
 				}
 				$this->redirect('rubic/edit_rubic/'.$id_rubic);
 		
@@ -518,7 +518,7 @@ class Controller_Rubic extends Controller_Template {
 						$this->redirect('rubic');
 					}
 			
-			case 'getEvent'://получить журнал событий
+			case 'getEvent'://получить журнал событий. при этом сохраняю набор выбранных событий в cookies
 				//echo Debug::vars('405', $_GET, $_POST); exit;
 							
 				$post=Validation::factory($this->request->post());
@@ -530,18 +530,13 @@ class Controller_Rubic extends Controller_Template {
 					if($post->check())
 					{
 						Cookie::set('id_event_filter', serialize(Arr::get($post, 'id_event_filter')));
-						//Cookie::set('id_event_filter', array('123', 678));
-						//echo Debug::vars('415', 'valid OK', Arr::get($post, 'id_event_filter')); exit;
-						//Model::factory('rubic')->getEventsFromTo($post);// получить журнал событий
-						//Session::instance()->set('eventTable', Model::factory('rubic')->getEventsFromTo($post));// получить журнал событий 2022.08.19
 						Session::instance()->set('timeFrom', Arr::get($post, 'timeFrom'));// Запись даты в переменные сессии
 						Session::instance()->set('timeTo', Arr::get($post, 'timeTo'));// Запись даты в переменные сессии
-						Session::instance()->set('id_event_filter', Arr::get($post, 'id_event_filter'));// Запись даты в переменные сессии
 						$this->redirect('rubic/event');
 						
 					} else 
 					{
-						//echo Debug::vars('415', 'valid ERR'); exit;
+						echo Debug::vars('415', 'valid ERR'); exit;
 						Session::instance()->set('e_mess', $post->errors('Valid_mess'));
 						$this->redirect('rubic/event');
 					}

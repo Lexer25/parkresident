@@ -22,6 +22,21 @@ class Model_Event extends Model {
 		$sql='select hle.id, hle.name, hle.color from hl_eventcode hle
 			where hle.id in (3, 4, 5, 6, 46, 50, 65, 81)
 			order by hle.id';
+		//лист событий, которые не надо показывать с отчете. Номера событий настраиваются в файле конфигурации приложения	
+			if(isset(Kohana::$config->load('artonitparking_config')->noViewEventsList))
+			{
+				$noViewEventsList=Kohana::$config->load('artonitparking_config')->noViewEventsList;
+				$sql='select hle.id, hle.name, hle.color from hl_eventcode hle
+				where hle.id not in ('.implode(",", $noViewEventsList).')
+				order by hle.id';
+			} else {
+				
+				$noViewEventsList=array();
+				$sql='select hle.id, hle.name, hle.color from hl_eventcode hle
+				order by hle.id';
+			}
+			
+		
 		//echo Debug::vars('12', $sql); exit;
 		
 		$query = DB::query(Database::SELECT, $sql)
