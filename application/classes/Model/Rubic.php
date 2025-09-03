@@ -124,7 +124,7 @@ class Model_Rubic extends Model {
 		} 
 		
 			$sql.=' order by hle.event_time desc';
-		echo Debug::vars('71', date('Y-m-d H:i:s'), $data, $sql); exit;	
+		//echo Debug::vars('71', date('Y-m-d H:i:s'), $data, $sql); exit;	
 		//Log::instance()->add(Log::DEBUG, '106 '.$sql);
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
