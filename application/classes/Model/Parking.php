@@ -39,9 +39,8 @@ class Model_Parking extends Model {
 			$res[$key]['NAME']=iconv('windows-1251','UTF-8',Arr::get($value,'NAME'));
 			$res[$key]['MAXCOUNT']=Arr::get($value,'MAXCOUNT');
 			$res[$key]['POSITION']=Arr::get($value,'POSITION');
-			
-			
 		}
+		//echo Debug::vars('45',$res);//exit;
 		return $res;	
 	}
 	

@@ -39,9 +39,13 @@ class Controller_Garage extends Controller_Template {
 		$id_parking=1;
 		//echo Debug::vars('20', $_SESSION);
 		
-		$garageLst=Model::Factory('garage')->getAllGarageInfo();// список гаражей в виде класса
+		//$garageLst=Model::Factory('garage')->getAllGarageInfo();// список гаражей в виде класса
+		$garageLst2=Model::Factory('garage')->getAllGarageInfo2();// список гаражей в виде класса
+		
+		//echo Debug::vars('45', $garageLst2);exit;
 		$content = View::factory('garage/garageList', array(
-			'garageLst'=>$garageLst,
+			//'garageLst'=>$garageLst,
+			'garageLst2'=>$garageLst2,
 				
 		));
         $this->template->content = $content;

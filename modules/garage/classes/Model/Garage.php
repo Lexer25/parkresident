@@ -14,6 +14,228 @@ class Model_Garage extends Model {
 	
 	public $rootParking=1;
 	
+	
+	/** 27.09.2025  модель таблицы сводной информации по гаражам
+	* модель включает в себя параметры:
+	* "name" => string(23) - название гаража
+    *   "id_garage" => string(1) id гаража
+    *    "not_count" => string(1) признак: вести ли подсчет свободных мест? 0 - не вести, 1 - вести
+    *    "orgList" => array(2) - список организаций, приписанных гаражу
+    *    "placeList" => array(0) - список машиномест, приписанных гаражу
+    *    "grzList" => array(0) список ГРЗ, которые могут заезжать в гараж. В целом является производной от orgList и представлен здесь исключительно для ускорения вывода таблицы на экран
+    *    "cardList" => array(15) список UHF, которые могут заезжать в гараж. В целом является производной от orgList и представлен здесь исключительно для ускорения вывода таблицы на экран 
+	* кроме всего прочего, пока нет разделения карт UHF и  EM-Marine, поэтому этот список пока не выводится.
+    *    "grzInGarageList" => array(0) - список идентификаторов, которые находятся на терриитории гаража.
+    *    "parkingList" => вспомогаельный набор данны: названия парковок. ДОбавляются для ускорения вывода на экран.
+	*/
+	
+	public function getAllGarageInfo2()
+	{
+	
+		$parkingList=Model::Factory('parking')->get_list_parking($this->rootParking);
+		$result=array();
+		//статистики по гражам: id, название, занятые места и т.п.
+		$sql='SELECT 
+			hlgn.id,
+			hlgn.name,
+			hlgn.not_count,
+			hlgn.div_code,
+			(SELECT COUNT(*) FROM hl_orgaccess hloa WHERE hloa.id_garage = hlgn.id) as orgCount,
+			(SELECT COUNT(*) FROM hl_garage hlg WHERE hlg.id_garagename = hlgn.id) as placeCount,
+			(SELECT COUNT(*) 
+			 FROM hl_orgaccess hloa2 
+			 JOIN people p ON p.id_org = hloa2.id_org 
+			 JOIN card c ON c.id_pep = p.id_pep 
+			 JOIN hl_inside hli ON hli.id_card = c.id_card 
+			 WHERE hloa2.id_garage = hlgn.id) as keyCount
+			FROM hl_garagename hlgn
+			order by hlgn.id';
+		try
+		{
+			$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+			foreach($query as $key)
+			{
+			//	echo Debug::vars('45', $key);exit;
+			$result[$key['ID']]['name']= $key['NAME'];
+			$result[$key['ID']]['id_garage']=$key['ID'];
+			$result[$key['ID']]['not_count']=$key['NOT_COUNT'];
+			$result[$key['ID']]['orgList']=array();
+			$result[$key['ID']]['placeList']=array();
+			$result[$key['ID']]['grzList']=array();
+			$result[$key['ID']]['cardList']=array();
+			$result[$key['ID']]['grzInGarageList']=array();
+			$result[$key['ID']]['parkingList']=$parkingList;
+				
+			}
+			
+		
+		} catch (Exception $e) {
+			Log::instance()->add(Log::ERROR, $e);
+		}
+		//echo Debug::vars('77', $result);exit;
+		//добавляю список организаций, входящих в гаражи
+		$sql='SELECT hloa.id, o.id_org, o.name,  hloa.id_garage
+            FROM hl_orgaccess hloa
+            JOIN organization o ON o.id_org = hloa.id_org';
+
+		try
+			{
+				$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+				
+			
+			} catch (Exception $e) {
+				Log::instance()->add(Log::ERROR, $e);
+			}
+			
+		foreach($query as $key)
+		{
+			if(array_key_exists($key['ID_GARAGE'], $result)){
+			$result[$key['ID_GARAGE']]['orgList'][$key['ID_ORG']]=array(
+				'ID'=>Arr::get($key, 'ID_ORG'),
+				'NAME'=>Arr::get($key, 'NAME'),
+				'NOTE'=>'',			
+				);
+			}
+		}
+		//добавляю список grz
+		$sql='SELECT hloa.id_garage, hloa.id, p.id_pep, p.surname, c.id_card, c.id_cardtype , c."ACTIVE"
+            FROM hl_orgaccess hloa
+            JOIN organization o ON o.id_org = hloa.id_org
+            JOIN people p ON p.id_org = o.id_org
+            JOIN card c ON c.id_pep = p.id_pep and c.id_cardtype=4';
+
+		try
+			{
+				$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+				
+			
+			} catch (Exception $e) {
+				Log::instance()->add(Log::ERROR, $e);
+			}
+			
+		foreach($query as $key)
+		{
+		if(array_key_exists($key['ID_GARAGE'], $result)){
+			$result[$key['ID_GARAGE']]['grzList'][$key['ID_CARD']]=array(
+				'ID'=>NULL,
+				'NAME'=>Arr::get($key, 'SURNAME'),
+				'GRZ'=>Arr::get($key, 'ID_CARD'),
+				'ACTIVE'=>Arr::get($key, 'ACTIVE'),
+				);
+		}
+		}
+		
+		//добавляю список card
+		$sql='SELECT hloa.id_garage, hloa.id, p.id_pep, p.surname, c.id_card, c.id_cardtype , c."ACTIVE"
+            FROM hl_orgaccess hloa
+            JOIN organization o ON o.id_org = hloa.id_org
+            JOIN people p ON p.id_org = o.id_org
+            JOIN card c ON c.id_pep = p.id_pep and c.id_cardtype=1';
+
+		try
+			{
+				$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+				
+			
+			} catch (Exception $e) {
+				Log::instance()->add(Log::ERROR, $e);
+			}
+			
+		foreach($query as $key)
+		{
+			if(array_key_exists($key['ID_GARAGE'], $result)){
+				$result[$key['ID_GARAGE']]['cardList'][$key['ID_CARD']]=array(
+				'ID'=>NULL,
+				'NAME'=>Arr::get($key, 'SURNAME'),
+				'GRZ'=>Arr::get($key, 'ID_CARD'),
+				'ACTIVE'=>Arr::get($key, 'ACTIVE'),
+				);
+			}
+		}
+		
+		//добавляю список placeList
+		/*  6 => array(6) (
+                "ID" => string(1) "6"
+                "ID_PARKING" => string(1) "4"
+                "NAME" => string(0) ""
+                "PLACENUMBER" => string(1) "1"
+                "PARKING_NAME" => string(27) "Парковка 3.3 РЖД"
+                "NOTE" => string(0) ""
+            ) */
+			
+		$sql='select hlg.id_garagename, hlp.id, hlp.name, hlp.placenumber, hlp.note, hlp.id_parking, hlpr.name as parking_name from hl_garage hlg
+            join hl_place hlp on hlp.id=hlg.id_place
+            join hl_parking hlpr on hlp.id_parking=hlpr.id';
+
+		try
+			{
+				$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+				
+			
+			} catch (Exception $e) {
+				Log::instance()->add(Log::ERROR, $e);
+			}
+			
+		foreach($query as $key)
+		{
+		//	echo Debug::vars('173', $key);exit;
+		if(array_key_exists($key['ID_GARAGENAME'], $result)){
+			$result[$key['ID_GARAGENAME']]['placeList'][$key['ID']]=array(
+				'ID'=>Arr::get($key, 'ID'),
+				'ID_PARKING'=>Arr::get($key, 'ID_PARKING'),
+				'NAME'=>Arr::get($key,'NAME'),
+				'PLACENUMBER'=>Arr::get($key, 'PLACENUMBER'),
+				'PARKING_NAME'=>Arr::get($key, 'PARKING_NAME'),
+				'NOTE'=>Arr::get($key, 'NOTE'),
+				);
+			}
+		}	
+		
+		//grzInGarageList кто на территории
+		$sql='select hlo.id_garage, hli.id_card, hli.entertime, hli.counterid as id_parking, c."ACTIVE"  from hl_inside  hli
+				left join card c on c.id_card=hli.id_card
+				left join people p on p.id_pep=c.id_pep
+				left join hl_orgaccess hlo on hlo.id_org=p.id_org
+				order by hlo.id_garage';
+		try
+			{
+				$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+				
+			
+			} catch (Exception $e) {
+				Log::instance()->add(Log::ERROR, $e);
+			}
+			
+		foreach($query as $key)
+		{
+		//	echo Debug::vars('173', $key);exit;
+			if(array_key_exists($key['ID_GARAGE'], $result)){
+				$result[$key['ID_GARAGE']]['grzInGarageList'][$key['ID_CARD']]=array(
+					//'ID'=>NULL,
+					'ENTER_TIME'=>Arr::get($key,'ENTERTIME'),
+					'ID_PARKING'=>Arr::get($key,'ID_PARKING'),
+					'ACTIVE'=>Arr::get($key,'ACTIVE', 0),
+				);
+			}
+		}	
+
+		return $result;
+	}		
+	
+	
+	
 	public function getAllGarageInfo()
 	{
 		$res=array();
@@ -67,7 +289,7 @@ class Model_Garage extends Model {
 			->execute(Database::instance('fb'))
 			->as_array();
 			$res=array();
-			Foreach ($query as $key => $value)
+			foreach ($query as $key => $value)
 			{
 				$res[Arr::get($value,'ID')]['ID']=Arr::get($value,'ID');
 				$res[Arr::get($value,'ID')]['ID_PARKING']=Arr::get($value,'ID_PARKING');
@@ -224,7 +446,7 @@ class Model_Garage extends Model {
 			);
 		foreach ($query as $key=>$value)
 		{
-			//echo Debug::vars('58', $value); exit;
+			//echo Debug::vars('288', $value); exit;
 			$res[Arr::get($value, 'ID_ORG')]['id']=Arr::get($value, 'ID_ORG');
 			$res[Arr::get($value, 'ID_ORG')]['title']=iconv('windows-1251','UTF-8', Arr::get($value, 'NAME'));
 			$res[Arr::get($value, 'ID_ORG')]['parent']=Arr::get($value, 'ID_PARENT');
@@ -258,7 +480,7 @@ class Model_Garage extends Model {
 			);
 		foreach ($query as $key=>$value)
 		{
-			//echo Debug::vars('58', $value); exit;
+			//echo Debug::vars(322', $value); exit;
 			$res[Arr::get($value, 'ID_ORG')]['id']=Arr::get($value, 'ID_ORG');
 			$res[Arr::get($value, 'ID_ORG')]['title']=iconv('windows-1251','UTF-8', Arr::get($value, 'NAME'));
 			$res[Arr::get($value, 'ID_ORG')]['parent']=Arr::get($value, 'ID_PARENT');
