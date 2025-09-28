@@ -53,7 +53,7 @@ $(function() {
         }
         .camera-view {
             width: 48%;
-            min-width: 280px;
+            min-width: 200px;
             background: #000;
             border-radius: 8px;
             overflow: hidden;
@@ -270,36 +270,46 @@ if (!empty($output)) {
 }
 
 //отображаю состояние работы видеосистемы
-if($video_set)
+/* if($video_set)
 {
 						echo '<span class="label label-success" id="inputField" title="Видеосистема работает правильно.">Видео работает</span>';
 					} else {
 						
 						echo '<span class="label label-warning" title="Видеосистема не работает, надо запустить ffmpeg">Видео не работает</span>';
-					}
+					} */
+					echo '<span class="label label-warning" title="Видео отключено">Видео отключено</span>';
+					
+					
+					//echo '<span class="label label-default pull-right" title="Порядок вывода настривается в файле parkresident\application\config\artonitparking_config.php переменная \'order_gate\'. Например: \'order_gate\'=>array(3, 4, 2, 7, 5, 6)"">Настройка</span>';
+					echo '<acronym class="pull-right" title="Порядок вывода настривается в файле parkresident\application\config\artonitparking_config.php переменная \'order_gate\'. Например: \'order_gate\'=>array(3, 4, 2, 7, 5, 6)">Настройка</acronym>';
 	?>
-	
-
-
 
 
 	<div class="container">
+	
 	 <table>
 		<tr>
 			<?php
-			$order_gate=array(3, 4, 2, 7, 5, 6);//порядок вывода ворот на экран
-					//foreach(array_slice($_gateList, 0, 6) as $key)
-				foreach($order_gate as $key2)// для ворот в указанном порядке организую вывод информации. $key2 - id ворот
+			
+			if(isset(Kohana::$config->load('artonitparking_config')->order_gate))
+			{
+				$order_gate=Kohana::$config->load('artonitparking_config')->order_gate;//порядок вывода ворот на экран
+			} else {
+				$temp=Model::factory('Rmo')->getListGate();//я сделал свой запрос номеров ворот... так спокойнее и надежнее
+				$order_gate=array_column($temp, 'ID');//вывожу все id_gate
+			}
+			
+			foreach($order_gate as $key2)// для ворот в указанном порядке организую вывод информации. $key2 - id ворот
 				{
+					
 					$key=array();
 					foreach($_gateList as $key3)//делаю перебор массива с перечнем ворот. Цель - найти $key3, у которого номер ворот совпадает с тем, что надо выводить.
 					{
-						if(Arr::get($key3, 'id') == $key2) $key=$key3; 
+						if(Arr::get($key3, 'id') == $key2) $key=$key3;
+						
 					}
 				
 				echo '<td>';
-				
-				
 				echo '<div class="camera-view">';
 				echo '<h3>'.Arr::get($key, 'name').'</h3>';
 				if($video_set)

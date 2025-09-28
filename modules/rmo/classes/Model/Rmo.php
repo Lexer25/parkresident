@@ -70,7 +70,31 @@ class Model_Rmo extends Model {
 		}	
 			
 			//return $request->body();
-	} 
+	}
+
+	/**	28.09.2025 Получить список gate 
+	*/
+	public function getListGate($id_parking=0, $is_enter = null)// 
+	{
+		$res=array();
+		
+		$sql='select hlp.id from hl_param hlp';
+		
+		//echo Debug::vars('35', $sql); exit;
+		try{
+			$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+			
+			
+		} catch  (Exception $e) {
+			Log::instance()->add(Log::ERROR, $e->getMessage());
+					}
+		//echo Debug::vars('26', $query);exit;
+		return $query;		
+	}
+
+	
 	
 	
 }
