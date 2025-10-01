@@ -857,14 +857,14 @@ class Model_Garage extends Model {
 			':ID'=>$id,
 			':NAME'=>'\''.Arr::get($data,'name').'\'',
 			':NOT_COUNT'=>Arr::get($data, 'not_count', 0),
-			':DIV_CODE'=>Arr::get($data, 'not_count', '\'divcode_'.$id.'\''),
+			':DIV_CODE'=>(Arr::get($data, 'not_count') == '') ? Arr::get($data, 'not_count') : '\'divcode_'.$id.'\'',
 			
 			));
-		// echo Debug::vars('815',$id); 
-		// echo Debug::vars('815-1',$data);
+		 echo Debug::vars('815',$id); 
+		 echo Debug::vars('815-1',$data);
 		// echo Debug::vars('815-11',Arr::get($data, 'not_count', 0));
 		// echo Debug::vars('815-12',Arr::get($data, 'not_count', '\'divcode_'.$id.'\''));
-		// echo Debug::vars('815-2', $sql); exit;
+		echo Debug::vars('815-2', $sql); exit;
 		try
 				{
 				$query = DB::query(Database::INSERT, iconv('UTF-8','windows-1251',$sql))

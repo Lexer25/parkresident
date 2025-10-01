@@ -88,6 +88,7 @@ class Events
 	*/
 	public function getListEventsForGarage($id_events)
 	{
+		
 		if(!empty($id_events))
 		{
 			$sql='select hle.event_time, hle.event_code, hlp.is_enter, hlp.name as gate_name, hlp.id_parking, hle.grz, hle.id_pep, hle.id_gate, hle.comment, et.name as event_name,  p.surname, p.name, p.PATRONYMIC, hl_org.id_garage
@@ -100,7 +101,7 @@ class Events
             where hle.id in ('.implode(",", $id_events).')
 			order by hle.event_time desc';	
 			
-			echo Debug::vars('102', $sql);exit;
+			//echo Debug::vars('102', $sql);exit;
 			
 			try
 			{
@@ -114,6 +115,8 @@ class Events
 				Log::instance()->add(Log::DEBUG, 'Line 52 '. $e->getMessage());
 			
 			}
+		} else {
+			echo Debug::vars('118');exit;
 		}
 		return array();
 	}

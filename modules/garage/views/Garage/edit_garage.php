@@ -266,89 +266,20 @@ echo Form::open('garage/control');
 
 
 			//формирую массив парковочных площадей
-		$placeList=array();
-		foreach (Model::factory('ParkingPlace')->get_list() as $key=>$value)
-		{
-			$placeList[Arr::get($value, 'ID')] = Model::factory('Place')->getChild(Arr::get($value, 'ID'));
-		}
-		
-		//echo Debug::vars('206', $placeList);exit;
-	
-			
-	foreach($placeList as $key2=>$value2)
+	$temp=Model::factory('ParkingPlace')->get_list();
+	foreach($temp as $key=>$value)
 	{
 		
-		$place_list2=array();	
-		$parking=new Parking ($key2);
-		//echo Debug::vars('211', iconv('windows-1251','UTF-8', $parking->name));//exit;
-		
-		?>
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h3 class="panel-title"><?php echo __('Список машиномест парковочной площадки :name.', array(':name'=>iconv('windows-1251','UTF-8', $parking->name)));?></h3>
-				</div>
-				<div class="panel-body">
+		$parking=new Parking ($value['ID']);
+		$place_list = Model::factory('Place')->getChild_2(Arr::get($value, 'ID'));
+		include Kohana::find_file('views', 'garage/block/placeForGarageBlock');//выводит блок с машиноместами для заданной парковки
+		/* $content = View::factory('garage/block/placeForGarageBlock', array(
+			'parking'=>$parking,
+			'place_list'=>$place_list, */
+	}	
 			
-			
-		<?php
-		
-		//echo Debug::vars('297', $value2);exit;
-		foreach($value2 as $key3=>$value3)
-		{
-			
-			$place=new Place(Arr::get($value3, 'ID'));
-			$place_list2[$place->id]['ID']=$place->id;
-			$place_list2[$place->id]['PLACENUMBER']=$place->placenumber;
-			
-			
-		}
-		//echo Debug::vars('233', $place_list2);//exit;
-		$place_list=$place_list2;
-		if(count($place_list))
-			{ ?>
-			
-			<table class="table table-striped table-hover table-condensed">
-				<tbody>
-				<?php 
-								
-				$i=0;
-				$checked='no';
-				$column=10;// количество колонок в таблице
-				$row= ceil(count($place_list)/$column);
-				$aaa=array_chunk($place_list, $column);
-				//echo Debug::vars('120', $aaa); //exit;
-				
-				for ($i=0; $i<$row; $i++)
-				{
-					echo '<tr>';
-						foreach(Arr::get($aaa, $i) as $key=>$value)
-						{
-							if(array_key_exists(Arr::get($value, 'ID'), $place_busy) and !array_key_exists(Arr::get($value, 'ID'), $place_income_garage)) // если это место уже занято, то запретить редактирование
-							{
-							echo '<td>'.Form::checkbox('id_place['.Arr::get($value, 'ID').']', Arr::get($value, 'ID'), TRUE, array("disabled"=>"disabled")).'мм №'.Arr::get($value, 'PLACENUMBER').'</td>';
-							} else {
-							echo '<td>'.Form::checkbox('id_place['.Arr::get($value, 'ID').']', Arr::get($value, 'ID'), (array_key_exists(Arr::get($value, 'ID'), $place_income_garage))? true : false, array()).'мм №'.Arr::get($value, 'PLACENUMBER').'</td>';
-							}
-						}
-					echo '</tr>';	
-					
-				}
-				
-				?>
-				</tbody>
-			</table>
-			<?php 
-			
-			} else {
-				echo __('no_date_for_view');
-		
-			};
-			?>
-			
-			</div>
-			</div>
-			<?php
-	}
+	
+	
 	echo Form::button('todo', 'Добавить/изменить машиноместо', array('value'=>'add_place_to_garage','class'=>'btn btn-success', 'type' => 'submit'));
 		//==
 		echo '<br>';
@@ -462,8 +393,11 @@ echo Form::open('garage/control');
 	<?php
 		$garage = new Garage(Arr::get($garage_info, 'ID'));
 		
+		$garage->eventList=array(3,4,5,6,7,8,9,10);
+		//echo Debug::vars('395', $garage->getEvents());exit;
 		$events=new Events();
-		$eventsListForGarage=$events->getListEventsForGarage($garage->getEvents());//я передаю список id событий, которые надо вывести на экран
+		
+		$eventsListForGarage=$events->getListEventsForGarage($garage->eventList);//я передаю список id событий, которые надо вывести на экран
 
 		 echo View::factory('garage/event')// вывод таблицы журнала событий для гаража
 				->set('list', $eventsListForGarage)
