@@ -46,8 +46,6 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 		//если номер гаража указан, то вывожу данные по этому гаражу (для организации управления).
 		if($id_garage>=1)
 		{
-			$id_parking=1;
-			
 			$garage_info=Model::Factory('garage')->get_garage_info($id_garage);//информация о гараже 
 			$place_income_garage=Model::Factory('garage')->place_income_garage($id_garage);//список машиномест, зарегистрированных в выбранном гараже
 			$org_income_garage=Model::Factory('garage')->org_income_garage($id_garage);//статистические данные: список квартир, зарегистрированных в выбранном гараже
@@ -437,7 +435,8 @@ public function action_opengateCVS()//передача команды на от�
 			
 			case 'find_place':// поиск по номеру машиноместа
 			$post=Validation::factory($this->request->post());
-				$post->rule('num_for_search', 'digit')
+				//$post->rule('num_for_search', 'digit')
+				$post->rule('num_for_search', 'max_length', array(':value', '50'))
 						->rule('num_for_search', 'not_empty')
 						;
 				if($post->check())
@@ -445,10 +444,12 @@ public function action_opengateCVS()//передача команды на от�
 				
 				//получаю id_garage по номеру машиноместа
 				Session::instance()->set('place_for_search', Arr::get($post, 'num_for_search'));
-					$id_garage=Model::factory('garage')->get_id_garage_from_place(Arr::get($post, 'num_for_search'));
+					//$id_garage=Model::factory('garage')->get_id_garage_from_place(Arr::get($post, 'num_for_search'));
+					$id_garage=Model::factory('garage')->get_id_garage_from_place_string(Arr::get($post, 'num_for_search'));//получаю список гаражей, куда входит искомое мм
 					
 					if(!is_null($id_garage))
 					{
+						//echo Debug::vars('452', $id_garage);exit;
 					Session::instance()->set('ok_mess', array('desc'=>'Информация по номеру машиноместа '.Arr::get($post, 'num_for_search').' найдена успешно.'));
 					$this->redirect('rmo/index/'.$id_garage);
 					} else {

@@ -86,15 +86,11 @@
 								echo __('Всего мест <b>count</b>', array('count'=>count(Arr::get($value, 'placeList')))).'<hr>';
 								foreach(Arr::get($value, 'parkingList') as $_key=>$_infoParking)
 								{
-										
-										//echo '<button type="button" class="btn btn-default btn-sm"><b>'.Arr::get($_infoParking,'NAME').'</b><br>';
 										foreach(Arr::get($value, 'placeList') as $key3=>$value3)
 										{
-											if(Arr::get($value3, 'ID_PARKING') == Arr::get($_infoParking,'ID')) 	echo HTML::anchor('rubic/edit_place/'.Arr::get($value3, 'PLACENUMBER'), '№ '.Arr::get($value3, 'PLACENUMBER')).' ('. Arr::get($value3, 'NAME').' '.Arr::get($_infoParking,'NAME').')<br>';
+											if(Arr::get($value3, 'ID_PARKING') == Arr::get($_infoParking,'ID')) echo HTML::anchor('rubic/edit_place/'.Arr::get($value3, 'PLACENUMBER'), '№ '.iconv('windows-1251','UTF-8',Arr::get($value3, 'NAME'))).' ('.Arr::get($_infoParking,'NAME').')<br>';
 										};
-									//echo '</button><br>';
-									
-								}	
+									}	
 								echo '</td>';
 							
 							//вывод списка ГРЗ, уже стоящих на парковке, в две колонки. Каждая колонка - своя парковка

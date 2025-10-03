@@ -3,7 +3,7 @@
 //заранее должны быть подготовлены переменные
 //$parking,
 //$place_list,
-//echo Debug::vars('2', $garageLst);//exit;
+//echo Debug::vars('2', $place_list);//exit;
 
 ?>
 <div class="panel panel-primary">
@@ -33,11 +33,16 @@
 					echo '<tr>';
 						foreach(Arr::get($aaa, $i) as $key=>$value)
 						{
+							
 							if(array_key_exists(Arr::get($value, 'ID'), $place_busy) and !array_key_exists(Arr::get($value, 'ID'), $place_income_garage)) // если это место уже занято, то запретить редактирование
 							{
-							echo '<td>'.Form::checkbox('id_place['.Arr::get($value, 'ID').']', Arr::get($value, 'ID'), TRUE, array("disabled"=>"disabled")).'мм №'.Arr::get($value, 'PLACENUMBER').'</td>';
+							//echo '<td>'.Form::checkbox('id_place['.Arr::get($value, 'ID').']', Arr::get($value, 'ID'), TRUE, array("disabled"=>"disabled")).'мм №'.Arr::get($value, 'PLACENUMBER').'<br>'.iconv('windows-1251','UTF-8', Arr::get($value, 'NAME')).'</td>';
+							echo '<td>'.Form::checkbox('id_place['.Arr::get($value, 'ID').']', Arr::get($value, 'ID'), TRUE, array("disabled"=>"disabled"))
+							.HTML::anchor('place/edit/'.Arr::get($value, 'ID'), iconv('windows-1251','UTF-8', Arr::get($value, 'NAME'))).'</td>';
 							} else {
-							echo '<td>'.Form::checkbox('id_place['.Arr::get($value, 'ID').']', Arr::get($value, 'ID'), (array_key_exists(Arr::get($value, 'ID'), $place_income_garage))? true : false, array()).'мм №'.Arr::get($value, 'PLACENUMBER').'</td>';
+							//echo '<td>'.Form::checkbox('id_place['.Arr::get($value, 'ID').']', Arr::get($value, 'ID'), (array_key_exists(Arr::get($value, 'ID'), $place_income_garage))? true : false, array()).'мм №'.Arr::get($value, 'PLACENUMBER').'<br>'.iconv('windows-1251','UTF-8', Arr::get($value, 'NAME')).'</td>';
+							echo '<td>'.Form::checkbox('id_place['.Arr::get($value, 'ID').']', Arr::get($value, 'ID'), (array_key_exists(Arr::get($value, 'ID'), $place_income_garage))? true : false, array())
+							.HTML::anchor('place/edit/'.Arr::get($value, 'ID'),iconv('windows-1251','UTF-8', Arr::get($value, 'NAME'))).'</td>';
 							}
 						}
 					echo '</tr>';	

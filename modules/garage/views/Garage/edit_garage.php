@@ -218,8 +218,8 @@ echo Form::open('garage/control');
 			echo Form::hidden('id_garage', Arr::get($garage_info,'ID'));
 			echo '<tr>';
 				echo '<td>'.$i.'</td>';
-				echo '<td>'.Arr::get($value,'PLACENUMBER').'</td>';
-				echo '<td>'.Arr::get($value,'NAME').'</td>';
+				echo '<td>'.HTML::anchor('place/edit/'.Arr::get($value,'ID'), Arr::get($value,'PLACENUMBER')).'</td>';
+				echo '<td>'.HTML::anchor('place/edit/'.Arr::get($value,'ID'), Arr::get($value,'NAME')).'</td>';
 				echo '<td>'.Arr::get($value,'PARKING_NAME').'</td>';
 				//	echo '<td>'.Arr::get($value,'NOTE').'</td>';
 				echo '<td>';
@@ -273,9 +273,7 @@ echo Form::open('garage/control');
 		$parking=new Parking ($value['ID']);
 		$place_list = Model::factory('Place')->getChild_2(Arr::get($value, 'ID'));
 		include Kohana::find_file('views', 'garage/block/placeForGarageBlock');//выводит блок с машиноместами для заданной парковки
-		/* $content = View::factory('garage/block/placeForGarageBlock', array(
-			'parking'=>$parking,
-			'place_list'=>$place_list, */
+		
 	}	
 			
 	

@@ -83,8 +83,8 @@ class Place
 	
 	public function add()
 	{
-		$sql='INSERT INTO HL_place (ID, PLACENUMBER, DESCRIPTION, NOTE, ID_PARKING)
-			values ('.$this->id.','.$this->placenumber .', \''.$this->description.'\',\''.$this->note.'\','.$this->id_parking .')';
+		$sql='INSERT INTO HL_place (ID, PLACENUMBER, DESCRIPTION, NOTE, ID_PARKING, NAME)
+			values ('.$this->id.','.$this->placenumber .', \''.$this->description.'\',\''.$this->note.'\','.$this->id_parking .',\''.$this->name .'\')';
 			//echo Debug::vars('88 '.$sql);exit;
 		try
 				{
@@ -166,4 +166,19 @@ class Place
 		return $this->__construct($id);
 	}
    
+   /**2.10.2025 Проверка уникальность пары парковка - номер машиноместо
+   *
+   *
+   */
+   public static function checkUniqPlaceInParking($placenumber, $id_parking)
+   {
+	   $sql='select hlp.id from hl_place hlp
+		where hlp.placenumber='.$placenumber.'
+		and hlp.id_parking='.$id_parking;
+		
+		return !( DB::query(Database::SELECT, iconv('UTF-8', 'CP1251',$sql))
+			->execute(Database::instance('fb'))
+			->get('ID') >0);
+	   
+   }
 }

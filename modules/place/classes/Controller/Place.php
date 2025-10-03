@@ -87,22 +87,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	public function action_list()//
 	{
 		$id = $this->request->param('id');
-		//$_SESSION['menu_active']='rubic';
-		/* $query=Validation::factory($this->request->param());
-			$query->rule('id', 'not_empty')
-					->rule('id', 'digit')
-							;
-			if($query->check())
-			{
-				//$id_place=Model::factory('place')->getChild(Arr::get($query, 'id'));
-				//$id_place[]=array('ID'=>$id);
-				$place_list=Model::factory('Place')->getPlaceListforParking();
-			} else 
-			{
-				//$id_place=Model::factory('place')->getAll();
-				$place_list=Model::factory('Place')->getPlaceListforAllParking();
-			} */
-		
+	
 		
 		$place_list=Model::factory('Place')->getPlaceListforAllParking();
 		
@@ -170,7 +155,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 		switch ($todo){
 			
 			case 'addarray'://регистрация нескольких машиномест начиная с number1 и до number2. Если такой номер уже есть, то пропускаем его.
-				//echo Debug::vars('173',$_POST);exit;
+				//echo Debug::vars('173',$this->request->post());exit;
 				$mess_ok=array();
 				$mess_err=array();
 				$_data=Validation::factory($this->request->post());
@@ -203,9 +188,10 @@ class Controller_Place extends Controller_Template { // класс описыв�
 								$entity->name='мм_'.$pn;
 								$entity->placenumber=$pn;
 								$entity->id_parking=Arr::get($_data, 'id_parking');
-								$entity->description="auto";
-								$entity->note="auto";
+								$entity->description="Автодобавление";
+								$entity->note="Автодобавление";
 								$entity->status=0;
+								$entity->name=$entity->placenumber;
 								//echo Debug::vars('196', $entity);//exit;
 								Log::instance()->add(Log::DEBUG, 'Line 197 '. '199 Добавляю машиноместо :placenum.', array(':placenum'=>$entity->id));
 								
@@ -286,6 +272,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 			
 			case 'add'://добавление нового машиноместа
 
+				//echo Debug::vars('274',$this->request->post() );exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('placenumber', 'not_empty')
 						->rule('placenumber', 'digit')
@@ -296,20 +283,32 @@ class Controller_Place extends Controller_Template { // класс описыв�
 					{
 						
 						$entity = new Place();
-						$entity->name='Новое машиноместо_'.Arr::get($_data, 'new_place_name');
+						//$entity->name='Новое машиноместо_'.Arr::get($_data, 'new_place_name').'\'';
 						$entity->placenumber=Arr::get($_data, 'placenumber');
+						$entity->name=$entity->placenumber;
 						$entity->id_parking=Arr::get($_data, 'id_parking');
 						$entity->description="";
 						$entity->note="";
 						$entity->status=0;
-						if ($entity->add())
+						if($entity::checkUniqPlaceInParking($entity->placenumber, $entity->id_parking))
 						{
-							Session::instance()->set('ok_mess', array('ok_mess' => __('Машиноместо :placenum добавлено успешно.', array(':placenum'=>Arr::get($_data, 'place')))));
-							
+							//echo Debug::vars('294 true', $entity);exit;
+							if ($entity->add())
+							{
+								Session::instance()->set('ok_mess', array('ok_mess' => __('Машиноместо :placenum добавлено успешно.', array(':placenum'=>Arr::get($_data, 'place')))));
+								
+							} else {
+								Session::instance()->set('e_mess', array('err_mess' => __('Машиноместо :placenum НЕ добавлено. Ошибка.', array(':placenum'=>Arr::get($_data, 'place')))));
+								
+							}
 						} else {
-							Session::instance()->set('e_mess', array('err_mess' => __('Машиноместо :placenum НЕ добавлено. Ошибка.', array(':placenum'=>Arr::get($_data, 'place')))));
+							//echo Debug::vars('296 false');exit;
+							$parking=new Parking($entity->id_parking);
+							//echo Debug::vars('306', $parking);exit;
+							Session::instance()->set('e_mess', array('err_mess' => __('Машиноместо :placenum уже существует на парковке ":parkingName".', array(':placenum'=>$entity->placenumber, ':parkingName'=>iconv('windows-1251','UTF-8',$parking->name)))));
 							
 						}
+						
 						
 						
 					} else 

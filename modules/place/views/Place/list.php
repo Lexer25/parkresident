@@ -174,7 +174,7 @@ $t1=microtime(true);
 			<th><?echo __('Выбор');?></th>
 			<th><?echo 'Название парковки';?></th>
 			<th><?echo __('Номер машиноместа');?></th>
-			
+			<th><?echo __('Название машиноместа');?></th>
 			<th><?echo __('Комментарий машиноместа');?></th>
 			<th><?echo 'Прим.';?></th>
 			<th><?echo 'Гараж';?></th>
@@ -212,6 +212,17 @@ $t1=microtime(true);
 					echo '<td>'.$place->placenumber.'</td>';
 					
 				}
+				if(Auth::Instance()->logged_in())
+				{				
+					echo '<td>'.HTML::anchor('place/edit/'.$place->id,
+							iconv('windows-1251','UTF-8', $place->name))
+							.'</td>';
+				} else 
+				{
+					echo '<td>'.iconv('windows-1251','UTF-8', $place->name).'</td>';
+					
+				}
+				
 				//echo '<td>'.iconv('windows-1251','UTF-8', $place->name). '1</td>';
 				echo '<td>'.iconv('windows-1251','UTF-8',$place->description).'</td>';
 				echo '<td>'.iconv('windows-1251','UTF-8',$place->note).'</td>';

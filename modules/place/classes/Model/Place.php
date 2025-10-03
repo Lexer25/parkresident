@@ -146,7 +146,8 @@ class Model_Place extends Model {
 	public function getChild_2($parent)
 	{
 		$sql='select * from hl_place hlp
-			where hlp.id_parking='.$parent;
+			where hlp.id_parking='.$parent.'
+			order by hlp.placenumber';
 		//echo Debug::vars('41', $sql);//exit;
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))

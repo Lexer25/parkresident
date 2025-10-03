@@ -100,14 +100,14 @@ $(function() {
   <div class="panel-body">
 	
 <?// Раздел ввода данных
-	//echo Debug::vars('12', $garage_info);
-	if(!isset($garage_info))
+		if(!isset($garage_info))
 	{
 		echo __('comment_for_search');
 		echo Form::open('rmo/control');
 			echo Form::button('todo', 'Поиск машиноместа', array('value'=>'find_place','class'=>'btn btn-primary', 'type' => 'submit'));
 			echo ' ';
-			echo Form::input('num_for_search', '1', array( 'type'=>'number', 'max'=>99999));
+			//echo Form::input('num_for_search', '1', array( 'type'=>'number', 'max'=>99999));
+			echo Form::input('num_for_search', '1', array('max'=>50));
 			echo ' ';
 			//echo Form::button('todo', 'Поиск ГРЗ', array('value'=>'find_grz','class'=>'btn btn-success', 'type' => 'submit'));	
 		echo Form::close();	

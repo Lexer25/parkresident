@@ -860,11 +860,11 @@ class Model_Garage extends Model {
 			':DIV_CODE'=>(Arr::get($data, 'not_count') == '') ? Arr::get($data, 'not_count') : '\'divcode_'.$id.'\'',
 			
 			));
-		 echo Debug::vars('815',$id); 
-		 echo Debug::vars('815-1',$data);
+		 // echo Debug::vars('815',$id); 
+		 // echo Debug::vars('815-1',$data);
 		// echo Debug::vars('815-11',Arr::get($data, 'not_count', 0));
 		// echo Debug::vars('815-12',Arr::get($data, 'not_count', '\'divcode_'.$id.'\''));
-		echo Debug::vars('815-2', $sql); exit;
+		//echo Debug::vars('815-2', $sql); exit;
 		try
 				{
 				$query = DB::query(Database::INSERT, iconv('UTF-8','windows-1251',$sql))
@@ -928,6 +928,27 @@ class Model_Garage extends Model {
 			->get('ID_GARAGENAME');
 		
 		
+		return $query;
+	}
+	
+	
+	/**3.10.2025 ПОиск машиномест
+	*
+	*
+	*/
+	public function get_id_garage_from_place_string($num_place) //получить номер гаража по номеру машиноместа
+	{
+		
+		$sql='select hlg.id_garagename from HL_PLACE hlp
+		join hl_garage hlg on hlg.id_place=hlp.id
+		where hlp.name containing \''.$num_place.'\'';
+		//echo Debug::vars('815', $sql); exit;
+		$res=array();
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->get('ID_GARAGENAME');
+			//->as_array();
+		//return array_column($query, 'ID_GARAGENAME');
 		return $query;
 	}
 	

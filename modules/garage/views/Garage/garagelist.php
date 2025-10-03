@@ -91,15 +91,7 @@ function confirmSubmit() {
 
 	</div>
 		<?php
-		
-
-			echo 'Список зарегистрированных гаражей.';
-			//echo Debug::vars('123', $garageLst); exit;
-			
-		//include Kohana::find_file('views', 'garage/block/garageListBlock');//выводит таблицу состояния гаражей на основе переменной $garageLst
-	
-		$garageLst=$garageLst2;//вывод второй таблицы
-		//echo Debug::vars('106', $garageLst); exit;
+		echo 'Список зарегистрированных гаражей.';
 		include Kohana::find_file('views', 'garage/block/garageListBlock2');//выводит таблицу состояния гаражей на основе переменной $garageLst
 	
 		
