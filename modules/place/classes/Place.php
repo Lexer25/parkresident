@@ -115,7 +115,7 @@ class Place
 				id_parking = '.$this->id_parking.'
 			WHERE (ID = '.$this->id.')';
 		Log::instance()->add(Log::DEBUG, 'Line 101 '. $sql);//exit;
-		//echo Debug::vars('65', $sql); exit;
+		echo Debug::vars('65', $sql); exit;
 		try
 			{
 			$query = DB::query(Database::UPDATE, iconv('UTF-8', 'CP1251',$sql))

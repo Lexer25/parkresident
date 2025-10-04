@@ -17,6 +17,7 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 	
 	
 	public $template = 'templateWidth';
+
 	public function before()
 	{
 			
@@ -42,26 +43,45 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 		
 		//$this->template = 'templateWidth';
 		$id_garage = $this->request->param('id');
-		//echo Debug::vars('30', $id_garage); //exit;
+		
+		
+		$id_garage=Session::instance()->get('findingPlaceArray');
+		Session::instance()->delete('findingPlaceArray');
+		//echo Debug::vars('49', $id_garage);
 		//если номер гаража указан, то вывожу данные по этому гаражу (для организации управления).
-		if($id_garage>=1)
+		//===============================
+			
+			 $garageLst=Model::Factory('garage')->getAllGarageInfo2($id_garage);// список гаражей в виде класса
+			// echo Debug::vars('55', $garageLst);exit;
+			$garageListView=View::factory('garage/block/garageListBlock2',//подготовка таблицы гаражей. Эта таблица позже будет вставлена в общую форму
+			 array('garageLst'=>$garageLst));
+			 $garageListView=View::factory('place/block/placeInfo1',//подготовка таблицы гаражей. Эта таблица позже будет вставлена в общую форму
+			  array('garageLst'=>$garageLst));
+			
+			//===============================
+		
+		if(count($id_garage)>=1)
 		{
-			$garage_info=Model::Factory('garage')->get_garage_info($id_garage);//информация о гараже 
-			$place_income_garage=Model::Factory('garage')->place_income_garage($id_garage);//список машиномест, зарегистрированных в выбранном гараже
-			$org_income_garage=Model::Factory('garage')->org_income_garage($id_garage);//статистические данные: список квартир, зарегистрированных в выбранном гараже
-			$place_grz_garage_=Model::Factory('garage')->place_grz_garage_($id_garage);//статистические данные: список ГРЗ, зарегистрированных в выбранном гараже
-			$get_grz_in_parking=Model::Factory('garage')->get_grz_in_parking($id_garage);// перечень ГРЗ, находящихся на парковке для выбранного гаража
-			$get_garage_parking_list=Model::Factory('garage')->get_garage_parking_list($id_garage);// список парковок, входящих в указанный гараж
+			
+			
+			// $garage_info=Model::Factory('garage')->get_garage_info($id_garage);//информация о гараже 
+			// $place_income_garage=Model::Factory('garage')->place_income_garage($id_garage);//список машиномест, зарегистрированных в выбранном гараже
+			// $org_income_garage=Model::Factory('garage')->org_income_garage($id_garage);//статистические данные: список квартир, зарегистрированных в выбранном гараже
+			// $place_grz_garage_=Model::Factory('garage')->place_grz_garage_($id_garage);//статистические данные: список ГРЗ, зарегистрированных в выбранном гараже
+			// $get_grz_in_parking=Model::Factory('garage')->get_grz_in_parking($id_garage);// перечень ГРЗ, находящихся на парковке для выбранного гаража
+			// $get_garage_parking_list=Model::Factory('garage')->get_garage_parking_list($id_garage);// список парковок, входящих в указанный гараж
 
 			//echo Debug::vars('2', $garage_info, $place_income_garage, $org_income_garage, $get_grz_in_parking, $place_grz_garage_); exit;
 			
 			$content = View::factory('rmo/rmo', array(
-				'garage_info'=>$garage_info,
-				'place_income_garage'=>$place_income_garage,
-				'org_income_garage'=>$org_income_garage,
-				'get_grz_in_parking'=>$get_grz_in_parking,
-				'place_grz_garage_'=>$place_grz_garage_,
-				'get_garage_parking_list'=>$get_garage_parking_list,
+				// 'garage_info'=>$garage_info,
+				// 'place_income_garage'=>$place_income_garage,
+				// 'org_income_garage'=>$org_income_garage,
+				// 'get_grz_in_parking'=>$get_grz_in_parking,
+				// 'place_grz_garage_'=>$place_grz_garage_,
+				// 'get_garage_parking_list'=>$get_garage_parking_list,
+				'garageListView'=>$garageListView,
+				
 				));
 			
 			$this->template->content = $content;
@@ -72,6 +92,7 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 		{
 			Session::instance()->delete('place_for_search');
 			$content = View::factory('rmo/rmo', array(
+			//'garageListView'=>$garageListView,
 			));
 	        $this->template->content = $content;
 		}
@@ -433,7 +454,9 @@ public function action_opengateCVS()//передача команды на от�
 				//$this->redirect('rmo');
 			break;
 			
-			case 'find_place':// поиск по номеру машиноместа
+			case 'find_place':// поиск по названию машиноместа (а раньше было по номеру)
+			
+			$this->shared_data='449';
 			$post=Validation::factory($this->request->post());
 				//$post->rule('num_for_search', 'digit')
 				$post->rule('num_for_search', 'max_length', array(':value', '50'))
@@ -446,22 +469,28 @@ public function action_opengateCVS()//передача команды на от�
 				Session::instance()->set('place_for_search', Arr::get($post, 'num_for_search'));
 					//$id_garage=Model::factory('garage')->get_id_garage_from_place(Arr::get($post, 'num_for_search'));
 					$id_garage=Model::factory('garage')->get_id_garage_from_place_string(Arr::get($post, 'num_for_search'));//получаю список гаражей, куда входит искомое мм
-					
+					//echo Debug::vars('463', $id_garage);exit;
 					if(!is_null($id_garage))
 					{
-						//echo Debug::vars('452', $id_garage);exit;
+						echo Debug::vars('452', $id_garage);//exit;
+					Session::instance()->set('findingPlaceArray', $id_garage);
 					Session::instance()->set('ok_mess', array('desc'=>'Информация по номеру машиноместа '.Arr::get($post, 'num_for_search').' найдена успешно.'));
-					$this->redirect('rmo/index/'.$id_garage);
+					$this->redirect('rmo/index/');
+					//$this->shared_data=$id_garage;
 					} else {
 					Session::instance()->set('e_mess', array('desc'=>'Информация по номеру машиноместа '.Arr::get($post, 'num_for_search').' не найдена. Возможно, что машиноместо не входит ни в один из гаражей'));
 					$this->redirect('rmo');	
-						
+					//	$this->shared_data='471';
 					}
 				} else {
 					Session::instance()->set('e_mess', $post->errors('Valid_mess'));
+					//$this->shared_data='475';
 					$this->redirect('rmo/');
+					
 				}
 				
+				$this->redirect('rmo/index/');
+				//$this->action_index();
 			break;
 			case 'open_gate_1':
 			$t1=microtime(1);

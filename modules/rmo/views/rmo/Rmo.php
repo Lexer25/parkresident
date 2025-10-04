@@ -99,8 +99,15 @@ $(function() {
   </div>
   <div class="panel-body">
 	
-<?// Раздел ввода данных
-		if(!isset($garage_info))
+<?
+if(isset($garageListView)) //вывожу список информации по найденным машиноместам
+{
+	//echo Debug::vars('105');//exit;
+	echo $garageListView;
+} 
+// Раздел ввода данных
+//echo $garageListView;
+	if(!isset($garage_info))
 	{
 		echo __('comment_for_search');
 		echo Form::open('rmo/control');

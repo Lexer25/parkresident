@@ -173,8 +173,8 @@ $t1=microtime(true);
 			<th><?echo __('Номер п/п');?></th>
 			<th><?echo __('Выбор');?></th>
 			<th><?echo 'Название парковки';?></th>
-			<th><?echo __('Номер машиноместа');?></th>
-			<th><?echo __('Название машиноместа');?></th>
+			<!--<th><?echo __('Номер машиноместа');?></th>-->
+			<th><?echo __('Машиноместо');?></th>
 			<th><?echo __('Комментарий машиноместа');?></th>
 			<th><?echo 'Прим.';?></th>
 			<th><?echo 'Гараж';?></th>
@@ -202,7 +202,7 @@ $t1=microtime(true);
 				echo '<td>'.Form::radio( 'id', $place->id, Arr::get($value, 'is_active' == 1)).' '.$place->id.'</td>';
 								
 				echo '<td>'. iconv('windows-1251','UTF-8',$place->parkingname).'</td>';
-				if(Auth::Instance()->logged_in())
+				/* if(Auth::Instance()->logged_in())
 				{				
 					echo '<td>'.HTML::anchor('place/edit/'.$place->id,
 							$place->placenumber)
@@ -211,7 +211,7 @@ $t1=microtime(true);
 				{
 					echo '<td>'.$place->placenumber.'</td>';
 					
-				}
+				} */
 				if(Auth::Instance()->logged_in())
 				{				
 					echo '<td>'.HTML::anchor('place/edit/'.$place->id,

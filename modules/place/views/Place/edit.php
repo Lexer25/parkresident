@@ -2,7 +2,7 @@
  //echo Debug::vars('11', $rp_info); 
 // страница для редактирования сущности
 //echo Debug::vars('4');exit;
-echo Debug::vars('5', $place);//exit;
+//echo Debug::vars('5', $place);//exit;
 echo Form::open('Place/control');
 
 if(Auth::Instance()->logged_in())
@@ -26,7 +26,9 @@ if(Auth::Instance()->logged_in())
 	<div class="panel-body">
 		
 		<?php 
-		echo __('Номер машиноместа').Form::input('placenumber', $place->placenumber).' '.__('(ID').$place->id.')<br>';
+		//echo __('Номер машиноместа').Form::input('placenumber', $place->placenumber).' '.__('(ID').$place->id.')<br>';
+		echo Form::hidden('placenumber', $place->placenumber).'<br>';
+		echo __('(ID').$place->id.')<br>';
 		//echo __('Номер машиноместа: ').$place->placenumber.'<br>';
 		//echo __('Название машиноместа').Form::input('name', iconv('windows-1251','UTF-8', $place->name), array('maxlength'=>50)).'<br>';
 		//echo __('Статус').Form::input('status', iconv('windows-1251','UTF-8', $place->status), array('maxlength'=>50)).'<br>';

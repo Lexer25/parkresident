@@ -29,13 +29,14 @@ class Model_Garage extends Model {
     *    "parkingList" => вспомогаельный набор данны: названия парковок. ДОбавляются для ускорения вывода на экран.
 	*/
 	
-	public function getAllGarageInfo2()
+	public function getAllGarageInfo2(array $garageList=null)//если указан список гаражей, то выводить информацию только по ним
 	{
 	
 		$parkingList=Model::Factory('parking')->get_list_parking($this->rootParking);
 		$result=array();
 		//статистики по гражам: id, название, занятые места и т.п.
-		$sql='SELECT 
+		
+		$sql='SELECT distinct
 			hlgn.id,
 			hlgn.name,
 			hlgn.not_count,
@@ -48,8 +49,11 @@ class Model_Garage extends Model {
 			 JOIN card c ON c.id_pep = p.id_pep 
 			 JOIN hl_inside hli ON hli.id_card = c.id_card 
 			 WHERE hloa2.id_garage = hlgn.id) as keyCount
-			FROM hl_garagename hlgn
-			order by hlgn.id';
+			FROM hl_garagename hlgn ';
+			if(isset($garageList)) $sql=$sql . ' where hlgn.id in ('.implode(",", $garageList).')';
+			
+			$sql=$sql . ' order by hlgn.id';
+	//echo Debug::vars('56', $sql);exit;					
 		try
 		{
 			$query = DB::query(Database::SELECT, $sql)
@@ -161,16 +165,6 @@ class Model_Garage extends Model {
 			}
 		}
 		
-		//добавляю список placeList
-		/*  6 => array(6) (
-                "ID" => string(1) "6"
-                "ID_PARKING" => string(1) "4"
-                "NAME" => string(0) ""
-                "PLACENUMBER" => string(1) "1"
-                "PARKING_NAME" => string(27) "Парковка 3.3 РЖД"
-                "NOTE" => string(0) ""
-            ) */
-			
 		$sql='select hlg.id_garagename, hlp.id, hlp.name, hlp.placenumber, hlp.note, hlp.id_parking, hlpr.name as parking_name from hl_garage hlg
             join hl_place hlp on hlp.id=hlg.id_place
             join hl_parking hlpr on hlp.id_parking=hlpr.id';
@@ -946,10 +940,10 @@ class Model_Garage extends Model {
 		$res=array();
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
-			->get('ID_GARAGENAME');
-			//->as_array();
-		//return array_column($query, 'ID_GARAGENAME');
-		return $query;
+			//->get('ID_GARAGENAME');
+			->as_array();
+		return array_column($query, 'ID_GARAGENAME');
+		//turn $query;
 	}
 	
 	
