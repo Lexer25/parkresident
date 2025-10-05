@@ -80,7 +80,7 @@
 									//echo Debug::vars($key,$value); exit;
 									echo HTML::anchor('grz/history/'.Arr::get($value2, 'GRZ'), Arr::get($value2, 'GRZ')).' '. iconv('windows-1251','UTF-8', Arr::get($value2, 'NAME')).'<br>';
 								};
-								
+								echo Form::open('Place/control');
 								foreach(Arr::get($value, 'grzList') as $_key=>$_value)
 								{
 									 if (Arr::get($_value, 'ACTIVE') >0)
@@ -106,6 +106,7 @@
 										 
 									 }
 								}
+								echo Form::close();
 								
 								echo Form::open('rmo/opengate_unknow');
 								//echo Form::hidden('id_garage', Arr::get($garage_info, 'ID'));
@@ -155,35 +156,7 @@
 									};	//echo '</button><br>';
 								}
 								
-								//======
-								
-								//разрешить въезд известным ГРЗ
-					//echo Form::open('rmo/mqtt');
-					/* echo Form::open('rmo/opengateCVS');
-					//echo Form::hidden('id_garage', Arr::get($value, 'id_garage'));
-					//echo Form::hidden('place_for_open', Session::instance()->get('place_for_search'));
-					//echo Form::hidden('parking_for_open', Arr::get(Arr::get($place_income_garage, Session::instance()->get('place_for_search')), 'ID_PARKING'));
-	
-						$total_grz=count($place_grz_garage_);
-						//echo Debug::vars('57', $place_grz_garage_);
-						echo __('Всего ГРЗ:').' '. $total_grz.'<br>';
-						foreach($place_grz_garage_ as $key=>$value)
-						{
-						 if (Arr::get($value, 'ACTIVE') >0)
-						 {
-							echo Form::button('opendoor', Arr::get($value, 'GRZ').' ('.Arr::get($value, 'NAME').')', array('value'=>Arr::get($value, 'GRZ'), 'class'=>'btn btn-success btn-xs', 'type' => 'submit', 'onclick'=>'return confirm(\''.__('Будет открыт въезд для grz на парковку PARKING_NAME. Открыть', array('grz'=>Arr::get($value, 'GRZ'), 'PARKING_NAME'=>Arr::get(Arr::get($place_income_garage, Session::instance()->get('place_for_search')), 'PARKING_NAME'))).'?\') ? true : false;')).'<br><br>';
-						 } else
-						 {
-							echo Form::button('opendoor', Arr::get($value, 'GRZ').' ('.Arr::get($value, 'NAME').')', array('value'=>Arr::get($value, 'GRZ'), 'disabled'=>'disabled', 'class'=>'btn btn-danger btn-xs', 'type' => 'submit'));
-							echo ' '.__('Не активен').'<br>';
-							 
-						 }
-						
-				
-						}
-						
-					echo Form::close();	 */
-								//======
+							
 
 							echo '</td>';
 						//количество свободных мест		

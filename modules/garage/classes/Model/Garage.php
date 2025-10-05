@@ -936,14 +936,12 @@ class Model_Garage extends Model {
 		$sql='select hlg.id_garagename from HL_PLACE hlp
 		join hl_garage hlg on hlg.id_place=hlp.id
 		where hlp.name containing \''.$num_place.'\'';
-		//echo Debug::vars('815', $sql); exit;
 		$res=array();
-		$query = DB::query(Database::SELECT, $sql)
+		$query = DB::query(Database::SELECT, iconv('UTF-8','windows-1251',$sql))
 			->execute(Database::instance('fb'))
 			//->get('ID_GARAGENAME');
 			->as_array();
 		return array_column($query, 'ID_GARAGENAME');
-		//turn $query;
 	}
 	
 	

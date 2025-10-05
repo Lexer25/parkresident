@@ -1,3 +1,7 @@
+<?php
+//echo (isset($garageListView))? Debug::vars('2', $garageListView) : 'null';
+
+?>
 <script>
 $(function() {
 	
@@ -105,7 +109,7 @@ if(isset($garageListView)) //вывожу список информации по
 	//echo Debug::vars('105');//exit;
 	echo $garageListView;
 } 
-// Раздел ввода данных
+// Раздел ввода данных для поиска машиноместа
 //echo $garageListView;
 	if(!isset($garage_info))
 	{

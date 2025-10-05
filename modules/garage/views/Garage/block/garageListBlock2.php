@@ -83,6 +83,11 @@
 							
 								echo '<td>';
 								//echo Debug::vars('84', Arr::get($value, 'placeList'));
+								//разрешить въезд известным ГРЗ
+					
+								echo Form::open('rmo/opengateCVS');
+					
+					
 								echo __('Всего мест <b>count</b>', array('count'=>count(Arr::get($value, 'placeList')))).'<hr>';
 								foreach(Arr::get($value, 'parkingList') as $_key=>$_infoParking)
 								{
@@ -91,6 +96,7 @@
 											if(Arr::get($value3, 'ID_PARKING') == Arr::get($_infoParking,'ID')) echo HTML::anchor('rubic/edit_place/'.Arr::get($value3, 'PLACENUMBER'), '№ '.iconv('windows-1251','UTF-8',Arr::get($value3, 'NAME'))).' ('.Arr::get($_infoParking,'NAME').')<br>';
 										};
 									}	
+									echo Form::close();
 								echo '</td>';
 							
 							//вывод списка ГРЗ, уже стоящих на парковке, в две колонки. Каждая колонка - своя парковка

@@ -47,7 +47,7 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 		
 		$id_garage=Session::instance()->get('findingPlaceArray');
 		Session::instance()->delete('findingPlaceArray');
-		//echo Debug::vars('49', $id_garage);
+		//echo Debug::vars('49', $id_garage);exit;
 		//если номер гаража указан, то вывожу данные по этому гаражу (для организации управления).
 		//===============================
 			
@@ -60,33 +60,16 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 			
 			//===============================
 		
-		if(count($id_garage)>=1)
-		{
-			
-			
-			// $garage_info=Model::Factory('garage')->get_garage_info($id_garage);//информация о гараже 
-			// $place_income_garage=Model::Factory('garage')->place_income_garage($id_garage);//список машиномест, зарегистрированных в выбранном гараже
-			// $org_income_garage=Model::Factory('garage')->org_income_garage($id_garage);//статистические данные: список квартир, зарегистрированных в выбранном гараже
-			// $place_grz_garage_=Model::Factory('garage')->place_grz_garage_($id_garage);//статистические данные: список ГРЗ, зарегистрированных в выбранном гараже
-			// $get_grz_in_parking=Model::Factory('garage')->get_grz_in_parking($id_garage);// перечень ГРЗ, находящихся на парковке для выбранного гаража
-			// $get_garage_parking_list=Model::Factory('garage')->get_garage_parking_list($id_garage);// список парковок, входящих в указанный гараж
-
-			//echo Debug::vars('2', $garage_info, $place_income_garage, $org_income_garage, $get_grz_in_parking, $place_grz_garage_); exit;
-			
+		// if(count($id_garage)>=1)
+		// {
 			$content = View::factory('rmo/rmo', array(
-				// 'garage_info'=>$garage_info,
-				// 'place_income_garage'=>$place_income_garage,
-				// 'org_income_garage'=>$org_income_garage,
-				// 'get_grz_in_parking'=>$get_grz_in_parking,
-				// 'place_grz_garage_'=>$place_grz_garage_,
-				// 'get_garage_parking_list'=>$get_garage_parking_list,
 				'garageListView'=>$garageListView,
 				
 				));
 			
 			$this->template->content = $content;
 			
-		};
+		//};
 		
 		if(is_null($id_garage))//а если номер гаража не указан, то вывожу предложение поиска
 		{
@@ -469,8 +452,9 @@ public function action_opengateCVS()//передача команды на от�
 				Session::instance()->set('place_for_search', Arr::get($post, 'num_for_search'));
 					//$id_garage=Model::factory('garage')->get_id_garage_from_place(Arr::get($post, 'num_for_search'));
 					$id_garage=Model::factory('garage')->get_id_garage_from_place_string(Arr::get($post, 'num_for_search'));//получаю список гаражей, куда входит искомое мм
-					//echo Debug::vars('463', $id_garage);exit;
-					if(!is_null($id_garage))
+					//echo Debug::vars('463', $id_garage, count($id_garage));exit;
+					Session::instance()->delete('findingPlaceArray');
+					if(count($id_garage)>0)
 					{
 						echo Debug::vars('452', $id_garage);//exit;
 					Session::instance()->set('findingPlaceArray', $id_garage);
