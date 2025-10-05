@@ -263,7 +263,7 @@ class Controller_Wizard extends Controller_Template {
 	{
 		//echo Debug::vars('260', $_POST);exit;
 		$setting=new Setting();
-		$setting->Update(Arr::get($_POST, 'name'), Arr::get($_POST, 'value'), Arr::get($_POST, 'type'));
+		$setting->Update(Arr::get($_POST, 'name'), Arr::get($_POST, 'value', 0), Arr::get($_POST, 'type'));
 	
 		
 		$referrer = Request::initial()->referrer();

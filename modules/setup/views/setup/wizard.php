@@ -35,27 +35,7 @@
 					$setting=new Setting();
                     $i=0;
 					
-                      /*   echo '<tr>';
-							echo '<td>'.++$i.'</td>';
-							echo '<td>IP адрес интегратора</td>';
-							echo Form::open('wizard/cvs');
-								echo Form::hidden('type', 'str');
-								echo Form::hidden('name', 'ip_cvs');
-								echo '<td>'.Form::input('value',$setting->get('ip_cvs')).'</td>';
-								echo '<td>'.Form::button('cvs', 'Сохранить', array('type' => 'submit')).'</td>';
-							 echo Form::close();
-                        echo '</tr>';
-                        echo '<tr>';
-							echo '<td>'.++$i.'</td>';
-							echo '<td>Порт интегратора</td>';
-							echo Form::open('wizard/cvs');
-								echo Form::hidden('type', 'int');
-								echo Form::hidden('name', 'port_cvs');
-								echo '<td>'.Form::input('value',$setting->get('port_cvs')).'</td>';
-								echo '<td>'.Form::button('cvs', 'Сохранить').'</td>';
-							 echo Form::close();	
-                        echo '</tr>';
-						 */
+                    
 						echo '<tr>';
 							echo '<td>'.++$i.'</td>';
 							echo '<td>Т1 Время блокировки повторного распознавания delay_cvs (сек)</td>';
@@ -77,6 +57,27 @@
 								echo '<td>'.Form::button('cvs', 'Сохранить').'</td>';
 							 echo Form::close();	
                         echo '</tr>';
+						echo '<tr>';
+							echo '<td>'.++$i.'</td>';
+							echo '<td>Минимальная длина названия машиноместа. Если введенный номер короче указанной длины, то слева будут добавлены символы "0".</td>';
+							echo Form::open('wizard/cvs');
+								echo Form::hidden('type', 'int');
+								echo Form::hidden('name', 'placeNameLenght');
+								echo '<td>'.Form::input('value',$setting->get('placeNameLenght', 3), array('type'=>'number', 'min'=>'2', 'max'=>'4')).'</td>';
+								echo '<td>'.Form::button('cvs', 'Сохранить').'</td>';
+							 echo Form::close();	
+                        echo '</tr>';
+						echo '<tr>';
+							echo '<td>'.++$i.'</td>';
+							echo '<td>Применять форматирование длины названия машиноместа</td>';
+							echo Form::open('wizard/cvs');
+								echo Form::hidden('type', 'int');
+								echo Form::hidden('name', 'placeNameLenghtApply');
+								echo '<td>'.Form::checkbox('value', 1, $setting->get('placeNameLenghtApply', 0) == 1).'</td>';
+								echo '<td>'.Form::button('cvs', 'Сохранить').'</td>';
+							 echo Form::close();	
+                        echo '</tr>';
+						
  
                     ?>
                     </tbody>

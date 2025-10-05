@@ -83,6 +83,11 @@ class Place
 	
 	public function add()
 	{
+		$setting=new Setting();
+		if($setting->get('placeNameLenghtApply', 0) == 1){
+			$charSubstr='0';
+			if(strlen(iconv('UTF-8','windows-1251', $this->name ))<$setting->get('placeNameLenght', 3)) $this->name = str_pad($this->name , $setting->get('placeNameLenght', 3), $charSubstr, STR_PAD_LEFT);
+		}
 		$sql='INSERT INTO HL_place (ID, PLACENUMBER, DESCRIPTION, NOTE, ID_PARKING, NAME)
 			values ('.$this->id.','.$this->placenumber .', \''.$this->description.'\',\''.$this->note.'\','.$this->id_parking .',\''.$this->name .'\')';
 			//echo Debug::vars('88 '.$sql);exit;

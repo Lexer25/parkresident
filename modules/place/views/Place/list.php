@@ -14,11 +14,7 @@ $t1=microtime(true);
     }
   }
   
-  
-//echo Debug::vars('4', array_slice($place_list, 0, 2));
-//$token = Profiler::start('pr', 'placeLisr');//Профилирую работу вывода списка мм
 
-	
 		$placeList=Model::factory('Place')->getAll();//список машиномест на этой парковочной площадке
 		
 		$titleAddPlace=__('Регистрация машиноместа для парковочных площадок. Общее количество мест на площадке :countPlace',
@@ -45,6 +41,8 @@ $t1=microtime(true);
 </script> 
 <?php if(Auth::Instance()->logged_in())
 {
+	
+	//if(isset($renamePlace)) echo $renamePlace;//блок управления названиями
 	
 	$parkingPlace=Model::factory('ParkingPlace')->get_list_for_select();//получил список парковочных площадок
 	$selectList=array();

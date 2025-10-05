@@ -69,7 +69,7 @@ $(function() {
  <div class="panel panel-primary"> 
 
   <div class="panel-heading">
-    <h3 class="panel-title"><?php echo __('Панель управления и контроля воротами');?></h3>
+    <h3 class="panel-title"><?php echo __('Панель управления воротами');?></h3>
    
   </div>
   <div class="panel-body"> 

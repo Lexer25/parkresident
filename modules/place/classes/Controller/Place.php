@@ -90,12 +90,12 @@ class Controller_Place extends Controller_Template { // класс описыв�
 	
 		
 		$place_list=Model::factory('Place')->getPlaceListforAllParking();
+		$renamePlace=View::factory('place/block/renamePlace');
 		
 		//echo Debug::vars('90',$place_list );exit;
 		$content = View::factory('place/list', array(
-		//$content = View::factory('place/placeList', array(
-			//'id_place'=>$id_place,
 			'place_list'=>$place_list,
+			'renamePlace'=>$renamePlace,
 		));
         $this->template->content = $content;
 		//echo View::factory('profiler/stats');
@@ -153,6 +153,16 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						
 					}
 		switch ($todo){
+			
+			//5.10.2025 проверяет название машиномест и добавляет слева нули, если длина названия меньше указанной
+			case 'renamePlace':
+				$placeList=Model::factory('place')->getPlaceListforAllParking();
+				foreach($placeList as $key)
+				{
+					echo Debug::vars('159', $key);exit;
+				}
+			
+			break;
 			
 			case 'addarray'://регистрация нескольких машиномест начиная с number1 и до number2. Если такой номер уже есть, то пропускаем его.
 				//echo Debug::vars('173',$this->request->post());exit;
