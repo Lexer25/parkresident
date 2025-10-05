@@ -110,8 +110,6 @@
 								
 								echo Form::open('rmo/opengate_unknow');
 								//echo Form::hidden('id_garage', Arr::get($garage_info, 'ID'));
-								//echo Form::hidden('place_for_open', Session::instance()->get('place_for_search'));
-								//echo Form::hidden('parking_for_open', Arr::get(Arr::get($place_income_garage, Session::instance()->get('place_for_search')), 'ID_PARKING'));
 								//разрешить въезд неизвестным ГРЗ
 								
 								

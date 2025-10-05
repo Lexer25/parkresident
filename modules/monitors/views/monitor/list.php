@@ -1,5 +1,5 @@
-<script  src="../js/modal-window.js"></script>
-<script  src="../js/modal-photo.js"></script>
+<script  src="../js_event/modal-window.js"></script>
+<script  src="../js_event/modal-photo.js"></script>
 <script >
 	
   	$(function(){		

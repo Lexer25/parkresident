@@ -38,47 +38,60 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 	}
 	
 	
-	public function action_index()// управление гаражом
+	public function action_index()// рабочее место сотрудника охраны
 	{
 		
-		//$this->template = 'templateWidth';
-		$id_garage = $this->request->param('id');
-		
-		
-		$id_garage=Session::instance()->get('findingPlaceArray');
+		$id_garage=Session::instance()->get('findingPlaceArray');//получаю список гаражей, куда входят названия искомых машиномест.
 		Session::instance()->delete('findingPlaceArray');
 		//echo Debug::vars('49', $id_garage);exit;
 		//если номер гаража указан, то вывожу данные по этому гаражу (для организации управления).
-		//===============================
-			
-			 $garageLst=Model::Factory('garage')->getAllGarageInfo2($id_garage);// список гаражей в виде класса
-			// echo Debug::vars('55', $garageLst);exit;
-			$garageListView=View::factory('garage/block/garageListBlock2',//подготовка таблицы гаражей. Эта таблица позже будет вставлена в общую форму
-			 array('garageLst'=>$garageLst));
-			 $garageListView=View::factory('place/block/placeInfo1',//подготовка таблицы гаражей. Эта таблица позже будет вставлена в общую форму
-			  array('garageLst'=>$garageLst));
-			
-			//===============================
+
+		if(is_null($id_garage))//если номер гаража НЕ указан, то вывожу только поиск гаража
+		{
+			$rmoSearchPlace5=View::factory('rmo/block/rmoSearchPlace5',//блок управления воротами.
+			  array());
 		
-		// if(count($id_garage)>=1)
-		// {
+		} else { //если номер гаража указан, то вывожу информацию о найденных гаражах
+			
+			$garageListData=Model::Factory('garage')->getAllGarageInfo2($id_garage);// информация о гаражах с разыскиваемыми машиноместами
+		
+			$garageListView=View::factory('place/block/placeInfo1',//форма таблицы гаражей. Эта таблица позже будет вставлена в общую форму
+				array('garageLst'=>$garageListData));
+			
+			$rmoSearchPlace5=View::factory('rmo/block/rmoSearchPlace5',//блок управления воротами.
+				array(
+					'garageListView'=>$garageListView,
+					));
+			
+		}
+	//блок управления воротами		
+			if(isset(Kohana::$config->load('artonitparking_config')->order_gate))
+			{
+				$order_gate=Kohana::$config->load('artonitparking_config')->order_gate;//порядок вывода ворот на экран
+			} else {
+				$temp=Model::factory('Rmo')->getListGate();//я сделал свой запрос номеров ворот... так спокойнее и надежнее
+				$order_gate=array_column($temp, 'ID');//вывожу все id_gate
+			}
+			
+			$rmoGateControl3=View::factory('rmo/block/rmoGateControl3',//блок управления воротами.
+			  array(
+				'order_gate'=>$order_gate,
+			  ));
+
+	//блок журнала событий
+			$rmoEventGrid4=View::factory('rmo/block/rmoEventGrid4',//блок журнала событий
+			  array(
+			  //'garageLst'=>$garageLst
+			  ));
+
+	//а теперь все собираю на одну страницу
 			$content = View::factory('rmo/rmo', array(
-				'garageListView'=>$garageListView,
-				
+				'rmoSearchPlace5'=>$rmoSearchPlace5,
+				'placeGateControl3'=>$rmoGateControl3,
+				'rmoEventGrid4'=>$rmoEventGrid4,
 				));
 			
 			$this->template->content = $content;
-			
-		//};
-		
-		if(is_null($id_garage))//а если номер гаража не указан, то вывожу предложение поиска
-		{
-			Session::instance()->delete('place_for_search');
-			$content = View::factory('rmo/rmo', array(
-			//'garageListView'=>$garageListView,
-			));
-	        $this->template->content = $content;
-		}
 	}
 	
 	/*
@@ -449,7 +462,7 @@ public function action_opengateCVS()//передача команды на от�
 				{	
 				
 				//получаю id_garage по номеру машиноместа
-				Session::instance()->set('place_for_search', Arr::get($post, 'num_for_search'));
+				
 					//$id_garage=Model::factory('garage')->get_id_garage_from_place(Arr::get($post, 'num_for_search'));
 					$id_garage=Model::factory('garage')->get_id_garage_from_place_string(Arr::get($post, 'num_for_search'));//получаю список гаражей, куда входит искомое мм
 					//echo Debug::vars('463', $id_garage, count($id_garage));exit;
@@ -459,7 +472,7 @@ public function action_opengateCVS()//передача команды на от�
 						echo Debug::vars('452', $id_garage);//exit;
 					Session::instance()->set('findingPlaceArray', $id_garage);
 					Session::instance()->set('ok_mess', array('desc'=>'Информация по номеру машиноместа '.Arr::get($post, 'num_for_search').' найдена успешно.'));
-					$this->redirect('rmo/index/');
+					$this->redirect('rmo');
 					//$this->shared_data=$id_garage;
 					} else {
 					Session::instance()->set('e_mess', array('desc'=>'Информация по номеру машиноместа '.Arr::get($post, 'num_for_search').' не найдена. Возможно, что машиноместо не входит ни в один из гаражей'));
@@ -473,7 +486,7 @@ public function action_opengateCVS()//передача команды на от�
 					
 				}
 				
-				$this->redirect('rmo/index/');
+				$this->redirect('rmo');
 				//$this->action_index();
 			break;
 			case 'open_gate_1':
