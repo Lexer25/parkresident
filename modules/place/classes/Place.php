@@ -74,7 +74,14 @@ class Place
 	   }
 	}
 	
-	
+	public function checkNameLenght()
+	{
+		$setting=new Setting();
+		if($setting->get('placeNameLenghtApply', 0) == 1){
+			$charSubstr='0';
+			if(strlen(iconv('UTF-8','windows-1251', $this->name ))<$setting->get('placeNameLenght', 3)) $this->name = str_pad($this->name , $setting->get('placeNameLenght', 3), $charSubstr, STR_PAD_LEFT);
+		}
+	}
 		
 	/**
 	*26.08.2023 добавление машиноместа
@@ -83,14 +90,15 @@ class Place
 	
 	public function add()
 	{
-		$setting=new Setting();
-		if($setting->get('placeNameLenghtApply', 0) == 1){
-			$charSubstr='0';
-			if(strlen(iconv('UTF-8','windows-1251', $this->name ))<$setting->get('placeNameLenght', 3)) $this->name = str_pad($this->name , $setting->get('placeNameLenght', 3), $charSubstr, STR_PAD_LEFT);
-		}
+		$this->checkNameLenght();
 		$sql='INSERT INTO HL_place (ID, PLACENUMBER, DESCRIPTION, NOTE, ID_PARKING, NAME)
 			values ('.$this->id.','.$this->placenumber .', \''.$this->description.'\',\''.$this->note.'\','.$this->id_parking .',\''.$this->name .'\')';
 			//echo Debug::vars('88 '.$sql);exit;
+		$sql='INSERT INTO HL_place (ID, DESCRIPTION, NOTE, ID_PARKING, NAME)
+			values ('.$this->id.', \''.$this->description.'\',\''.$this->note.'\','.$this->id_parking .',\''.$this->name .'\')';
+			//echo Debug::vars('88 '.$sql);exit;
+		
+		
 		try
 				{
 				$query = DB::query(Database::INSERT, iconv('UTF-8','windows-1251',$sql))
@@ -110,6 +118,7 @@ class Place
 	public function update()
 	{
 		//echo Debug::vars('36', $this);exit;
+		$this->checkNameLenght();
 				
 		$sql='UPDATE HL_PLACE
 				SET NAME = \''.$this->name.'\',
@@ -120,7 +129,7 @@ class Place
 				id_parking = '.$this->id_parking.'
 			WHERE (ID = '.$this->id.')';
 		Log::instance()->add(Log::DEBUG, 'Line 101 '. $sql);//exit;
-		echo Debug::vars('65', $sql); exit;
+		//echo Debug::vars('65', $sql); exit;
 		try
 			{
 			$query = DB::query(Database::UPDATE, iconv('UTF-8', 'CP1251',$sql))
@@ -175,11 +184,17 @@ class Place
    *
    *
    */
-   public static function checkUniqPlaceInParking($placenumber, $id_parking)
+   public static function checkUniqPlaceNameInParking($placenumber, $id_parking)
    {
-	   $sql='select hlp.id from hl_place hlp
+	   /* $sql='select hlp.id from hl_place hlp
 		where hlp.placenumber='.$placenumber.'
+		and hlp.id_parking='.$id_parking; */
+		
+		$sql='select hlp.id from hl_place hlp
+		where hlp.name=\''.$placenumber.'\'
 		and hlp.id_parking='.$id_parking;
+		//echo Debug::vars('191', $sql);exit;
+		
 		
 		return !( DB::query(Database::SELECT, iconv('UTF-8', 'CP1251',$sql))
 			->execute(Database::instance('fb'))

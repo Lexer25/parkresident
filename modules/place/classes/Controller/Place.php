@@ -176,11 +176,10 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						->rule('id_parking', 'digit')
 						->rule('id_parking', 'not_empty')
 						->rule('id_parking', 'digit')
-						
-						
-							;
+						;
 					if($_data->check())
 					{
+						echo Debug::vars('182 ok');//exit;
 					Log::instance()->add(Log::DEBUG, '187 Начинаю добавление машиномест с номера :from по номер :to для паркинга :parking.', 
 								array(
 									':from'=>Arr::get($_data, 'number1'),
@@ -189,11 +188,12 @@ class Controller_Place extends Controller_Template { // класс описыв�
 									));
 						for($pn=Arr::get($_data, 'number1'); $pn<=Arr::get($_data, 'number2'); $pn++)
 						{
-							
-							$_list=array(':placenum'=>$pn, ':id_parking'=>Arr::get($_data, 'id_parking'));//набор данных для логирования
-							if(!Model_Place::isPresent_numberPlace($pn, Arr::get($_data, 'id_parking')))
+							$_parking=new Parking(Arr::get($_data, 'id_parking'));
+							$_list=array(':placenum'=>$pn, ':id_parking'=>Arr::get($_data, 'id_parking'), ':parkingName'=>iconv('windows-1251','UTF-8',$_parking->name));//набор данных для логирования
+							echo Debug::vars('193', $_list);//exit;
+							if(!Model_Place::isPresent_namePlace($pn, Arr::get($_data, 'id_parking')))
 							{
-								//echo Debug::vars('185 начинаю регистрацию', $pn, Arr::get($_data, 'id_parking') );
+								//echo Debug::vars('185 начинаю регистрацию', $pn, Arr::get($_data, 'id_parking') );exit;
 								$entity = new Place();
 								$entity->name='мм_'.$pn;
 								$entity->placenumber=$pn;
@@ -202,7 +202,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 								$entity->note="Автодобавление";
 								$entity->status=0;
 								$entity->name=$entity->placenumber;
-								//echo Debug::vars('196', $entity);//exit;
+								//echo Debug::vars('196', $entity);exit;
 								Log::instance()->add(Log::DEBUG, 'Line 197 '. '199 Добавляю машиноместо :placenum.', array(':placenum'=>$entity->id));
 								
 								if ($entity->add())
@@ -259,9 +259,9 @@ class Controller_Place extends Controller_Template { // класс описыв�
 									
 								}
 							} else {
-								
-								Log::instance()->add(Log::DEBUG, '213 Повтор номера :placenum для площадки :id_parking. Ошибка.', $_list);
-								$mess_err[]=__('Машиноместо :placenum уже сущесвтует для площадки :id_parking. Операция прервана.', $_list);
+								//echo Debug::vars('262 ');exit;
+								Log::instance()->add(Log::DEBUG, '213 Повтор номера :placenum для площадки :id_parking :parkingName. Ошибка.', $_list);
+								$mess_err[]=__('Машиноместо :placenum уже сущесвтует для площадки :id_parking :parkingName. Операция прервана.', $_list);
 							}
 						}
 								
@@ -284,8 +284,8 @@ class Controller_Place extends Controller_Template { // класс описыв�
 
 				//echo Debug::vars('274',$this->request->post() );exit;
 				$_data=Validation::factory($this->request->post());
-				$_data->rule('placenumber', 'not_empty')
-						->rule('placenumber', 'digit')
+				$_data->rule('placename', 'not_empty')
+						->rule('placename', 'not_empty')
 						->rule('id_parking', 'not_empty')
 						->rule('id_parking', 'digit')
 							;
@@ -294,13 +294,13 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						
 						$entity = new Place();
 						//$entity->name='Новое машиноместо_'.Arr::get($_data, 'new_place_name').'\'';
-						$entity->placenumber=Arr::get($_data, 'placenumber');
-						$entity->name=$entity->placenumber;
+						//$entity->placenumber=Arr::get($_data, 'placenumber');
+						$entity->name=Arr::get($_data, 'placename');
 						$entity->id_parking=Arr::get($_data, 'id_parking');
 						$entity->description="";
 						$entity->note="";
 						$entity->status=0;
-						if($entity::checkUniqPlaceInParking($entity->placenumber, $entity->id_parking))
+						if($entity::checkUniqPlaceNameInParking($entity->name, $entity->id_parking))
 						{
 							//echo Debug::vars('294 true', $entity);exit;
 							if ($entity->add())
@@ -315,7 +315,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 							//echo Debug::vars('296 false');exit;
 							$parking=new Parking($entity->id_parking);
 							//echo Debug::vars('306', $parking);exit;
-							Session::instance()->set('e_mess', array('err_mess' => __('Машиноместо :placenum уже существует на парковке ":parkingName".', array(':placenum'=>$entity->placenumber, ':parkingName'=>iconv('windows-1251','UTF-8',$parking->name)))));
+							Session::instance()->set('e_mess', array('err_mess' => __('Машиноместо :placenum уже существует на парковке ":parkingName".', array(':placenum'=>$entity->placename, ':parkingName'=>iconv('windows-1251','UTF-8',$parking->name)))));
 							
 						}
 						

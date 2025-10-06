@@ -195,5 +195,26 @@ class Model_Place extends Model {
 	
 		}
 	
+	/*06.10.2025 Проверка НАЗВАНИЯ машиноместа в указанной парковке на уникальность
+	*если название машиноместа в парковке есть, то возвращается true
+	*если название машиноместа в парковке нет, то возвращается false
+	*/	
+	public static function isPresent_namePlace($name, $id_parking)
+	//public static function unique_numberPlace($data)
+		{
+				
+		$sql='select count(id) as total from hl_place hlp
+					where hlp.name=\''. $name.'\'
+					and hlp.id_parking='.$id_parking;
+		//echo Debug::vars('184', $sql);exit;			
+			$total= DB::query(Database::SELECT, iconv('UTF-8','windows-1251', $sql))
+			->execute(Database::instance('fb'))
+			->get('TOTAL');	
+		if($total == 0) return false;
+			return true;		
+					
+	
+		}
+	
 	
 }

@@ -42,7 +42,7 @@ $t1=microtime(true);
 <?php if(Auth::Instance()->logged_in())
 {
 	
-	//if(isset($renamePlace)) echo $renamePlace;//блок управления названиями
+	if(isset($renamePlace)) echo $renamePlace;//блок управления названиями
 	
 	$parkingPlace=Model::factory('ParkingPlace')->get_list_for_select();//получил список парковочных площадок
 	$selectList=array();
@@ -65,12 +65,14 @@ $t1=microtime(true);
 			<table>
 				<tr>
 					<th>Парковочная площадка</th>
-					<th>Номер машиноместа</th>
+					<!--<th>Номер машиноместа</th>-->
+					<th>Название машиноместа</th>
 					<th>Комментарий машиноместа</th>
 				</tr>
 				<tr>
 					<td><?php echo Form::select('id_parking', $parkingPlace);?></td>
-					<td><?php echo Form::input('placenumber','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number' ));?></td>
+					<!--<td><?php echo Form::input('placenumber','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number' ));?></td>-->
+					<td><?php echo Form::input('placename','', array('placeholder'=>'Название машиноместа','minlength '=>1,'maxlength  '=>50, 'required'=>'required'));?></td>
 					<td><?php echo Form::input('new_place_name', '', array('placeholder'=>'Комментарий машиноместа','maxlength  '=>205));?></td>
 				</tr>
 			</table>
@@ -200,16 +202,7 @@ $t1=microtime(true);
 				echo '<td>'.Form::radio( 'id', $place->id, Arr::get($value, 'is_active' == 1)).' '.$place->id.'</td>';
 								
 				echo '<td>'. iconv('windows-1251','UTF-8',$place->parkingname).'</td>';
-				/* if(Auth::Instance()->logged_in())
-				{				
-					echo '<td>'.HTML::anchor('place/edit/'.$place->id,
-							$place->placenumber)
-							.'</td>';
-				} else 
-				{
-					echo '<td>'.$place->placenumber.'</td>';
-					
-				} */
+				
 				if(Auth::Instance()->logged_in())
 				{				
 					echo '<td>'.HTML::anchor('place/edit/'.$place->id,
