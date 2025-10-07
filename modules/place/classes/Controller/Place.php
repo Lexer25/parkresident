@@ -521,5 +521,57 @@ class Controller_Place extends Controller_Template { // класс описыв�
 			
 		}
 		
+		
+	
+	  /** 7.10.2025 //отправка http post запроса на открытие двери для указанного ГРЗ 
+	  *string(3) "551"
+	  *array(3) (
+	*	"mess" => string(1) "6"
+	*		"id" => string(1) "4"
+	*		"submit" => string(27) "Открыть ворота"
+	*	)
+	*/
+	 public function action_sendOpen()
+	 {	
+		echo Debug::vars('536', $_POST);exit;
+		
+		Log::instance()->add(Log::DEBUG, '561-0 sendOpen '.Debug::vars($_POST));
+				
+				//фиксирую отправку команды на открытие ворот в журнале событий.
+				$event=new Events();
+				$event->event_code=$event::evOpenDoorOperator;
+				$event->id_gate=Arr::get($_POST, 'id');
+				$event->comment=Text::limit_chars(Arr::get($_POST, 'mess'), 255);
+				$event->insert();
+				//echo Debug::vars('575', $event);exit;
+			$result=Model::factory('Rmo')->sendOpen(Arr::get($_POST, 'id'));//открыть указанные ворота
+			//echo Debug::vars('559', $result, $event->result->id_events);exit;
+			
+			//фиксирую результат выполения команды на открытие ворот
+			if(Arr::get($result, 'result'))
+			{
+				//команда выполнена успешно
+				$event->event_code=$event::evOpenDoorOperatorOk;
+				$event->idGate=Arr::get($_POST, 'id');
+				$event->comment=$event->result->id_events;
+				$event->insert();
+				//echo Debug::vars('578', $event, $event->insert());//exit;
+				Log::instance()->add(Log::DEBUG, '561-1 sendOpen Команда выпонена успешно');
+				Session::instance()->set('ok_mess', array('Команда выпонена успешно.'));
+				
+				
+				
+			} else {
+				//комнада не выполнена
+				$event->event_code=$event::evOpenDoorOperatorErr;
+				$event->idGate=Arr::get($_POST, 'id');
+				$event->comment=Text::limit_chars(Arr::get($result, 'edesc'), 255).' '.$event->result->id_events;
+				$event->insert();
+				Log::instance()->add(Log::DEBUG, '561-2 sendOpen '.Debug::vars(Arr::get($result, 'edesc')));
+				Session::instance()->set('e_mess', array(Arr::get($result, 'edesc')));
+			}
+			//echo Debug::vars('567');exit;
+			$this->redirect($this->request->referrer());
+	 }
 
 } 

@@ -7,7 +7,7 @@
 ?>
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo 'Список гаражей v.2';?></h3>
+		<h3 class="panel-title"><?php echo __('Результат поиска :count гаражей', array(':count'=>count($garageLst)));?></h3>
 	</div>
 	<div class="panel-body">
 	
@@ -41,7 +41,10 @@
 						echo '<tr>';
 							
 							echo '<td>'.++$i.'</td>';//номер по порядку
-							echo '<td>'. HTML::anchor('/garage/edit_garage/'.Arr::get($value, 'id_garage'), iconv('windows-1251','UTF-8', Arr::get($value, 'name'))).'</td>';//название гаража
+							echo '<td>'
+								. HTML::anchor('/garage/edit_garage/'.Arr::get($value, 'id_garage'), iconv('windows-1251','UTF-8', Arr::get($value, 'name')))
+								.'<br>(id='.Arr::get($value, 'id_garage').')'
+								.'</td>';//название гаража
 							echo '<td>'; //считать или не считать
 								if(Arr::get($value, 'not_count')!=0)
 								{
@@ -75,12 +78,12 @@
 							//вывод списка ГРЗ
 							echo '<td>';
 								echo __('Всего ГРЗ <b>count</b>', array('count'=>count(Arr::get($value, 'grzList')))).'<hr>';
-								foreach(Arr::get($value, 'grzList') as $key2=>$value2)
+								/* foreach(Arr::get($value, 'grzList') as $key2=>$value2)
 								{
 									//echo Debug::vars($key,$value); exit;
 									echo HTML::anchor('grz/history/'.Arr::get($value2, 'GRZ'), Arr::get($value2, 'GRZ')).' '. iconv('windows-1251','UTF-8', Arr::get($value2, 'NAME')).'<br>';
-								};
-								echo Form::open('Place/control');
+								}; */
+								//echo Form::open('Place/sendOpen');
 								foreach(Arr::get($value, 'grzList') as $_key=>$_value)
 								{
 									 if (Arr::get($_value, 'ACTIVE') >0)
@@ -90,10 +93,7 @@
 											'value'=>Arr::get($_value, 'GRZ'), 
 											'class'=>'btn btn-success btn-xs', 
 											'type' => 'submit', 
-											'onclick'=>'return confirm(\''.__('Будет открыт въезд для grz на парковку PARKING_NAME. Открыть', 
-												array('grz'=>Arr::get($_value, 'GRZ'), 
-												'PARKING_NAME'=>'PARKING_NAME'
-												)).'?\') ? true : false;'))
+											))
 										.'<br><br>';
 									 } else
 									 {
@@ -106,9 +106,9 @@
 										 
 									 }
 								}
-								echo Form::close();
+								//echo Form::close();
 								
-								echo Form::open('rmo/opengate_unknow');
+								/* echo Form::open('rmo/opengate_unknow');
 								//echo Form::hidden('id_garage', Arr::get($garage_info, 'ID'));
 								//разрешить въезд неизвестным ГРЗ
 								
@@ -117,7 +117,7 @@
 								echo ' ';
 								echo Form::button('todo', 'Вставка неизвестного ГРЗ для проезда', array('value'=>'insert_unknow_plate','class'=>'btn btn-primary', 'type' => 'submit'));
 								echo '<br>(не более 10 символов)';
-								echo Form::close();	
+								echo Form::close();	 */
 					
 						 
 								echo '</td>';

@@ -142,6 +142,7 @@ Kohana::modules(array(
 	 'emul'  => MODPATH.'emul',  // Набор инструментов для эмуляции работы парковочной системы.
 	 'rmo'  => MODPATH.'rmo',  // рабочее место охранника
 	 'monitors'  => MODPATH.'monitors',  // монитор событий онлайн
+	 'grz'  => MODPATH.'grz',  // работа с ГРЗ
 	
 	));
 

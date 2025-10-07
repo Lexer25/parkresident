@@ -35,10 +35,10 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 	{
 		//$_SESSION['menu_active']='grz';
 		$t1=microtime(true);//отмека времени для оценки быстродействия	
-		//echo Debug::vars('38', $_GET, $_POST, $id_parking); //exit;
-		$getGrzInfo=Model::Factory('grz')->getGrzInfoList();//список ГРЗ
 		
-		$content = View::factory('rubic/grzList', array(
+		$getGrzInfo=Model::Factory('grz')->getGrzInfoList();//список ГРЗ
+		//echo Debug::vars('40', $getGrzInfo);exit;
+		$content = View::factory('grz/grzList', array(
 			'grz_list'=>$getGrzInfo,
 			't1'=>$t1,
 			));
@@ -68,7 +68,7 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 
 
 			//echo debug::vars('61', $getGrzInfo, $grzHistory); exit;
-			$content = View::factory('rubic/grzHistory', array(
+			$content = View::factory('grz/grzHistory', array(
 			'grz'=>Arr::get($query, 'grz'),
 			'getGrzInfo'=>$getGrzInfo,
 			'grzHistory'=>$grzHistory,
@@ -113,9 +113,10 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 			;
 		if($post->check())
 		{
-			
+			//echo Debug::vars('116 ok');exit;
 			//внесение ГРЗ в таблицу HL_INSIDE для указанной парковки
-			Model::factory('grz')->addToInside(Arr::get($post, 'car_in_parking'));
+			//echo Debug::vars('118', $post);exit;
+			Model::factory('grz')->addToInside(Arr::get($post, 'car_in_parking'), Arr::get($post, 'id_pep'), Arr::get($post, 'id_parking'));
 
 			//внесение события "Ручной въезд" ГРЗ для указанной парковки
 			Model::factory('grz')->addEventsInsertGRZTomInside(Arr::get($post, 'car_in_parking'));			
@@ -124,6 +125,7 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 			$this->redirect('grz');
 			
 		} else {
+			//echo Debug::vars('127 err');exit;
 			Session::instance()->set('e_mess', $post->errors('Valid_mess'));
 			$this->redirect('grz');
 		}

@@ -40,7 +40,7 @@ class Model_Grz extends Model {
 	*/
 	public function getGrzInfoList()
 	{
-		$sql='select first 10 c.id_card from card c
+		$sql='select c.id_card from card c
 		where c.id_cardtype='.$this->id_cardtype.'
 		order by c.id_card';
 		//echo Debug::vars('46', $sql); exit;
@@ -126,7 +126,7 @@ class Model_Grz extends Model {
 		
 		//список парковок для ГРЗ
 					
-		 $sql='select  hlpp.id  as id_parking, hlpp.name as parking_name from hl_orgaccess hlo
+		 $sql='select distinct hlpp.id  as id_parking, hlpp.name as parking_name from hl_orgaccess hlo
                 join people p on p.id_org=hlo.id_org
                 join hl_garagename hlg on hlg.id=hlo.id_garage
                 join hl_garage hlgg on hlgg.id_garagename=hlg.id
@@ -134,7 +134,7 @@ class Model_Grz extends Model {
                 join hl_parking hlpp on hlp.id_parking=hlpp.id
                 where p.id_pep='.Arr::get($res, 'ID_PEP');
 				
-				
+		//echo Debug::vars('137', $sql);exit;		
 			try
 		{
 		$query = DB::query(Database::SELECT, $sql)
@@ -279,10 +279,15 @@ class Model_Grz extends Model {
 	Добавление ГРЗ в таблицу INSIDE
 	
 	*/
-	public function addToInside($grz)
+	public function addToInside($grz, $id_pep, $id_parking)
 	{
 		$this->delFromInside($grz);
-		$sql='INSERT INTO HL_INSIDE (ID_CARD, COUNTERID) VALUES (\''.$grz.'\', 4)';
+		$sql=__('INSERT INTO HL_INSIDE (ID_CARD, ID_PEP, COUNTERID) VALUES (\':grz\', :id_pep, :id_parking)',
+			array(
+			':grz'=>$grz,
+			':id_pep'=>$id_pep,
+			':id_parking'=>$id_parking,
+			));
 		//echo Debug::vars('142', $sql); exit;
 		try {
 			$query = DB::query(Database::INSERT, $sql)

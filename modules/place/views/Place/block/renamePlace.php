@@ -53,15 +53,7 @@
                     </tbody>
                 </table>
 			<?php
-	
-	//echo Debug::vars('16');//exit;
-		/* echo Form::open('place/control');
-
-				echo Form::input('placenumber','', array('placeholder'=>'Номер машиноместа','minlength '=>1,'maxlength  '=>5, 'required'=>'required', 'type'=>'number' )).'<br>';
-				echo Form::input('new_place_name', '', array('placeholder'=>'Комментарий машиноместа','maxlength  '=>205)).'<br>';
-
-			echo Form::button('todo', 'Преобразовать', array('value'=>'renamePlace','class'=>'btn btn-success', 'type' => 'submit'));	
-			echo Form::close(); */
+	if(Auth::Instance()->logged_in()) echo HTML::anchor('wizard', 'Изменить настройки');
 	?>
 		
 				

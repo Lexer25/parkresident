@@ -19,6 +19,7 @@
 
 	<thead allign="center">
 		<tr>
+			<th><?php echo __('pp');?></th>
 			<th><?php echo __('grz');?></th>
 			<th><?php echo __('pep_name');?></th>
 			<th><?php echo __('Активность');?></th>
@@ -53,7 +54,10 @@
 		foreach($grz_list as $key=>$value)
 		{
 			echo '<tr>';
-				//echo '<td>'.$i++.'</td>';
+				echo '<td>'
+					.$i++
+					//.Debug::vars('57', $value)
+					.'</td>';
 				echo '<td>'. HTML::anchor('grz/history/'.Arr::get($value,'ID_CARD'), iconv('windows-1251','UTF-8',Arr::get($value,'ID_CARD')));
 					if( preg_match("/[а-яё]/iu", iconv('windows-1251','UTF-8',Arr::get($value,'ID_CARD', '')))) echo '<br><span class="label label-danger">Русские буквы в ГРЗ</span>';
 					//echo Debug::vars('60', $value);
@@ -118,6 +122,7 @@
 					
 					echo Form::open('grz/car_in_parking');
 					echo Form::hidden('id_parking', Arr::get($value2,'ID_PARKING'));
+					echo Form::hidden('id_pep', Arr::get($value,'ID_PEP'));
 					//echo Debug::vars('100',Arr::get($value,'accessList') );
 					echo Form::button('car_in_parking', 'IN '.iconv('windows-1251','UTF-8', Arr::get($value2, 'PARKING_NAME')), array('value'=>Arr::get($value,'ID_CARD'),'class'=>'btn btn-success btn-xs', 'type' => 'submit'));
 					//echo '<br><br>';
