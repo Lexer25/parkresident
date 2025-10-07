@@ -584,7 +584,7 @@ public function action_opengateCVS()//передача команды на от�
 	*/
 	 public function action_sendOpen()
 	 {	
-		echo Debug::vars('551', $_POST);exit;
+		//echo Debug::vars('551', $_POST);exit;
 		
 		Log::instance()->add(Log::DEBUG, '561-0 sendOpen '.Debug::vars($_POST));
 				

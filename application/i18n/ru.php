@@ -261,7 +261,7 @@ return array(
 		'gate_name'=>'Название КПП',
 		'id_gate '=>'ID КПП',
 		'update'=>'Сохранить',
-		'gate_menu'=>'#КПП',
+		'gate_menu'=>'КПП',
 		'del_grz_from_parking'=>'Удалить с территории парковки',
 		'grz'=>'ГРЗ',
 		'date_come_in'=>'Дата и время въезда',
