@@ -421,8 +421,8 @@ class Controller_Place extends Controller_Template { // класс описыв�
 			
 			
 			
-			case 'update'://обновление данных о жилом комплексе. Примем данных и обновление данных о ЖК.
-			//echo Debug::vars('278', $_GET, $_POST); //exit;
+			case 'update'://обновление данных о машиноместе
+				echo Debug::vars('278', $_GET, $_POST); //exit;
 				$_data=Validation::factory($this->request->post());
 				$_data->rule('id', 'not_empty')
 						->rule('id', 'digit')
@@ -433,7 +433,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						;
 				if($_data->check())
 				{
-					//echo Debug::vars('316', $_data);exit;
+					echo Debug::vars('316', $_data);exit;
 					$entity = new Place (Arr::get($_data, 'id'));
 					$entity->placenumber=Arr::get($_data, 'placenumber');
 					$entity->name=Arr::get($_data, 'name');
@@ -453,7 +453,7 @@ class Controller_Place extends Controller_Template { // класс описыв�
 						}
 				} else 
 				{
-					//echo Debug::vars('298');exit;
+					echo Debug::vars('298');exit;
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 				}
 				$this->redirect('place/list');
