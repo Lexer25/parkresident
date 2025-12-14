@@ -115,8 +115,7 @@ $(function() {
 
 
 <? //http://itchief.ru/lessons/bootstrap-3/30-bootstrap-3-tables;
-/* echo Debug::vars('11', 
-	$garage_info);  */
+/* echo Debug::vars('11', $garage_info);  */
 // страница отображения данных по гаражу
 //echo Debug::vars('5', $place_list);
 echo Form::open('garage/control');
@@ -151,8 +150,7 @@ echo Form::open('garage/control');
 	<div class="panel-body">
 		
 		<?php 
-		//echo Debug::vars('11', $garage_info, Arr::get($garage_info, 'ENABLED'));
-		//echo Form::hidden('id_rubic', Arr::get($garage_info, 'ID'));
+		
 		echo 'Название гаража'.Form::input('name', Arr::get($garage_info, 'NAME'), array('maxlength'=>250)).'<br>';
 		echo 'ID гаража'. ' '. Arr::get($garage_info, 'ID').'<br>';
 		
@@ -169,12 +167,12 @@ echo Form::open('garage/control');
 		?>
 	</div>
 	<?php
-		//echo debug::vars('128', $place_grz_garage_);
+		
 		if(count($place_grz_garage_))
 		{
 			foreach($place_grz_garage_ as $key=>$value)
 				
-				echo Arr::get($value, 'GRZ').' '.Arr::get($value, 'NAME').' ';
+				echo Arr::get($value, 'GRZ').' '.Arr::get($value, 'NAME').'<br>';
 		} else 
 		{
 			echo __('Нет ГРЗ для этого гаража.');
@@ -389,19 +387,8 @@ echo Form::open('garage/control');
 	</div>
 	<div class="panel-body">
 	<?php
-		$garage = new Garage(Arr::get($garage_info, 'ID'));
 		
-		$garage->eventList=array(3,4,5,6,7,8,9,10);
-		//echo Debug::vars('395', $garage->getEvents());exit;
-		$events=new Events();
-		
-		$eventsListForGarage=$events->getListEventsForGarage($garage->eventList);//я передаю список id событий, которые надо вывести на экран
-
-		 echo View::factory('garage/event')// вывод таблицы журнала событий для гаража
-				->set('list', $eventsListForGarage)
-
-			; 
-			
+		echo $eventtable;
 	?>
 
 	</div>

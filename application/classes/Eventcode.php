@@ -62,19 +62,7 @@ class Eventcode
 	}
 	
 	
-	/*
 	
-	*/
-	public function getListEventsForGarage($id_events)
-	{
-		
-		Foreach($id_events as $key)
-		{
-			
-			
-		}
-		return ($id_events);
-	}
 	
 	/*
 	30.08.2023

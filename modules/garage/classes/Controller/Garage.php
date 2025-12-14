@@ -56,21 +56,31 @@ class Controller_Garage extends Controller_Template {
 		//$_SESSION['menu_active']='kp_park_menu';
 		//echo Debug::vars('43', $_GET, $_POST, $this->request->param('id')); exit;
 		$id_garage = $this->request->param('id');
-		$garage_info=Model::Factory('garage')->get_garage_info($id_garage); //получить информация о гараже
+		$modelGarage=Model::Factory('garage');
+		$garage_info=$modelGarage->get_garage_info($id_garage); //получить информация о гараже
+		
+		$place_income_garage=$modelGarage->place_income_garage($id_garage); //список машиномест, входящих в гараж
+		$place_busy=$modelGarage->place_busy_garage(); //список машиномест, входящих в другие гаражи
+		$org_income_garage=$modelGarage->org_income_garage($id_garage); //список квартир, входящих в гараж
+		$place_grz_garage_=$modelGarage->place_grz_garage_($id_garage); //список ГРЗ, входящих в гараж
+		
+	
 		$place_list=Model::Factory('rubic')->get_list_parking_place();//список парковочный мест
-		$place_income_garage=Model::Factory('garage')->place_income_garage($id_garage); //список машиномест, входящих в гараж
-		$place_busy=Model::Factory('garage')->place_busy_garage(); //список машиномест, входящих в другие гаражи
-		$org_income_garage=Model::Factory('garage')->org_income_garage($id_garage); //список квартир, входящих в гараж
-		$place_grz_garage_=Model::Factory('garage')->place_grz_garage_($id_garage); //список ГРЗ, входящих в гараж
-		//echo Debug::vars('56 debug'); exit;
 		
 		
-		$org_busy=Model::Factory('garage')->org_busy_garage(); //список квартир с пометкой принадлежности к другим гаражам. Их надо пометить как неактивные и запретить выбор.
-		//$org_can=Model::Factory('garage')->org_can_garage(); //список квартир, учитывающихся для въезда в гараж. Их надо пометить как активные и разрешить выбор. Кандидат на удаление
+		$org_busy=$modelGarage->org_busy_garage(); //список квартир с пометкой принадлежности к другим гаражам. Их надо пометить как неактивные и запретить выбор.
 		$org_can_view=Model::Factory('treeorg')->make_tree($org_busy, $id_garage);
 		
 	
-		//echo Debug::vars('59', $org_income_garage); exit;
+		//14.12.2025 добавляю журнал событий для гаража
+		$garage = new Garage($id_garage);
+		$garage->eventList=array(3,4,5,6,7,8,9,10);//список событий, которые необходимо выводить для гаража
+		$eventsListForGarage=$modelGarage->getListEventsForGarage($garage);//я передаю весь класс garage, получаю массив для вывода на экран
+		$eventtable= View::factory('garage/event')// вывод таблицы журнала событий для гаража
+				->set('list', $eventsListForGarage)
+			; 
+			
+			
 		
 		$content = View::factory('garage/edit_garage', array(
 			'garage_info'=>$garage_info,
@@ -80,6 +90,7 @@ class Controller_Garage extends Controller_Template {
 			'org_can_view'=>$org_can_view,
 			'org_income_garage'=>$org_income_garage,
 			'place_grz_garage_'=>$place_grz_garage_,
+			'eventtable'=>$eventtable,
 			
 		));
         $this->template->content = $content;

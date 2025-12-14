@@ -7,6 +7,11 @@
  * @copyright  (c) 2025 Artonit Team
  * @license    http://artonit/ru 
  
+ 
+ echo Debug::vars('');exit;
+ Дата последней редакции:
+ 14.12.2025
+ 
  */
 
 
@@ -68,10 +73,10 @@ class Events
 			$this->color=Arr::get($query, 'COLOR');
 			$this->is_present=true;
 			
-			//echo Debug::vars('23', $sql, $query); exit;
+			
 			
 		} catch (Exception $e) {
-			////echo Debug::vars('30', $sql, $e->getMessage()); exit;
+			
 			Log::instance()->add(Log::DEBUG, 'Line 52 '. $e->getMessage());
 		
 		}
@@ -83,44 +88,7 @@ class Events
 	}
 	
 	
-	/*
-	
-	*/
-	public function getListEventsForGarage($id_events)
-	{
 		
-		if(!empty($id_events))
-		{
-			$sql='select hle.event_time, hle.event_code, hlp.is_enter, hlp.name as gate_name, hlp.id_parking, hle.grz, hle.id_pep, hle.id_gate, hle.comment, et.name as event_name,  p.surname, p.name, p.PATRONYMIC, hl_org.id_garage
-            from hl_events  hle
-            left join hl_param hlp on hlp.id_dev=hle.id_gate
-            left join hl_eventcode  et on et.id=hle.event_code
-            left join card c on c.id_card=hle.grz
-            left join people p on p.id_pep=c.id_pep
-            join hl_orgaccess hl_org on hl_org.id_org=p.id_org
-            where hle.id in ('.implode(",", $id_events).')
-			order by hle.event_time desc';	
-			
-			//echo Debug::vars('102', $sql);exit;
-			
-			try
-			{
-				$query = DB::query(Database::SELECT, $sql)
-				->execute(Database::instance('fb'))
-				->as_array();
-				
-				return $query;
-			} catch (Exception $e) {
-				////echo Debug::vars('30', $sql, $e->getMessage()); exit;
-				Log::instance()->add(Log::DEBUG, 'Line 52 '. $e->getMessage());
-			
-			}
-		} else {
-			echo Debug::vars('118');exit;
-		}
-		return array();
-	}
-	
 	/*
 	30.08.2023
 	получить список id событий по этому гаражу
@@ -156,7 +124,7 @@ class Events
 			}
 			return $res;
 		} catch (Exception $e) {
-			////echo Debug::vars('30', $sql, $e->getMessage()); exit;
+			
 			Log::instance()->add(Log::DEBUG, 'Line 52 '. $e->getMessage());
 		
 		}
@@ -211,7 +179,7 @@ class Events
 			':ID_PEP'=>$this->id_pep,
 			':ID_GATE'=>$this->id_gate
 			));
-			//echo Debug::vars('205', $sql);exit;
+			
 			Log::instance()->add(Log::DEBUG, 'Line 215 '. $sql);
 			try{
 				$result = DB::query(Database::INSERT, iconv('UTF-8', 'windows-1251', $sql))
@@ -242,14 +210,14 @@ class Events
 	
 	public function save()
 	{
-		//echo Debug::vars('36', $this->name, $this->standalone);
+		
 		 $sql=__('INSERT INTO TABLE (NAME, standalone)
 			VALUES (\':NAME\', :standalone)', 
 		array(
 			':NAME'=>$this->name,
 			':standalone'=>$this->standalone,
 			));
-	//echo Debug::vars('45', $sql); exit;
+	
 		try
 			{
 				$query = DB::query(Database::INSERT, iconv('UTF-8', 'CP1251',$sql))

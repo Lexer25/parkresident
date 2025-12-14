@@ -23,13 +23,14 @@ class Model_Grz extends Model {
 	{
 		$sql='select hle.id, hle.event_time, hle.event_code,hlec.color, hlec.name as eventName, hle.grz, hlp.name as gateName, hlp.is_enter from hl_events hle
 			join hl_eventcode hlec on hlec.id=hle.event_code
-			join hl_param hlp on hlp.id_dev=hle.id_gate
+			join hl_param hlp on hlp.id=hle.id_gate
 			where hle.grz=\''.$grz.'\'
 			and hle.event_code not in (13)
 			order by hle.id desc';
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array();
+		//echo Debug::vars('33', $sql); exit;
 		//echo Debug::vars('20', $query); exit;
 		return $query;
 	}
@@ -48,13 +49,15 @@ class Model_Grz extends Model {
 			->execute(Database::instance('fb'))
 			->as_array();
 		
-		
-		foreach (array_slice($query, 0, 1000) as $key=>$value)
+		$current_time_limit = ini_get('max_execution_time');
+		set_time_limit(300); // 5 минут
+		foreach (array_slice($query, 0, 10000) as $key=>$value)
 		{
 			$res[]=$this->getGrzInfo(Arr::get($value, 'ID_CARD'));
 			
 		}
 		//echo Debug::vars('20', $res); exit;
+		set_time_limit($current_time_limit); 
 		return $res;
 	}
 	

@@ -34,9 +34,10 @@ class Garage
 	
 	 public function __construct($id=null)
     {
-       if(filter_var($id, FILTER_VALIDATE_BOOLEAN))//если указан id, то создаю экземпляр класса с данными из БД.
+      // echo Debug::vars('37', $id, filter_var($id, FILTER_VALIDATE_BOOLEAN), (is_numeric($id) && $id > 0));//exit;
+	   if(is_numeric($id) && $id > 0)//если указан id, то создаю экземпляр класса с данными из БД.
 	   {
-	   $this->id = $id;
+		$this->id = $id;
 		$sql='select hln.name, hln.created, hln.not_count, hln.div_code from hl_garagename hln
 				where hln.id='.$this->id;
 		try
@@ -57,7 +58,7 @@ class Garage
 		
 		}
 	   } else { // если не указан id, то создаю пустой экземпляр класса
-			
+
 	   }
 	}
 	
@@ -77,7 +78,7 @@ class Garage
 			and ec.id not in (46)
 			 order by e.id';
 		
-		
+	//echo Debug::vars('80', $sql);exit;	
 		
 		$res=array();
 		try

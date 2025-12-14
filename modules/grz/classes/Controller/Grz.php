@@ -51,10 +51,7 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 	{
 		//$_SESSION['menu_active']='grz';
 		$param=array('grz'=>$this->request->param('id'));
-		//echo Debug::vars('263', $param); exit;
 		
-			
-	//echo Debug::vars('51 car_in_parking', $_POST); exit;
 		$query=Validation::factory($param);
 		//$query=Validation::factory(array('grz'=>$this->request->param('id')));
 		$query->rule('grz', 'not_empty')
@@ -67,7 +64,8 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 			$getGrzInfo=Model::factory('grz')->getGrzInfo(Arr::get($query, 'grz'));
 
 
-			//echo debug::vars('61', $getGrzInfo, $grzHistory); exit;
+			//echo debug::vars('67', $grzHistory); exit;
+			//echo debug::vars('61', $getGrzInfo); exit;
 			$content = View::factory('grz/grzHistory', array(
 			'grz'=>Arr::get($query, 'grz'),
 			'getGrzInfo'=>$getGrzInfo,

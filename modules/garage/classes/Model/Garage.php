@@ -961,6 +961,44 @@ class Model_Garage extends Model {
 			
 	}
 	
+	/*14.12.2027 теперь в функцию передается весь экземпляр класса garage
+	
+	*/
+	public function getListEventsForGarage($garage)
+	{
+		
+		if(!empty($garage))
+		{
+			
+			$sql='select hle.event_time, hle.event_code, hlp.is_enter, hlp.name as gate_name, hlp.id_parking, hle.grz, hle.id_pep, hle.id_gate, hle.comment, et.name as event_name,  p.surname, p.name, p.PATRONYMIC, hl_org.id_garage
+            from hl_events  hle
+            left join hl_param hlp on hlp.id_dev=hle.id_gate
+            left join hl_eventcode  et on et.id=hle.event_code
+            left join card c on c.id_card=hle.grz
+            left join people p on p.id_pep=c.id_pep
+            join hl_orgaccess hl_org on hl_org.id_org=p.id_org
+            where hle.event_code in ('.implode(",", $garage->eventList).')
+			and hl_org.id_garage='.$garage->id.'
+			order by hle.event_time desc';	
+			
+			try
+			{
+				$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+				
+				return $query;
+			} catch (Exception $e) {
+				
+				Log::instance()->add(Log::DEBUG, 'Line 52 '. $e->getMessage());
+			
+			}
+		} else {
+			return array();
+		}
+		return array();
+	}
+	
 	
 	
 }
