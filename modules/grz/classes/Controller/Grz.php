@@ -34,12 +34,22 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 	public function action_index()// просмотр списка ГРЗ и их свойств
 	{
 		//$_SESSION['menu_active']='grz';
+		
 		$t1=microtime(true);//отмека времени для оценки быстродействия	
 		
-		$getGrzInfo=Model::Factory('grz')->getGrzInfoList();//список ГРЗ
-		//echo Debug::vars('40', $getGrzInfo);exit;
-		$content = View::factory('grz/grzList', array(
+		//$getGrzInfo=Model::Factory('grz')->getGrzInfoList();//список ГРЗ
+		
+		$getGrzInfo=Model::Factory('grz')->getGrzInfoListModel();//список ГРЗ
+		$grzInfoListAccessNameList=Model::Factory('grz')->getGrzInfoListAccessNameList();//список id_pep->категория доступа 
+		$grzInfoListParkingList=Model::Factory('grz')->getGrzInfoListParkingList();//список id_pep->парковка
+		//echo Debug::vars('40', $getGrzInfo);..exit;
+		//echo Debug::vars('41', (microtime(true)-$t1));exit;
+		
+		
+		$content = View::factory('grz/GrzList3arra', array(
 			'grz_list'=>$getGrzInfo,
+			'grzInfoListAccessNameList'=>$grzInfoListAccessNameList,
+			'grzInfoListParkingList'=>$grzInfoListParkingList,
 			't1'=>$t1,
 			));
         $this->template->content = $content;

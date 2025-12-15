@@ -62,6 +62,81 @@ class Model_Grz extends Model {
 	}
 	
 	
+	/*15.12.2025 попытка ускорить процесс получения данных.
+	* 
+	Получить информацию по всем ГРЗ, зарегистрированных в базе данных СКУД.
+	
+	*/
+	public function getGrzInfoListModel()
+	{
+		
+		
+		$sql='select distinct c.id_card, c.id_pep, c.timestart, c.timeend, c.note, c.status, c."ACTIVE", c.flag, c.id_cardtype, p.name , p.surname as GRZ_MODEL, p.patronymic from card c
+		join people p on c.id_pep=p.id_pep
+
+        where c.id_cardtype='.$this->id_cardtype.'
+        order by c.id_card';
+		
+		//echo Debug::vars('46', $sql); exit;
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		
+		/* $current_time_limit = ini_get('max_execution_time');
+		set_time_limit(300); // 5 минут
+		foreach (array_slice($query, 0, 10000) as $key=>$value)
+		{
+			$res[]=$this->getGrzInfo(Arr::get($value, 'ID_CARD'));
+			
+		}
+		//echo Debug::vars('20', $res); exit;
+		set_time_limit($current_time_limit);  */
+		return $query;
+	}
+	
+	/*15.12.2025 попытка ускорить процесс получения данных.
+	* 
+	вспомогательная тебалица id_pep-> список id категорий доступа
+	
+	*/
+	public function getGrzInfoListAccessNameList()
+	{
+		
+		
+		$sql='select ssu.id_pep, ssu.id_accessname from ss_accessuser ssu';
+		
+		//echo Debug::vars('46', $sql); exit;
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		return $query;
+	}
+	
+	/*15.12.2025 попытка ускорить процесс получения данных.
+	* 
+	вспомогательная тебалица id_card-> список id_парковок
+	
+	*/
+	public function getGrzInfoListParkingList()
+	{
+		
+		
+		$sql='select distinct p.id_pep,p.name, p.surname, p.patronymic, hlg.id, hlg.name, hlpr.id, hlpr.name from hl_orgaccess hlo
+			join people p on p.id_org=hlo.id_org
+			join hl_garagename hlg on hlg.id=hlo.id_garage
+			join hl_garage hlg2 on hlg2.id_garagename=hlg.id
+			join hl_place hlp on hlp.id=hlg2.id_place
+			join hl_parking hlpr on hlpr.id=hlp.id_parking';
+		
+		//echo Debug::vars('46', $sql); exit;
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		return $query;
+	}
+	
+	
+	
 	/*
 		информация о ГРЗ
 		$grz - номер идентификатора
