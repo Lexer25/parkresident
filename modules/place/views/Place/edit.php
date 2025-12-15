@@ -8,7 +8,7 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<h3 class="panel-title"><?php echo __('Конфигурация машиноместа').' '. iconv('windows-1251','UTF-8',$place->name);
-		echo Form::hidden('id', $place->id);
+		
 
 		?></h3>
 	</div>
@@ -21,6 +21,7 @@
 
 			echo Form::open('Place/control');
 			echo Form::hidden('placenumber', $place->placenumber).'<br>';
+			echo Form::hidden('id', $place->id);
 			echo __('(ID').$place->id.')<br>';
 			$selectList=array();
 			/* echo 'Парковочная площадка: '.Form::select('id_parking', $parkingPlace, $place->id_parking).' '.__('(ID').$place->id_parking.')';

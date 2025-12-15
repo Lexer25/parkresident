@@ -110,8 +110,7 @@ class Events
 			join hl_eventcode ec on ec.id=e.event_code
 			where hlo.id_garage='.$this->id.'
 			and ec.id not in (46)';
-		
-		
+	
 		try
 		{
 			$query = DB::query(Database::SELECT, $sql1)
@@ -120,7 +119,7 @@ class Events
 			foreach($query as $key=>$value)
 			{
 				$res[]=$value;
-				//$res[]=Arr::get($value, '');
+
 			}
 			return $res;
 		} catch (Exception $e) {

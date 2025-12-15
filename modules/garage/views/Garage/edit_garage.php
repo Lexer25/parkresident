@@ -142,7 +142,7 @@ echo Form::open('garage/control');
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?echo 'Редактировать гараж '. Arr::get($garage_info, 'name');
+		<h3 class="panel-title"><?php echo 'Редактировать гараж '. Arr::get($garage_info, 'name');
 		echo Form::hidden('id_garage', Arr::get($garage_info,'ID'));
 		echo Form::hidden('id_org', Arr::get($garage_info,'id_org'));
 		?></h3>
@@ -183,7 +183,7 @@ echo Form::open('garage/control');
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?echo __('Список машиномест, входящих в гараж.');?></h3>
+		<h3 class="panel-title"><?php echo __('Список машиномест, входящих в гараж (всего :ccount).', array(':ccount'=>count($place_income_garage)));?></h3>
 	</div>
 	<div class="panel-body">
 	<?php
@@ -196,11 +196,11 @@ echo Form::open('garage/control');
 	<table id="tab0" class="table table-striped table-hover table-condensed tablesorter">
 	<thead allign="center">
 		<tr>
-			<th><?echo Kohana::message('rubic','pp');?></th>
-			<th><?echo 'Номер машиноместа';?></th>
-			<th><?echo 'Название машиноместа';?></th>
-			<th><?echo 'Парковка';?></th>
-			<th><?echo 'Прим.';?></th>
+			<th><?php echo Kohana::message('rubic','pp');?></th>
+			<!--<th><?php echo 'Номер машиноместа';?></th> -->
+			<th><?php echo 'Название машиноместа';?></th>
+			<th><?php echo 'Парковка';?></th>
+			<th><?php echo 'Прим.';?></th>
 			
 		</tr>
 
@@ -216,7 +216,7 @@ echo Form::open('garage/control');
 			echo Form::hidden('id_garage', Arr::get($garage_info,'ID'));
 			echo '<tr>';
 				echo '<td>'.$i.'</td>';
-				echo '<td>'.HTML::anchor('place/edit/'.Arr::get($value,'ID'), Arr::get($value,'PLACENUMBER')).'</td>';
+				//echo '<td>'.HTML::anchor('place/edit/'.Arr::get($value,'ID'), Arr::get($value,'PLACENUMBER')).'</td>';
 				echo '<td>'.HTML::anchor('place/edit/'.Arr::get($value,'ID'), Arr::get($value,'NAME')).'</td>';
 				echo '<td>'.Arr::get($value,'PARKING_NAME').'</td>';
 				//	echo '<td>'.Arr::get($value,'NOTE').'</td>';
@@ -295,7 +295,7 @@ echo Form::open('garage/control');
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?echo 'Список квартир, паркующихся в гараже'?></h3>
+		<h3 class="panel-title"><?php echo __('Список квартир, паркующихся в гараже (всего :ccount)' , array(':ccount'=>count($org_income_garage)))?></h3>
 	</div>
 	<div class="panel-body">
 
@@ -303,10 +303,10 @@ echo Form::open('garage/control');
 
 	<thead allign="center">
 		<tr>
-			<th><?echo Kohana::message('rubic','pp');?></th>
-			<th><?echo 'ID квартиры(группы)';?></th>
-			<th><?echo 'Название квартиры (группы)';?></th>
-			<th><?echo 'Прим.';?></th>
+			<th><?php echo Kohana::message('rubic','pp');?></th>
+			<th><?php echo 'ID квартиры(группы)';?></th>
+			<th><?php echo 'Название квартиры (группы)';?></th>
+			<th><?php echo 'Прим.';?></th>
 		</tr>
 
 		</thead>
@@ -383,7 +383,7 @@ echo Form::open('garage/control');
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?echo 'Журнал событий'?></h3>
+		<h3 class="panel-title"><?php echo 'Журнал событий'?></h3>
 	</div>
 	<div class="panel-body">
 	<?php

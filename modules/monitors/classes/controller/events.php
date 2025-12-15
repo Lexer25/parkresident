@@ -58,7 +58,8 @@ class Controller_events extends Controller {
         left join card c on c.id_card=e.grz
         left join people p on p.id_pep=c.id_pep
         left join organization o on o.id_org=p.id_org
-		where  e.id >'.($id-30);
+		where  e.id >'.($id-30).'
+		order by e.event_time';
 		
 				
 		
@@ -90,7 +91,7 @@ class Controller_events extends Controller {
 				Cookie::set('id',$id);
 			}
 			$tab=$this->selectevent($id,$photo); // получил журнал событий
-
+//echo Debug::vars('93', $tab);exit;
 			if(count($tab)==0) 
 			{
 								
@@ -184,9 +185,9 @@ class Controller_events extends Controller {
 				<td id="org_name" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['ORGANIZATION_NAME']).'</td>
 				<td id="comment" style="'.$style.'">'.iconv('CP1251','UTF-8',$row['COMMENT']).'</td>
 				</tr>';	
-				
+			Cookie::set('id',$tab[0]['ID_EVENT']);	
 			}	
-			Cookie::set('id',$tab[0]['ID_EVENT']);
+		//	Cookie::set('id',$tab[0]['ID_EVENT']);
 			$this->response->body($body);
 		}
 		catch (Exception $e) {
