@@ -37,14 +37,17 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 		$t1=microtime(true);//отмека времени для оценки быстродействия	
 		$content='';
 	
-		$getGrzInfo=Model::Factory('grz')->getGrzInfoListModel();//список ГРЗ
 	
-	$grzInfoListParkingList=Model::Factory('grz')->getGrzInfoListParkingList();//список id_pep->парковка
+		$getGrzInfo=Model::Factory('grz')->getGrzInfoListModel2();//список ГРЗ
+	
+	//	echo Debug::vars('42', $getGrzInfo);exit;
+		$grzInfoListParkingList=Model::Factory('grz')->getGrzInfoListParkingList();//список id_pep->парковка
 		$accessNameList=Model::Factory('grz')->getAccessNameList();//список категорий доступа
 		
 	//echo Debug::vars('52',$getGrzInfo );exit;	
 		
-		$content =$content. View::factory('grz/GrzList3arra', array(
+		//$content =$content. View::factory('grz/GrzList3arra', array(
+		$content =$content. View::factory('grz/GrzListModel2', array(
 			'grz_list'=>$getGrzInfo,
 			'accessNameList'=>$accessNameList,
 			't1'=>$t1,

@@ -124,6 +124,171 @@ class Model_Grz extends Model {
 		return $query;
 	}
 	
+	/*19.12.2025 попытка ускорить процесс получения данных.
+	* 
+	Получить информацию по всем ГРЗ, зарегистрированных в базе данных СКУД.
+	
+	*/
+	public function getGrzInfoListModel2()
+	{
+	
+	 
+	 $sql='select  distinct c.id_card, c.id_pep, c.timestart, c.timeend, c.note
+		, c.status, c."ACTIVE", c.flag, c.id_cardtype, p.name , p.surname as GRZ_MODEL, p.patronymic
+		from card c
+        join people p on c.id_pep=p.id_pep
+        where c.id_cardtype='.$this->id_cardtype.'
+		order by c.id_card';
+		
+	//	echo Debug::vars('46', $sql); exit;
+	
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		
+		foreach($query as $key)
+			{
+
+			$result[$key['ID_CARD']]['ID_CARD']= $key['ID_CARD'];
+			$result[$key['ID_CARD']]['ID_PEP']= $key['ID_PEP'];
+			$result[$key['ID_CARD']]['TIMESTART']=$key['TIMESTART'];
+			$result[$key['ID_CARD']]['TIMEEND']=$key['TIMEEND'];
+			$result[$key['ID_CARD']]['NOTE']=$key['NOTE'];
+			$result[$key['ID_CARD']]['STATUS']=$key['STATUS'];
+			$result[$key['ID_CARD']]['ACTIVE']=$key['ACTIVE'];
+			$result[$key['ID_CARD']]['FLAG']=$key['FLAG'];
+			$result[$key['ID_CARD']]['ID_CARDTYPE']=$key['ID_CARDTYPE'];
+			$result[$key['ID_CARD']]['NAME']=$key['NAME'];
+			$result[$key['ID_CARD']]['GRZ_MODEL']=$key['GRZ_MODEL'];
+			$result[$key['ID_CARD']]['PATRONYMIC']=$key['PATRONYMIC'];
+				
+			}
+		
+//	echo Debug::vars('188', $result);exit;	
+		//готовлю список категорий доступа, которые приписаны этому пиплу
+		$sql='select c.id_card, ssu.id_pep, an.id_accessname, an.name from ss_accessuser ssu
+		join card c on ssu.id_pep=c.id_pep
+		join accessname an on ssu.id_accessname=an.id_accessname
+		where c.id_cardtype=4';
+
+		try
+			{
+				$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+				
+			
+			} catch (Exception $e) {
+				Log::instance()->add(Log::ERROR, $e);
+			}
+			
+		foreach($query as $key)
+		{
+			//добавляю категории доступа в массив result
+			if(array_key_exists($key['ID_CARD'], $result)){
+			$result[$key['ID_CARD']]['accessNameList'][$key['ID_ACCESSNAME']]=array(
+				'ID'=>Arr::get($key, 'ID_ACCESSNAME'),
+				'NAME'=>Arr::get($key, 'NAME'),
+				);
+			}
+		}
+
+		//готовлю список гаражей, которые приписаны этому пиплу
+		$sql='select c.id_card, hlgn.id, hlgn.name from card c
+			join people p on c.id_pep=p.id_pep
+			join hl_orgaccess hlo on p.id_org=hlo.id_org
+			join hl_garagename hlgn on hlo.id_garage=hlgn.id';
+
+		try
+			{
+				$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+				
+			
+			} catch (Exception $e) {
+				Log::instance()->add(Log::ERROR, $e);
+			}
+			
+		foreach($query as $key)
+		{
+			//добавляю категории доступа в массив result
+			if(array_key_exists($key['ID_CARD'], $result)){
+			$result[$key['ID_CARD']]['garageList'][$key['ID']]=array(
+				'ID'=>Arr::get($key, 'ID'),
+				'NAME'=>Arr::get($key, 'NAME'),
+				);
+			}
+		}
+		
+		//готовлю список парковок, на которых находится выбранный ГРЗ
+		$sql='select hli.id_card, hli.counterid  as id, hli.entertime, hlp.name from hl_inside hli
+			join hl_parking hlp on hli.counterid=hlp.id';
+
+		try
+			{
+				$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+				
+			
+			} catch (Exception $e) {
+				Log::instance()->add(Log::ERROR, $e);
+			}
+			
+		foreach($query as $key)
+		{
+			//добавляю категории доступа в массив result
+			if(array_key_exists($key['ID_CARD'], $result)){
+			$result[$key['ID_CARD']]['onParkingList'][$key['ID']]=array(
+				'ID'=>Arr::get($key, 'ID'),
+				'NAME'=>Arr::get($key, 'NAME'),
+				'ENTERTIME'=>Arr::get($key, 'ENTERTIME'),
+				);
+			}
+		}
+		
+		
+		//готовлю список парковок, на которые может заехать этот ГРЗ
+		$sql='select c.id_card, hlpr.id, hlpr.name from card c
+            join people p on c.id_pep=p.id_pep
+            join hl_orgaccess hlo on p.id_org=hlo.id_org
+            join hl_garage hlg on hlo.id_garage=hlg.id
+            join hl_place  hlp on hlg.id_place=hlp.id
+            join hl_parking hlpr on hlp.id_parking=hlpr.id';
+
+		try
+			{
+				$query = DB::query(Database::SELECT, $sql)
+				->execute(Database::instance('fb'))
+				->as_array();
+				
+			
+			} catch (Exception $e) {
+				Log::instance()->add(Log::ERROR, $e);
+			}
+			
+		foreach($query as $key)
+		{
+			//добавляю категории доступа в массив result
+			if(array_key_exists($key['ID_CARD'], $result)){
+			$result[$key['ID_CARD']]['enabledParkingList'][$key['ID']]=array(
+				'ID'=>Arr::get($key, 'ID'),
+				'NAME'=>Arr::get($key, 'NAME'),
+				
+				);
+			}
+		}
+		
+		
+		
+
+		
+		return $result;
+	}
+	
+	
+	
 	/*16.12.2025 получить список категорий доступа для этого id_pep
 	
 	*/

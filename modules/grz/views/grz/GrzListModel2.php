@@ -56,7 +56,7 @@
 			echo '<tr>';
 				echo '<td>'
 					.$i++
-					//.Debug::vars('57', $value)
+			//		.Debug::vars('57', $value)
 					.'</td>';
 				echo '<td>'. HTML::anchor('grz/history/'.Arr::get($value,'ID_CARD'), iconv('windows-1251','UTF-8',Arr::get($value,'ID_CARD')));
 					if( preg_match("/[а-яё]/iu", iconv('windows-1251','UTF-8',Arr::get($value,'ID_CARD', '')))) echo '<br><span class="label label-danger">Русские буквы в ГРЗ</span>';
@@ -75,15 +75,12 @@
 				//вывод списка категорий доступа
 				echo '<td>';
 				//echo Debug::vars('77', $accessNameList);exit;
+				//echo '78<br>';
 				if(Arr::is_array(Arr::get($value,'accessNameList')))
 				{
 					foreach (Arr::get($value,'accessNameList') as $key1=>$value1)
 					{
-						//echo Debug::vars('82', $value1);exit;
-						//получаю список категорий доступа, выданных этому пиплу.
-						//Названия беру из списка категорий доступа.
-						echo iconv('windows-1251','UTF-8',Arr::get($accessNameList, Arr::get($value1, 'ID_ACCESSNAME'), '')).'<br>';
-						
+						echo iconv('windows-1251','UTF-8',Arr::get($accessNameList, Arr::get($value1, 'ID'), '')).'<br>';
 					};
 				} else {
 						//echo __('Нет_85');
@@ -94,41 +91,79 @@
 				
 				
 				//вывод списка присвоенных гаражей
-				//$_info=Arr::flatten(Arr::get($value,'garageList'));
-				//$_garageName=iconv('windows-1251','UTF-8',Arr::get($_info, 'NAME'));
-				//$_garageName=Arr::get($_info, 'NAME');
+				
 				$_garageName='95';
 				echo '<td>';
-						echo HTML::anchor('garage/edit_garage/'.Arr::get($value, 'ID_GARAGE'), iconv('windows-1251','UTF-8',Arr::get($value, 'GARAGENAME')));
-						//echo '98 ';
-						//echo Debug::vars('99',$value);
-						//echo Debug::vars('99',$grzInfoListAccessNameList);exit;
-						//echo iconv('windows-1251','UTF-8', Arr::get($value,'GARAGENAME'));
+				//echo '98<br>';
+				if(Arr::is_array(Arr::get($value,'garageList'))){
+					foreach (Arr::get($value,'garageList') as $key1=>$value1)
+					{
+						
+						echo HTML::anchor('garage/edit_garage/'.Arr::get($value1, 'ID'), iconv('windows-1251','UTF-8',Arr::get($value1, 'NAME')));
+					}
+				} else {
+					
+					//echo '106 no';
+				}
+						
 				echo '</td>';
 					
 				
 				//на какой парковке находится
-				//$_info=Arr::flatten(Arr::get($value,'inParking'));
 				echo '<td>';
-					//echo ' '.iconv('windows-1251','UTF-8',Arr::get($_info, 'NAME'));
-					//echo '106 ';
-					echo iconv('windows-1251','UTF-8', Arr::get($value,'PARKIGNAME'));
+										
+				if(Arr::is_array(Arr::get($value,'onParkingList'))){
+					foreach (Arr::get($value,'onParkingList') as $key1=>$value1)
+					{
+						
+						echo HTML::anchor('garage/edit_garage/'.Arr::get($value1, 'ID'), iconv('windows-1251','UTF-8',Arr::get($value1, 'NAME')));
+					}
+				} else {
+					
+					//echo '127 no';
+				}
+				
+				
 					
 				echo '</td>';
 			
 			//время въезда на парковку		
 				echo '<td>';
 				
-					//echo Arr::get($_info, 'ENTERTIME','');
-					//echo '114';
-					echo Arr::get($value,'ENTERTIME');
+					
+					if(Arr::is_array(Arr::get($value,'onParkingList'))){
+					foreach (Arr::get($value,'onParkingList') as $key1=>$value1)
+					{
+						echo Arr::get($value1,'ENTERTIME');
+						
+					}
+				} else {
+					
+					//echo '144 no';
+				}
 				echo '</td>';
 					
 				echo '<td>';	
 					
 					
-					//echo '136';
-					echo Arr::get($value,'PARKINGCOUNT');
+					//echo '136<br>';
+					
+					if(Arr::is_array(Arr::get($value,'enabledParkingList'))){
+						foreach (Arr::get($value,'enabledParkingList') as $key1=>$value1)
+						{
+							//echo iconv('windows-1251','UTF-8',Arr::get($value1, 'NAME'));
+							echo Form::open('grz/car_in_parking');
+							echo Form::hidden('id_parking', Arr::get($value1,'ID'));
+							echo Form::hidden('id_pep', Arr::get($value,'ID_PEP'));
+							echo Form::button('car_in_parking', 'IN '.iconv('windows-1251','UTF-8', Arr::get($value1, 'NAME')), array('value'=>Arr::get($value,'ID_CARD'),'class'=>'btn btn-success btn-xs', 'type' => 'submit'));
+							echo Form::close();
+
+						}
+					} else {
+						
+						//echo '161 no';
+					}
+					
 					
 				echo '</td>';
 					
