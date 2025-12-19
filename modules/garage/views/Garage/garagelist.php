@@ -96,6 +96,9 @@ function confirmSubmit() {
 			echo $garageListView;
 		
 		?>
+		<?php
+	echo __('Время выполнения :t', array(':t'=>(microtime(true) - $t1)));
+?>
 		
 
  

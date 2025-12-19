@@ -38,7 +38,10 @@
 						
 						echo '<tr>';
 							
-							echo '<td>'.++$i.'</td>';//номер по порядку
+							echo '<td>'
+							.++$i
+					//		.Debug::vars('43', $value)
+							.'</td>';//номер по порядку
 							echo '<td>'.Arr::get($value,'id_garage');echo '</td>';// id гаража
 							
 							

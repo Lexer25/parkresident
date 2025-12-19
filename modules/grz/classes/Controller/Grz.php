@@ -33,23 +33,20 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 	
 	public function action_index()// просмотр списка ГРЗ и их свойств
 	{
-		//$_SESSION['menu_active']='grz';
 		
 		$t1=microtime(true);//отмека времени для оценки быстродействия	
-		
-		//$getGrzInfo=Model::Factory('grz')->getGrzInfoList();//список ГРЗ
-		
+		$content='';
+	
 		$getGrzInfo=Model::Factory('grz')->getGrzInfoListModel();//список ГРЗ
-		$grzInfoListAccessNameList=Model::Factory('grz')->getGrzInfoListAccessNameList();//список id_pep->категория доступа 
-		$grzInfoListParkingList=Model::Factory('grz')->getGrzInfoListParkingList();//список id_pep->парковка
-		//echo Debug::vars('40', $getGrzInfo);..exit;
-		//echo Debug::vars('41', (microtime(true)-$t1));exit;
+	
+	$grzInfoListParkingList=Model::Factory('grz')->getGrzInfoListParkingList();//список id_pep->парковка
+		$accessNameList=Model::Factory('grz')->getAccessNameList();//список категорий доступа
 		
+	//echo Debug::vars('52',$getGrzInfo );exit;	
 		
-		$content = View::factory('grz/GrzList3arra', array(
+		$content =$content. View::factory('grz/GrzList3arra', array(
 			'grz_list'=>$getGrzInfo,
-			'grzInfoListAccessNameList'=>$grzInfoListAccessNameList,
-			'grzInfoListParkingList'=>$grzInfoListParkingList,
+			'accessNameList'=>$accessNameList,
 			't1'=>$t1,
 			));
         $this->template->content = $content;

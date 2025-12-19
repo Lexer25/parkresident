@@ -41,7 +41,7 @@ class Model_Grz extends Model {
 	*/
 	public function getGrzInfoList()
 	{
-		$sql='select c.id_card from card c
+		$sql='select   c.id_card from card c
 		where c.id_cardtype='.$this->id_cardtype.'
 		order by c.id_card';
 		//echo Debug::vars('46', $sql); exit;
@@ -69,30 +69,146 @@ class Model_Grz extends Model {
 	*/
 	public function getGrzInfoListModel()
 	{
-		
-		
-		$sql='select distinct c.id_card, c.id_pep, c.timestart, c.timeend, c.note, c.status, c."ACTIVE", c.flag, c.id_cardtype, p.name , p.surname as GRZ_MODEL, p.patronymic from card c
-		join people p on c.id_pep=p.id_pep
-
+	$sql='select distinct c.id_card, c.id_pep, c.timestart, c.timeend, c.note, c.status, c."ACTIVE", c.flag, c.id_cardtype, p.name , p.surname as GRZ_MODEL, p.patronymic,
+    hli.counterid, hli.entertime, hlp2.name as parkigname, hlgn.name as GARAGENAME, hlgn.id as ID_GARAGE, coalesce(count(ssu.id_accessuser), 0) as accesscount,
+    coalesce(count(hlpr.id), 0) as parkingcount  from card c
+        join people p on c.id_pep=p.id_pep
+        left join ss_accessuser ssu on ssu.id_pep=p.id_pep
+        left join hl_orgaccess hlo on p.id_org=hlo.id_org
+        left join hl_garagename hlgn on hlgn.id=hlo.id_garage
+        left join hl_inside hli on hli.id_card=c.id_card and hli.id_pep=p.id_pep
+        left join hl_parking hlp2 on hli.counterid=hlp2.id
+        left join hl_garage hlg on hlg.id_garagename=hlgn.id
+        left join hl_place hlp on hlp.id=hlg.id_place
+        left join hl_parking hlpr on hlpr.id=hlp.id_parking
         where c.id_cardtype='.$this->id_cardtype.'
-        order by c.id_card';
+        
+        group by c.id_card, c.id_pep, c.timestart, c.timeend, c.note, c.status, c."ACTIVE", c.flag, c.id_cardtype, p.name , p.surname, p.patronymic,
+    hli.counterid, hli.entertime, hlp2.name, hlgn.name, hlgn.id
+     order by c.id_card';
 		
-		//echo Debug::vars('46', $sql); exit;
+	//	echo Debug::vars('46', $sql); exit;
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array();
 		
-		/* $current_time_limit = ini_get('max_execution_time');
+		$current_time_limit = ini_get('max_execution_time');
 		set_time_limit(300); // 5 минут
+		
+		
+		//готовлю список категорий доступа, которые приписаны этому пиплу
 		foreach (array_slice($query, 0, 10000) as $key=>$value)
 		{
-			$res[]=$this->getGrzInfo(Arr::get($value, 'ID_CARD'));
+			
+			$value['accessNameList']=array();
+			$value['parkingNameList']=array();
+			//echo Debug::vars('113', $value);//exit;
+			if(Arr::get($value, 'ACCESSCOUNT')>0){
+				
+				$query[$key]['accessNameList']=$this->getAccessNameListForIdPep(Arr::get($value, 'ID_PEP'));
+			//	$value['parkingNameList']=$this->getParkingNameList(Arr::get($value, 'ID_PEP'));
+			}
+			if(Arr::get($value, 'PARKINGCOUNT')>0){
+				//$query[$key]['parkingNameList']=$this->getParkingNameList(Arr::get($value, 'ID_PEP'));
+			}
+			
+			
+			//echo Debug::vars('113', $value);exit;
 			
 		}
-		//echo Debug::vars('20', $res); exit;
-		set_time_limit($current_time_limit);  */
+		
+		//готовлю список паркингов, куда может заехать этот пипел
+		
+		
+		set_time_limit($current_time_limit); 
 		return $query;
 	}
+	
+	/*16.12.2025 получить список категорий доступа для этого id_pep
+	
+	*/
+	public function getAccessNameListForIdPep($id_pep)
+	{
+		
+		$sql='select an.id_accessname, an.name from ss_accessuser ssa
+				join accessname an on an.id_accessname=ssa.id_accessname
+				where ssa.id_pep='.$id_pep;
+				
+		$sql='select ssa.id_accessname from ss_accessuser ssa
+                where ssa.id_pep='.$id_pep;
+				
+				
+		try
+		{
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		return $query;
+		} catch (Exception $e) {
+			Log::instance()->add(Log::ERROR, $e->getMessage());
+		}
+	
+	}
+	
+	/*18.12.2025 получить список категорий доступа для этого id_pep
+	
+	*/
+	public function getAccessNameList()
+	{
+		
+		$sql='select an.id_accessname, an.name, an.time_stamp, an.guid from accessname an';
+				
+		$result=array();			
+		try
+		{
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		foreach($query as $key=>$value){
+			$result[Arr::get($value, 'ID_ACCESSNAME')] = Arr::get($value, 'NAME');
+			
+		}
+		return $result;
+		} catch (Exception $e) {
+			Log::instance()->add(Log::ERROR, $e->getMessage());
+		}
+	
+	}
+	
+	/*16.12.2025 получить список парковок, доступных этому id_pep
+	
+	*/
+	public function getParkingNameList($id_pep)
+	{
+		
+		$sql='select hlp.id, hlp.name from people p
+			join hl_orgaccess hlo on hlo.id_org=p.id_org
+			join hl_garage hlg on hlg.id_garagename=hlo.id_garage
+			join hl_place hlpl on hlg.id_place=hlpl.id
+			join hl_parking hlp on hlpl.id_parking=hlp.id
+			where p.id_pep='.$id_pep;
+			
+		$sql='select hlpl.id_parking from people p
+            join hl_orgaccess hlo on hlo.id_org=p.id_org
+            join hl_garage hlg on hlg.id_garagename=hlo.id_garage
+            join hl_place hlpl on hlg.id_place=hlpl.id
+
+			where p.id_pep='.$id_pep;
+			
+			
+			
+		try
+		{
+		$query = DB::query(Database::SELECT, $sql)
+			->execute(Database::instance('fb'))
+			->as_array();
+		return $query;
+		} catch (Exception $e) {
+			Log::instance()->add(Log::ERROR, $e->getMessage());
+		}
+	
+	}
+	
 	
 	/*15.12.2025 попытка ускорить процесс получения данных.
 	* 

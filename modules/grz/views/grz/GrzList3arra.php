@@ -74,15 +74,20 @@
 					echo '</td>';
 				//вывод списка категорий доступа
 				echo '<td>';
-				if(Arr::is_array(Arr::get($value,'accessList')))
+				//echo Debug::vars('77', $accessNameList);exit;
+				if(Arr::is_array(Arr::get($value,'accessNameList')))
 				{
-					foreach (Arr::get($value,'accessList') as $key1=>$value1)
+					foreach (Arr::get($value,'accessNameList') as $key1=>$value1)
 					{
-						echo iconv('windows-1251','UTF-8',Arr::get($value1, 'NAME', '')).'<br>';
+						//echo Debug::vars('82', $value1);exit;
+						//получаю список категорий доступа, выданных этому пиплу.
+						//Названия беру из списка категорий доступа.
+						echo iconv('windows-1251','UTF-8',Arr::get($accessNameList, Arr::get($value1, 'ID_ACCESSNAME'), '')).'<br>';
 						
 					};
 				} else {
-						echo __('Нет');
+						//echo __('Нет_85');
+						echo Arr::get($value,'ACCESSCOUNT');
 				}
 					echo '</td>';
 					
@@ -94,10 +99,11 @@
 				//$_garageName=Arr::get($_info, 'NAME');
 				$_garageName='95';
 				echo '<td>';
-						//echo HTML::anchor('garage/edit_garage/'.Arr::get($_info, 'ID_GARAGE'), iconv('windows-1251','UTF-8',Arr::get($_info, 'NAME')));
-						echo '98';
+						echo HTML::anchor('garage/edit_garage/'.Arr::get($value, 'ID_GARAGE'), iconv('windows-1251','UTF-8',Arr::get($value, 'GARAGENAME')));
+						//echo '98 ';
 						//echo Debug::vars('99',$value);
-						echo Debug::vars('99',$grzInfoListAccessNameList);exit;
+						//echo Debug::vars('99',$grzInfoListAccessNameList);exit;
+						//echo iconv('windows-1251','UTF-8', Arr::get($value,'GARAGENAME'));
 				echo '</td>';
 					
 				
@@ -105,7 +111,8 @@
 				//$_info=Arr::flatten(Arr::get($value,'inParking'));
 				echo '<td>';
 					//echo ' '.iconv('windows-1251','UTF-8',Arr::get($_info, 'NAME'));
-					echo '106';
+					//echo '106 ';
+					echo iconv('windows-1251','UTF-8', Arr::get($value,'PARKIGNAME'));
 					
 				echo '</td>';
 			
@@ -113,29 +120,15 @@
 				echo '<td>';
 				
 					//echo Arr::get($_info, 'ENTERTIME','');
-					echo '114';
+					//echo '114';
+					echo Arr::get($value,'ENTERTIME');
 				echo '</td>';
 					
 				echo '<td>';	
 					
-					//echo Debug::vars('115', Arr::get($value, 'parkingList'));
-					/* foreach (Arr::get($value, 'parkingList') as $key1=>$value2)
-					{
-						
-						//echo Debug::vars('115', Arr::get($value2, 'ID_PARKING'), Arr::get($value2, 'PARKING_NAME'));
-						//echo Debug::vars('115', $value2);
-						
 					
-					echo Form::open('grz/car_in_parking');
-					echo Form::hidden('id_parking', Arr::get($value2,'ID_PARKING'));
-					echo Form::hidden('id_pep', Arr::get($value,'ID_PEP'));
-					//echo Debug::vars('100',Arr::get($value,'accessList') );
-					echo Form::button('car_in_parking', 'IN '.iconv('windows-1251','UTF-8', Arr::get($value2, 'PARKING_NAME')), array('value'=>Arr::get($value,'ID_CARD'),'class'=>'btn btn-success btn-xs', 'type' => 'submit'));
-					//echo '<br><br>';
-					//echo Form::button('car_in_parking', 'IN Парковка -2', array('value'=>Arr::get($value,'ID_CARD'),'class'=>'btn btn-success btn-sm', 'type' => 'submit'));
-					echo Form::close();
-					} */
-					echo '136';
+					//echo '136';
+					echo Arr::get($value,'PARKINGCOUNT');
 					
 				echo '</td>';
 					

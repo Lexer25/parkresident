@@ -31,37 +31,37 @@ class Model_Garage extends Model {
 	
 	public function getAllGarageInfo2(array $garageList=null)//если указан список гаражей, то выводить информацию только по ним
 	{
-	
+	$t1=microtime(true);
 		$parkingList=Model::Factory('parking')->get_list_parking($this->rootParking);
 		$result=array();
 		//статистики по гражам: id, название, занятые места и т.п.
+		
+	
 		
 		$sql='SELECT distinct
 			hlgn.id,
 			hlgn.name,
 			hlgn.not_count,
-			hlgn.div_code,
-			(SELECT COUNT(*) FROM hl_orgaccess hloa WHERE hloa.id_garage = hlgn.id) as orgCount,
-			(SELECT COUNT(*) FROM hl_garage hlg WHERE hlg.id_garagename = hlgn.id) as placeCount,
-			(SELECT COUNT(*) 
-			 FROM hl_orgaccess hloa2 
-			 JOIN people p ON p.id_org = hloa2.id_org 
-			 JOIN card c ON c.id_pep = p.id_pep 
-			 JOIN hl_inside hli ON hli.id_card = c.id_card 
-			 WHERE hloa2.id_garage = hlgn.id) as keyCount
+			hlgn.div_code
+			
+			
+			
 			FROM hl_garagename hlgn ';
+			
 			if(isset($garageList)) $sql=$sql . ' where hlgn.id in ('.implode(",", $garageList).')';
 			
 			$sql=$sql . ' order by hlgn.id';
-	//echo Debug::vars('56', $sql);exit;					
+					
 		try
 		{
-			$query = DB::query(Database::SELECT, $sql)
+			
+		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
 			->as_array();
+
 			foreach($query as $key)
 			{
-			//	echo Debug::vars('45', $key);exit;
+
 			$result[$key['ID']]['name']= $key['NAME'];
 			$result[$key['ID']]['id_garage']=$key['ID'];
 			$result[$key['ID']]['not_count']=$key['NOT_COUNT'];
@@ -73,12 +73,12 @@ class Model_Garage extends Model {
 			$result[$key['ID']]['parkingList']=$parkingList;
 				
 			}
-			
+		
 		
 		} catch (Exception $e) {
 			Log::instance()->add(Log::ERROR, $e);
 		}
-		//echo Debug::vars('77', $result);exit;
+	
 		//добавляю список организаций, входящих в гаражи
 		$sql='SELECT hloa.id, o.id_org, o.name,  hloa.id_garage
             FROM hl_orgaccess hloa
@@ -182,7 +182,7 @@ class Model_Garage extends Model {
 			
 		foreach($query as $key)
 		{
-		//	echo Debug::vars('173', $key);exit;
+
 		if(array_key_exists($key['ID_GARAGENAME'], $result)){
 			$result[$key['ID_GARAGENAME']]['placeList'][$key['ID']]=array(
 				'ID'=>Arr::get($key, 'ID'),
@@ -214,7 +214,7 @@ class Model_Garage extends Model {
 			
 		foreach($query as $key)
 		{
-		//	echo Debug::vars('173', $key);exit;
+
 			if(array_key_exists($key['ID_GARAGE'], $result)){
 				$result[$key['ID_GARAGE']]['grzInGarageList'][$key['ID_CARD']]=array(
 					//'ID'=>NULL,

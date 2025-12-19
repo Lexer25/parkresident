@@ -97,7 +97,7 @@ class Controller_events extends Controller {
 								
 				return;//выйти при 0 вкладках (если нет событий)
 			}
-			//Cookie::set('id', $this->getid());
+			
 
 			$body='';
 			//Log::instance()->add(Log::DEBUG, Debug::vars($tab));
