@@ -56,13 +56,21 @@
 			echo '<tr>';
 				echo '<td>'
 					.$i++
-			//		.Debug::vars('57', $value)
+				//	.Debug::vars('57', $value)
+			
 					.'</td>';
 				echo '<td>'. HTML::anchor('grz/history/'.Arr::get($value,'ID_CARD'), iconv('windows-1251','UTF-8',Arr::get($value,'ID_CARD')));
 					if( preg_match("/[а-яё]/iu", iconv('windows-1251','UTF-8',Arr::get($value,'ID_CARD', '')))) echo '<br><span class="label label-danger">Русские буквы в ГРЗ</span>';
 					//echo Debug::vars('60', $value);
 					echo '</td>';
-				echo '<td>'.iconv('windows-1251','UTF-8', Arr::get($value,'GRZ_MODEL', '')).'</td>';
+				echo '<td>';
+
+					echo __('<abbr title="id_pep=:title">:GRZ_MODEL</abbr>', array(
+						':title'=>Arr::get($value,'ID_PEP', ''),
+						':GRZ_MODEL'=>iconv('windows-1251','UTF-8', Arr::get($value,'GRZ_MODEL', '')),
+					));
+					
+				echo '</td>';
 				echo '<td>';
 				if(Arr::get($value,'ACTIVE', '0') == 1)
 					{				
@@ -116,7 +124,8 @@
 					foreach (Arr::get($value,'onParkingList') as $key1=>$value1)
 					{
 						
-						echo HTML::anchor('garage/edit_garage/'.Arr::get($value1, 'ID'), iconv('windows-1251','UTF-8',Arr::get($value1, 'NAME')));
+					//	echo HTML::anchor('garage/edit_garage/'.Arr::get($value1, 'ID'), iconv('windows-1251','UTF-8',Arr::get($value1, 'NAME')));
+						echo  iconv('windows-1251','UTF-8',Arr::get($value1, 'NAME'));
 					}
 				} else {
 					

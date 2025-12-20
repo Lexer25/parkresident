@@ -250,10 +250,10 @@ class Model_Grz extends Model {
 		
 		
 		//готовлю список парковок, на которые может заехать этот ГРЗ
-		$sql='select c.id_card, hlpr.id, hlpr.name from card c
+		$sql='select c.id_card, c.id_pep, p.id_org, hlpr.id, hlpr.name from card c
             join people p on c.id_pep=p.id_pep
             join hl_orgaccess hlo on p.id_org=hlo.id_org
-            join hl_garage hlg on hlo.id_garage=hlg.id
+            join hl_garage hlg on hlo.id_garage=hlg.id_garagename
             join hl_place  hlp on hlg.id_place=hlp.id
             join hl_parking hlpr on hlp.id_parking=hlpr.id';
 
