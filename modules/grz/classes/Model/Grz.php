@@ -19,13 +19,14 @@ class Model_Grz extends Model {
 	Получить историю по ГРЗ
 	
 	*/
-	public function getHistory($grz)
+	public function getHistory($grz, $deepEventDay=30)
 	{
 		$sql='select hle.id, hle.event_time, hle.event_code,hlec.color, hlec.name as eventName, hle.grz, hlp.name as gateName, hlp.is_enter from hl_events hle
 			join hl_eventcode hlec on hlec.id=hle.event_code
 			join hl_param hlp on hlp.id=hle.id_gate
 			where hle.grz=\''.$grz.'\'
 			and hle.event_code not in (13)
+			AND hle.event_time >= (CURRENT_DATE - '.$deepEventDay.')
 			order by hle.id desc';
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))

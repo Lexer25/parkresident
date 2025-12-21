@@ -142,7 +142,7 @@ echo Form::open('garage/control');
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo 'Редактировать гараж '. Arr::get($garage_info, 'name');
+		<h3 class="panel-title"><?php echo __('Редактировать гараж ":name"', array(':name'=> Arr::get($garage_info, 'NAME')));
 		echo Form::hidden('id_garage', Arr::get($garage_info,'ID'));
 		echo Form::hidden('id_org', Arr::get($garage_info,'id_org'));
 		?></h3>
@@ -383,7 +383,11 @@ echo Form::open('garage/control');
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo 'Журнал событий'?></h3>
+		<h3 class="panel-title"><?php echo __('Журнал событий за последние <abbr title=":note">:deepEvent</abbr> дней',
+			array(
+				':deepEvent'=>$deepEvent,
+				':note'=>'Параметр deepEvent в файле настройки',
+				))?></h3>
 	</div>
 	<div class="panel-body">
 	<?php
@@ -393,3 +397,6 @@ echo Form::open('garage/control');
 
 	</div>
 </div>
+<?php
+	echo __('Время выполнения :t', array(':t'=>(microtime(true) - $t1)));
+?>

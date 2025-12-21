@@ -48,7 +48,7 @@ echo Form::open('grz/grz_control1');
 					echo '<ul>';
 					foreach (Arr::get($getGrzInfo, 'garageList') as $key=>$value)
 					{
-						echo '<li>'.HTML::anchor('rmo/index/'. Arr::get($value, 'ID_GARAGE'), iconv('windows-1251','UTF-8',Arr::get($value, 'NAME'))).'</li>';
+						echo '<li>'.HTML::anchor('/garage/edit_garage/'. Arr::get($value, 'ID_GARAGE'), iconv('windows-1251','UTF-8',Arr::get($value, 'NAME'))).'</li>';
 					}
 					echo '</ul>';
 				} else 
@@ -96,7 +96,14 @@ echo Form::open('grz/grz_control1');
 
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title"><?php echo __('История проездов ГРЗ <b>grz</b>', array('grz'=>$grz));?></h3>
+		<h3 class="panel-title"><?php //echo __('История проездов ГРЗ <b>grz</b>', array('grz'=>$grz));
+			echo __('История проездов ":grz" за последние <abbr title=":note">:deepEvent</abbr> дней',
+			array(
+				':grz'=>$grz,
+				':deepEvent'=>$deepEvent,
+				':note'=>'Параметр deepEvent в файле настройки',
+				))
+		?></h3>
 	</div>
 	<div class="panel-body">
 

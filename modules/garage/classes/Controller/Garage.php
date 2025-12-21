@@ -14,6 +14,7 @@ class Controller_Garage extends Controller_Template {
 	
 	
 	public $template = 'template';
+	public $config;
 	public function before()
 	{
 			
@@ -28,8 +29,9 @@ class Controller_Garage extends Controller_Template {
 				}
 			}
 				I18n::load('rubic');
-		
-			
+				
+		if(Kohana::$config->load('artonitparking_config') !== null) $this->config=Kohana::$config->load('artonitparking_config');
+				
 	}
 	
 	public function action_index() // получить список гаражей
@@ -41,7 +43,7 @@ class Controller_Garage extends Controller_Template {
 		$t1=microtime(true);
 		
 		$garageLst=Model::Factory('garage')->getAllGarageInfo2();// список гаражей в виде класса
-
+		
 		$garageListView=View::factory('garage/block/garageListBlock2',//подготовка таблицы гаражей. Эта таблица позже будет вставлена в общую форму
 			array('garageLst'=>$garageLst));
 		
@@ -55,6 +57,7 @@ class Controller_Garage extends Controller_Template {
 	
 		public function action_edit_garage()//редактировать и просматривать  гараж
 	{
+		$t1=microtime(true);
 		//$_SESSION['menu_active']='kp_park_menu';
 		//echo Debug::vars('43', $_GET, $_POST, $this->request->param('id')); exit;
 		$id_garage = $this->request->param('id');
@@ -65,7 +68,7 @@ class Controller_Garage extends Controller_Template {
 		$place_busy=$modelGarage->place_busy_garage(); //список машиномест, входящих в другие гаражи
 		$org_income_garage=$modelGarage->org_income_garage($id_garage); //список квартир, входящих в гараж
 		$place_grz_garage_=$modelGarage->place_grz_garage_($id_garage); //список ГРЗ, входящих в гараж
-		
+	
 	
 		$place_list=Model::Factory('rubic')->get_list_parking_place();//список парковочный мест
 		
@@ -73,17 +76,21 @@ class Controller_Garage extends Controller_Template {
 		$org_busy=$modelGarage->org_busy_garage(); //список квартир с пометкой принадлежности к другим гаражам. Их надо пометить как неактивные и запретить выбор.
 		$org_can_view=Model::Factory('treeorg')->make_tree($org_busy, $id_garage);
 		
-	
+
 		//14.12.2025 добавляю журнал событий для гаража
 		$garage = new Garage($id_garage);
 		$garage->eventList=array(3,4,5,6,7,8,9,10);//список событий, которые необходимо выводить для гаража
-		$eventsListForGarage=$modelGarage->getListEventsForGarage($garage);//я передаю весь класс garage, получаю массив для вывода на экран
-		$eventtable= View::factory('garage/event')// вывод таблицы журнала событий для гаража
+		
+		
+		$eventsListForGarage=$modelGarage->getListEventsForGarage($garage, $this->config->deepEvent);//я передаю весь класс garage, получаю массив для вывода на экран
+	
+
+	$eventtable= View::factory('garage/event')// вывод таблицы журнала событий для гаража
 				->set('list', $eventsListForGarage)
+				
 			; 
 			
-			
-		
+
 		$content = View::factory('garage/edit_garage', array(
 			'garage_info'=>$garage_info,
 			'place_list'=>$place_list,
@@ -93,6 +100,8 @@ class Controller_Garage extends Controller_Template {
 			'org_income_garage'=>$org_income_garage,
 			'place_grz_garage_'=>$place_grz_garage_,
 			'eventtable'=>$eventtable,
+			'deepEvent'=>$this->config->deepEvent,
+			't1'=>$t1,
 			
 		));
         $this->template->content = $content;

@@ -12,6 +12,7 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 	
 	
 	public $template = 'template';
+	public $config;
 	public function before()
 	{
 			
@@ -27,6 +28,8 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 			}
 			//echo Debug::vars('9', $_POST, $_GET, Auth::instance()->logged_in(), $_SESSION);
 			I18n::load('rubic');
+			if(Kohana::$config->load('artonitparking_config') !== null) $this->config=Kohana::$config->load('artonitparking_config');
+		
 			
 	}
 	
@@ -70,16 +73,14 @@ class Controller_Grz extends Controller_Template { // класс описыва�
 		if($query->check())
 		{
 			//подготовка истории автомобилия
-			$grzHistory=Model::factory('grz')->getHistory(Arr::get($query, 'grz'));
+			$grzHistory=Model::factory('grz')->getHistory(Arr::get($query, 'grz'),$this->config->deepEvent );
 			$getGrzInfo=Model::factory('grz')->getGrzInfo(Arr::get($query, 'grz'));
 
-
-			//echo debug::vars('67', $grzHistory); exit;
-			//echo debug::vars('61', $getGrzInfo); exit;
 			$content = View::factory('grz/grzHistory', array(
 			'grz'=>Arr::get($query, 'grz'),
 			'getGrzInfo'=>$getGrzInfo,
 			'grzHistory'=>$grzHistory,
+			'deepEvent'=>$this->config->deepEvent,
 			));
 			//вывод истории ГРЗ на экран
 			$this->template->content = $content;
