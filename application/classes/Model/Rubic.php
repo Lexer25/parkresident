@@ -102,17 +102,22 @@ class Model_Rubic extends Model {
 	
 	*/
 	
+	
+	
+	
 	public function getEventsFromTo($data)
 	{
 		//echo Debug::vars('415', $data); exit;
 		
-		$sql='select hle.event_time, hle.event_code, hlp.is_enter, hlp.name as gate_name, hlp.id_parking, hle.grz, hle.id_pep, hle.id_gate, hle.comment, et.name as event_name,  p.surname, p.name, p.surname, hl_org.id_garage
+		$sql='select hle.event_time, hle.event_code, hlp.is_enter, hlp.name as gate_name, hlp.id_parking, hle.grz
+        , hle.id_pep, hle.id_gate, hle.comment, et.name as event_name,  p.surname, p.name, p.surname, hl_org.id_garage, hlgn.name as garageName
             from hl_events  hle
             left join hl_param hlp on hlp.id=hle.id_gate
             left join hl_eventcode  et on et.id=hle.event_code
             left join card c on c.id_card=hle.grz
             left join people p on p.id_pep=c.id_pep
-			left join hl_orgaccess hl_org on hl_org.id_org=p.id_org
+            left join hl_orgaccess hl_org on hl_org.id_org=p.id_org
+            left join hl_garagename hlgn on hl_org.id_garage=hlgn.id
 			where hle.event_time>\''.Date::formatted_time(Arr::get($data, 'timeFrom'), 'Y-m-d H:i:s').'\'
 			and hle.event_time<\''.Date::formatted_time(Arr::get($data, 'timeTo'), 'Y-m-d H:i:s').'\'
 			and hle.event_code not in (13, 31, 35, 41, 42)';

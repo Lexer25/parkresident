@@ -2,7 +2,7 @@
 //8.06.2023 https://itchief.ru/bootstrap/accordion
 //8.06.2023 скрипт https://stackoverflow.com/questions/42834154/changing-bootstrap-button-text-on-toggle
 echo Form::open('rubic/rubic_control');
-//echo Debug::vars('3', $_SESSION);
+//echo Debug::vars('3', $_SESSION); exit;
 //echo Debug::vars('3', unserialize(Cookie::get('id_event_filter', 'no_cookies_0')));
 ?>
 
@@ -60,7 +60,7 @@ $(function() {
 			
 			
 		}
-		
+		//echo Debug::vars('120', $events_name_list); exit;
 		?></h3>
 	</div>
 	<div class="panel-body">
@@ -81,9 +81,10 @@ $(function() {
 						$i=0;
 						$checked='no';
 						$column=4;// количество колонок в таблице
+						//echo Debug::vars('120', $events_name_list); exit;
 						$row= ceil(count($events_name_list)/$column);//количество строк
 						$aaa=array_chunk($events_name_list, $column);//разбиение массива на $column массивов
-						//echo Debug::vars('120', $column, $row); //exit;
+						//echo Debug::vars('120', $column, $row, $aaa); exit;
 						for ($i=0; $i<$row; $i++)
 						{
 							echo '<tr>';
@@ -100,6 +101,9 @@ $(function() {
 					<?php 
 					
 					}
+					
+					//echo Debug::vars('120', $column, $row, $aaa); exit;
+					
 					?>
 				</div>
 			</div>
@@ -147,6 +151,7 @@ $(function() {
 		</div>
     </div>
 	<?php
+	
 	$eventTable='';
 	//$rz='	';
 	$rz=';';
@@ -155,7 +160,7 @@ $(function() {
 	
 	echo Form::button('todo', 'Получить журнал событий', array('value'=>'getEvent','class'=>'btn btn-success', 'type' => 'submit'));	
 	echo Form::button('todo', 'Сохранить журнал событий', array('value'=>'eventExport','class'=>'btn btn-primary', 'type' => 'submit', 'onclick'=>'return confirm(\''.__('Сохранить отчет в файл?').'?\') ? true : false;'));
-	
+$t1=microtime(true);
  ?>
 	  
 	 </div>
@@ -200,6 +205,7 @@ $(function() {
 		</thead>
 		<tbody>
 		<?php 
+		
 		$i=0;
 		$checked='no';
 	
@@ -221,7 +227,8 @@ $(function() {
 				
 			}
 			echo '<tr class="'.$ecolor.'">';
-				$garage= new Garage(Arr::get($value,'ID_GARAGE'));
+			set_time_limit(300); // Установили 5 минут
+				//$garage= new Garage(Arr::get($value,'ID_GARAGE'));
 				echo '<td>'.($i+1).'</td>';
 				echo '<td>'.Arr::get($value,'EVENT_NAME').' ('.Arr::get($value,'EVENT_CODE').')</td>';
 				echo '<td>'.Arr::get($value,'GATE_NAME').' ('.Arr::get($value,'ID_GATE').')</td>';
@@ -235,7 +242,7 @@ $(function() {
 							.Arr::get($value,'PATRONYMIC').' ('
 							.Arr::get($value,'ID_PEP').')</td>';
 				echo '<td>'.Arr::get($value,'COMMENT').'</td>';
-				echo '<td>'.HTML::anchor('garage/edit_garage/'.Arr::get($value,'ID_GARAGE'), iconv('windows-1251','UTF-8', $garage->name)).' </td>';
+				echo '<td>'.HTML::anchor('garage/edit_garage/'.Arr::get($value,'ID_GARAGE'), iconv('windows-1251','UTF-8', Arr::get($value, 'GARAGENAME'))).' </td>';
 				
 			echo '</tr>';	
 			$i++;
@@ -262,7 +269,9 @@ $(function() {
 		?>
 </div>
 </div>
-<?php echo Form::close();?>
+<?php echo Form::close();
+
+?>
 
 
     <script type="text/javascript">
