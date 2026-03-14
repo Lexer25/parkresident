@@ -1,267 +1,265 @@
- <script>
+<script>
 $(function() {
-	
-     $(".btn").click(
-       function() {
-         var bname = $(this).attr('org_name');
-         var _org_id = $(this).attr('org_id');
-         $(".kartka h1").text(bname);
-         $(".kartka h4").html(_org_id);
-		 document.getElementById("id_gate").value = $(this).attr('org_id');
-       });
-   });
-   	$(function() {		
-  		$("#tablesorter").tablesorter({sortList:[[0,0]]});
-  	});	
-</script>
-<style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #f0f0f0;
-        }
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-        .camera-view {
-            width: 48%;
-            min-width: 200px;
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        .camera-view h3 {
-            color: white;
-            text-align: center;
-            margin: 10px 0;
-        }
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 75%; /* 16:9 соотношение */
-        }
-        video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        .controls {
-            text-align: center;
-            margin-top: 20px;
-        }
-        button {
-            padding: 8px 16px;
-            margin: 0 5px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    </style>
+    $(".btn").click(function() {
+        var bname = $(this).attr('org_name');
+        var _org_id = $(this).attr('org_id');
+        $(".kartka h1").text(bname);
+        $(".kartka h4").html(_org_id);
+        document.getElementById("id_gate").value = $(this).attr('org_id');
+    });
+    
+    $("#tablesorter").tablesorter({sortList:[[0,0]]});
+});
 
- <div class="panel panel-primary"> 
-
-  <div class="panel-heading">
-    <h3 class="panel-title"><?php echo __('Панель управления воротами');?></h3>
-   
-  </div>
-  <div class="panel-body"> 
-	<?php
-		//получаю список ворот gate.
-		$_gateList=Arr::get(Model::factory('gates')->get_list_gate(), 'res');
-		//проверяю: работает ли ffmpeg?
-$processName = "ffmpeg.exe";
-exec("tasklist | findstr \"$processName\"", $output, $returnCode);
-if (!empty($output)) {
-    //echo "Процесс $processName работает!";
-	$video_set=true;
-} else {
-    //echo "Процесс $processName не найден.";
-	$video_set=false;
+// Сортировка строк
+function moveRow(button, direction) {
+    var row = $(button).closest('tr');
+    if (direction === 'up' && row.prev().length) {
+        row.insertBefore(row.prev());
+    } else if (direction === 'down' && row.next().length) {
+        row.insertAfter(row.next());
+    }
+    updateGateOrder();
 }
 
-//отображаю состояние работы видеосистемы
-/* if($video_set)
-{
-						echo '<span class="label label-success" id="inputField" title="Видеосистема работает правильно.">Видео работает</span>';
-					} else {
-						
-						echo '<span class="label label-warning" title="Видеосистема не работает, надо запустить ffmpeg">Видео не работает</span>';
-					} */
-					echo '<span class="label label-warning" title="Видео отключено">Видео отключено</span>';
-					
-					
-					//echo '<span class="label label-default pull-right" title="Порядок вывода настривается в файле parkresident\application\config\artonitparking_config.php переменная \'order_gate\'. Например: \'order_gate\'=>array(3, 4, 2, 7, 5, 6)"">Настройка</span>';
-					echo '<acronym class="pull-right" title="Порядок вывода настривается в файле parkresident\application\config\artonitparking_config.php переменная \'order_gate\'. Например: \'order_gate\'=>array(3, 4, 2, 7, 5, 6)">Настройка</acronym>';
-	?>
-
-
-	<div class="container">
-	
-	 <table>
-		<tr>
-			<?php
-			
-			
-			
-			foreach($order_gate as $key2)// для ворот в указанном порядке организую вывод информации. $key2 - id ворот
-				{
-					
-					$key=array();
-					foreach($_gateList as $key3)//делаю перебор массива с перечнем ворот. Цель - найти $key3, у которого номер ворот совпадает с тем, что надо выводить.
-					{
-						if(Arr::get($key3, 'id') == $key2) $key=$key3;
-						
-					}
-				
-				echo '<td>';
-				echo '<div class="camera-view">';
-				echo '<h3>'.Arr::get($key, 'name').'</h3>';
-				if($video_set)
-				{
-					echo '<div class="video-wrapper">
-						<video id="camera'.Arr::get($key, 'id_cam').'" controls muted></video>
-						</div>';
-				} else {
-					echo __('no_video');
-				}
-				
-				echo '</div>
-				<div class="controls">
-				
-					<button onclick="toggleFullscreen(\'camera'.Arr::get($key, 'id_cam').'\')">Полный экран Камера '.Arr::get($key, 'id_cam').'</button>';
-					
-					echo Form::open('rmo/sendOpen');
-						echo Form::hidden('id', Arr::get($key, 'id')).'<br>';
-						echo '<label class="btn btn-line dark btn-xs popup-contact btn-success" for="modalm-1"
-							org_name="'. Arr::get($key, 'name').'" 
-							org_id="'.Arr::get($key, 'id').'"
-							
-						>Открыть ворота '.Arr::get($key, 'id').'</label>';
-						
-						echo Form::close();
-					echo '
-					
-				</div>
-			</td>';
-					
-				}
-				?>
-		</tr>
-	</table>
-   </div>
-  </div>
- </div>
- 
- <div class="modalm">
-
-
-	<div class="panel-body">
-	<input class="modalm-open" id="modalm-1" type="checkbox" hidden>
-	<div class="modalm-wrap" aria-hidden="true" role="dialog">
-		
-		<div class="modalm-dialog">
-			<div class="modalm-header">
-				<h2>Управление воротами</h2>
-				<div class="row">
-					<div class="kartka">
-					  <h1></h1>
-						
-					  </div>
-				</div>
-				<label class="btnm-close" for="modalm-1" aria-hidden="true">x</label>
-			</div>
-			<div class="modalm-body">
-			<h2>Укажите причину</h2>
-			
-				
-				
-			<form action="rmo/sendOpen" method="post" enctype="multipart/form-data">
-					
-					<input type="input" name="mess" id="ipp" size="30" required >
-					<input type="hidden" name="id" id="id_gate">
-					
-					<br>
-					<br>
-					<input type="submit" name="submit" value="Открыть ворота">
-			</form> 
-			 <br>
-			  
-		
-			</div>
-			<div class="modalm-footer">
-				<h4>Артонит ПаркРезидент</h4>
-				
-			</div>
-		</div>
-	</div>
-	</div>
-
-</div> 
- 
-
- 
-
-    <!-- Подключаем HLS.js -->
-    <script src="/parkresident/hls.js"></script>
-	
+function updateGateOrder() {
+    var gateIds = [];
+    $('#sortableGates tr').each(function() {
+        gateIds.push($(this).data('gate-id'));
+    });
+    $('#gate_order_input').val(gateIds.join(','));
     
-    <script>
-        // Инициализация плееров
-        function initCamera(videoId, streamUrl) {
-            const video = document.getElementById(videoId);
-            
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(streamUrl);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(e => {
-                        console.error("Автовоспроизведение запрещено:", e);
-                        // Показываем кнопку воспроизведения
-                        video.controls = true;
-                    });
-                });
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // Для Safari
-                video.src = streamUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play().catch(e => {
-                        console.error("Автовоспроизведение запрещено:", e);
-                        video.controls = true;
-                    });
-                });
-            }
-        }
+    $('#sortableGates tr').each(function(index) {
+        $(this).find('.badge').text(index + 1);
+    });
+}
 
-        // Полноэкранный режим
-        function toggleFullscreen(videoId) {
-            const video = document.getElementById(videoId);
-            if (video.requestFullscreen) {
-                video.requestFullscreen();
-            } else if (video.webkitRequestFullscreen) {
-                video.webkitRequestFullscreen();
-            } else if (video.msRequestFullscreen) {
-                video.msRequestFullscreen();
+$(document).ready(function() {
+    updateGateOrder();
+    
+    $('#gateOrderForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    $('#gateSettingsModal').modal('hide');
+                    location.reload();
+                } else {
+                    alert('Ошибка: ' + response.message);
+                }
             }
-        }
-
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            // Замените URL на ваши HLS-потоки
-            initCamera('camera1', 'http://172.16.20.252:8080/stream/stream6.m3u8');
-            initCamera('camera2', 'http://172.16.20.252:8080/stream/stream8.m3u8');
-            initCamera('camera3', 'http://172.16.20.252:8080/stream/stream9.m3u8');
-            initCamera('camera4', 'http://172.16.20.252:8080/stream/stream10.m3u8');
-            initCamera('camera5', 'http://172.16.20.252:8080/stream/stream11.m3u8');
-            initCamera('camera6', 'http://172.16.20.252:8080/stream/stream7.m3u8');
-           
         });
-    </script>
+    });
+});
+</script>
+
+<style>
+.sort-controls {
+    text-align: center;
+    min-width: 80px;
+}
+.sort-controls .badge {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+.sort-controls .btn-group-vertical .btn {
+    padding: 2px 8px;
+    font-size: 12px;
+}
+#gateSettingsModal .modal-dialog {
+    width: 95%;
+    max-width: 1400px;
+}
+</style>
+
+<div class="panel panel-primary"> 
+    <div class="panel-heading">
+        <h3 class="panel-title"><?php echo __('Панель управления воротами');?></h3>
+    </div>
+    <div class="panel-body"> 
+        <?php
+        $_gateList = Arr::get(Model::factory('gates')->get_list_gate(), 'res');
+        
+        echo '<span class="label label-warning">Видео отключено</span>';
+        echo '<a href="#" class="pull-right" data-toggle="modal" data-target="#gateSettingsModal" title="Настройка">⚙️</a>';
+        ?>
+
+        <div class="rmo-cameras-container">
+            <table class="table table-bordered">
+                <tr>
+                    <?php foreach($order_gate as $key2): 
+                        $key = array();
+                        foreach($_gateList as $key3) {
+                            if(Arr::get($key3, 'id') == $key2) $key = $key3;
+                        }
+                    ?>
+                    <td>
+                        <div class="rmo-camera-view">
+                            <h3><?php echo Arr::get($key, 'name'); ?></h3>
+                            no_video
+                        </div>
+                        <div class="rmo-controls">
+                            <button class="btn btn-primary btn-sm">Полный экран</button>
+                            <button type="button" class="btn btn-success btn-sm" 
+                                    data-toggle="modal" data-target="#reasonModal"
+                                    data-gate-id="<?php echo Arr::get($key, 'id'); ?>"
+                                    data-gate-name="<?php echo Arr::get($key, 'name'); ?>">
+                                Открыть ворота
+                            </button>
+                        </div>
+                    </td>
+                    <?php endforeach; ?>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно причины -->
+<div class="modal fade" id="reasonModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Управление воротами</h4>
+            </div>
+            <div class="modal-body">
+                <h4 id="gateNameDisplay"></h4>
+                <form action="rmo/sendOpen" method="post" id="gateOpenForm">
+                    <div class="form-group">
+                        <label>Укажите причину:</label>
+                        <input type="text" class="form-control" name="mess" required>
+                        <input type="hidden" name="id" id="gateIdForOpen">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                <button type="submit" form="gateOpenForm" class="btn btn-primary">Открыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно настроек -->
+<div class="modal fade" id="gateSettingsModal" tabindex="-1" role="dialog" data-backdrop="static">
+    <div class="modal-dialog" style="width:95%; max-width:1400px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Настройка порядка ворот</h4>
+            </div>
+            <div class="modal-body">
+                <?php
+                $gatesResult = Model::factory('Gates')->get_list_gate();
+                $allGates = isset($gatesResult['res']) ? $gatesResult['res'] : array();
+                
+                if (!empty($allGates)):
+                ?>
+                <div class="alert alert-info">
+                    Текущий порядок: <?php echo implode(' → ', $order_gate); ?>
+                </div>
+                
+                <form id="gateOrderForm" method="post" action="<?php echo URL::site('rmo/saveGateOrder'); ?>">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Порядок</th>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Парковка</th>
+                                <th>Тип</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sortableGates">
+                            <?php 
+                            $sortedGates = array();
+                            foreach ($order_gate as $gateId) {
+                                foreach ($allGates as $gate) {
+                                    if ($gate['id'] == $gateId) {
+                                        $sortedGates[] = $gate;
+                                        break;
+                                    }
+                                }
+                            }
+                            foreach ($sortedGates as $index => $gate): 
+                            ?>
+                            <tr data-gate-id="<?php echo $gate['id']; ?>">
+                                <td class="sort-controls">
+                                    <span class="badge"><?php echo $index + 1; ?></span>
+                                    <div class="btn-group-vertical">
+                                        <button class="btn btn-xs btn-default move-up" onclick="moveRow(this, 'up')" type="button">↑</button>
+                                        <button class="btn btn-xs btn-default move-down" onclick="moveRow(this, 'down')" type="button">↓</button>
+                                    </div>
+                                </td>
+                                <td><?php echo $gate['id']; ?></td>
+                                <td><?php echo $gate['name']; ?></td>
+                                <td>Парковка <?php echo $gate['id_parking']; ?></td>
+                                <td>
+                                    <span class="label label-<?php echo ($gate['is_enter'] == 1) ? 'success' : 'info'; ?>">
+                                        <?php echo ($gate['is_enter'] == 1) ? 'Въезд' : 'Выезд'; ?>
+                                    </span>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    
+                    <input type="hidden" name="gate_order" id="gate_order_input" value="<?php echo implode(',', $order_gate); ?>">
+                    
+                <?php endif; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                <button type="submit" form="gateOrderForm" class="btn btn-primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$('#reasonModal').on('show.bs.modal', function(event) {
+    var button = $(event.relatedTarget);
+    $(this).find('#gateNameDisplay').text('Ворота: ' + button.data('gate-name'));
+    $(this).find('#gateIdForOpen').val(button.data('gate-id'));
+});
+</script>
+<style>
+/* Переопределяем только для наших модальных окон */
+#reasonModal.modal,
+#gateSettingsModal.modal {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    z-index: 1050 !important;
+    display: none !important;
+    overflow: hidden !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#reasonModal.modal.fade.in,
+#gateSettingsModal.modal.fade.in {
+    display: block !important;
+}
+
+#reasonModal .modal-content,
+#gateSettingsModal .modal-content {
+    background-color: #fff !important;
+    border: 1px solid rgba(0,0,0,0.2) !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5) !important;
+}
+
+#reasonModal .modal-header,
+#gateSettingsModal .modal-header {
+    background-color: #f5f5f5 !important;
+    cursor: default !important;
+}
+</style>

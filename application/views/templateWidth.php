@@ -27,6 +27,10 @@
   <!-- 1. Подключить библиотеку jQuery -->
   <!-- <script type="text/javascript" src="/city/static/js/jquery-1.11.1.min.js"></script>  --> 
    <script type="text/javascript" src="/parkresident/static/js/jquery-2.2.4.js"></script>
+   
+      <!-- jQuery UI для сортировки -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     
 	<!-- Подключить скрипта для монитора онлайн -->  
     <!--<script type="text/javascript" src="/parkresident/static/js/monitor_online.js"></script>-->
@@ -39,7 +43,7 @@
   <!-- 4. Подключить скрипт виджета "Bootstrap datetimepicker" -->
   <script type="text/javascript" src="/parkresident/static/js/bootstrap-datetimepicker.min.js"></script>
   <!-- 5. Подключить CSS платформы Twitter Bootstrap 3 -->  
-  <link rel="stylesheet" href="/parkresident/static/css/bootstrap.min.css" />
+  <!--<link rel="stylesheet" href="/parkresident/static/css/bootstrap.min.css" />-->
   <!-- 6. Подключить CSS виджета "Bootstrap datetimepicker" -->  
   <link rel="stylesheet" href="/parkresident/static/css/bootstrap-datetimepicker.min.css" />
   	<?php echo  HTML::style('static/css/city.css'); ?>

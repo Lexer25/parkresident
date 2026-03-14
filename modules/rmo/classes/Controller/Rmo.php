@@ -65,11 +65,11 @@ class Controller_Rmo extends Controller_Template { // класс описыва�
 			
 		}
 	//блок управления воротами		
-			if(isset(Kohana::$config->load('artonitparking_config')->order_gate))
+			if(isset(Kohana::$config->load('rmo')->order_gate))
 			{
-				$order_gate=Kohana::$config->load('artonitparking_config')->order_gate;//порядок вывода ворот на экран
+				$order_gate=Kohana::$config->load('rmo/rmo')->order_gate;//порядок вывода ворот на экран
 			} else {
-				$temp=Model::factory('Rmo')->getListGate();//я сделал свой запрос номеров ворот... так спокойнее и надежнее
+				$temp=Model::factory('rmo/rmo')->getListGate();//я сделал свой запрос номеров ворот... так спокойнее и надежнее
 				$order_gate=array_column($temp, 'ID');//вывожу все id_gate
 			}
 			
@@ -625,5 +625,81 @@ public function action_opengateCVS()//передача команды на от�
 			$this->redirect($this->request->referrer());
 	 }
 	
-	
+/**
+ * Сохранение порядка вывода ворот
+ */
+public function action_saveGateOrder()
+{
+    // Убираем проверку на AJAX для отладки
+    // if (!$this->request->is_ajax()) {
+    //     throw HTTP_Exception::factory(403, 'Доступ запрещен');
+    // }
+    
+    $this->auto_render = false;
+    
+    try {
+        $gateOrder = $this->request->post('gate_order');
+        
+        if (empty($gateOrder)) {
+            throw new Exception('Не указан порядок ворот');
+        }
+        
+        // Преобразуем строку в массив
+        $orderArray = explode(',', $gateOrder);
+        $orderArray = array_map('intval', array_filter($orderArray));
+        
+        if (empty($orderArray)) {
+            throw new Exception('Некорректный формат данных');
+        }
+        
+        // Путь к файлу конфигурации
+        //$configFile = MODPATH . 'config/rmo/rmo.php';
+		$configFile = MODPATH . 'rmo/config/rmo/rmo.php';
+        
+        // Читаем существующую конфигурацию
+        if (file_exists($configFile)) {
+            $config = include $configFile;
+            if (!is_array($config)) {
+                $config = array();
+            }
+        } else {
+            $config = array();
+        }
+        
+        // Обновляем порядок ворот
+        $config['order_gate'] = $orderArray;
+        
+        // Сохраняем конфигурацию
+        $content = "<?php defined('SYSPATH') or die('No direct script access.');\n\n";
+        $content .= "return " . var_export($config, true) . ";\n";
+        
+        if (file_put_contents($configFile, $content) === false) {
+            throw new Exception('Не удалось сохранить конфигурацию');
+        }
+        
+        // Вместо очистки кэша Kohana::$config, просто сбрасываем внутренний кэш
+        // Удаляем загруженную конфигурацию из кэша, если она там есть
+        if (method_exists(Kohana::$config, '_load')) {
+            // Для Kohana 3.3 нет прямого метода очистки, поэтому перезагрузим конфиг
+            Kohana::$config = new Config;
+        }
+        
+        $response = array(
+            'success' => true,
+            'message' => 'Порядок ворот успешно сохранен',
+            'order' => $orderArray
+        );
+        
+    } catch (Exception $e) {
+        Log::instance()->add(Log::ERROR, 'Ошибка сохранения порядка ворот: ' . $e->getMessage());
+        
+        $response = array(
+            'success' => false,
+            'message' => $e->getMessage()
+        );
+    }
+    
+    $this->response->headers('Content-Type', 'application/json');
+    $this->response->body(json_encode($response, JSON_UNESCAPED_UNICODE));
+}
 } 

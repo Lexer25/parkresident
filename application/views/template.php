@@ -27,6 +27,8 @@
   <!-- 1. Подключить библиотеку jQuery -->
   <!-- <script type="text/javascript" src="/city/static/js/jquery-1.11.1.min.js"></script>  --> 
    <script type="text/javascript" src="/parkresident/static/js/jquery-2.2.4.js"></script>
+   
+
     
 	<!-- Подключить скрипта для монитора онлайн -->  
     <!--<script type="text/javascript" src="/parkresident/static/js/monitor_online.js"></script>-->
