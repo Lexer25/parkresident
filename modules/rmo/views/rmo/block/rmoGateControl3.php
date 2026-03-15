@@ -1,15 +1,4 @@
 <script>
-$(function() {
-    $(".btn").click(function() {
-        var bname = $(this).attr('org_name');
-        var _org_id = $(this).attr('org_id');
-        $(".kartka h1").text(bname);
-        $(".kartka h4").html(_org_id);
-        document.getElementById("id_gate").value = $(this).attr('org_id');
-    });
-    
-    $("#tablesorter").tablesorter({sortList:[[0,0]]});
-});
 
 // Сортировка строк
 function moveRow(button, direction) {
