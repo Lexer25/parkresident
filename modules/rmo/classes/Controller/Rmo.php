@@ -595,7 +595,9 @@ public function action_opengateCVS()//передача команды на от�
 				$event->comment=Text::limit_chars(Arr::get($_POST, 'mess'), 255);
 				$event->insert();
 				//echo Debug::vars('575', $event);exit;
-			$result=Model::factory('Rmo')->sendOpen(Arr::get($_POST, 'id'));//открыть указанные ворота
+			
+                     //открыть указанные ворота           
+                        $result=Model::factory('Rmo')->sendOpen(Arr::get($_POST, 'id'));
 			//echo Debug::vars('559', $result, $event->result->id_events);exit;
 			
 			//фиксирую результат выполения команды на открытие ворот

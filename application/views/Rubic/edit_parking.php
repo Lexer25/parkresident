@@ -75,7 +75,6 @@ if(Auth::Instance()->logged_in())
 </div> 
 
 
-<?php }?>
 
 
 

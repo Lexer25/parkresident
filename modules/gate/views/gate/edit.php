@@ -103,13 +103,4 @@ if(Auth::Instance()->logged_in())
 </div>
 
 
-
-
-
-
-<?php }?>
-
-
-
-
 <?echo Form::close();?>	

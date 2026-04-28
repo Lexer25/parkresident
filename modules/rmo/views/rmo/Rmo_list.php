@@ -51,15 +51,6 @@ if(isset($list_grz))
 	</table>
 
 
-
-<?php
-	}
-?>
-
-
-	
-	
-
 </div>	
 </div>
 	

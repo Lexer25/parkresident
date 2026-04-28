@@ -118,7 +118,7 @@ if(Auth::Instance()->logged_in() OR true)
 	</div>
 </div>
 
-<?php }?>
+
 
 
 
