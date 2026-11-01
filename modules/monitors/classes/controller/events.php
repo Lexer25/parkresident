@@ -7,13 +7,15 @@ class Controller_events extends Controller {
 		
 	public $view = 'result';//view для показа результата
 	public $template = 'template';
+	
+	
 	public function before()
 	{
 		parent::before();
 	}
 
 
-	public function action_index($filter = null)
+	public function action_index()
 	{
 		//echo Debug::vars('19');exit;
 		
@@ -25,13 +27,12 @@ class Controller_events extends Controller {
 			//->bind('catdTypelist', $catdTypelist)
 			->bind('alert', $fl)
 			->bind('arrAlert', $arrAlert)
-			//->bind('filter', $filter)
+
 			;
 	}
 	
 	private function getid()
 	{
-		//$sql = 'SELECT GEN_ID(gen_event_id, 0 ) FROM RDB$DATABASE';//эта строка нужна для работы с общим журналом событий events
 		$sql = 'SELECT GEN_ID(GEN_HL_EVENTS_ID, 0 ) FROM RDB$DATABASE';//тут выбирается генератор таблицы hl_events
 		$query = DB::query(Database::SELECT, $sql)
 			->execute(Database::instance('fb'))
@@ -41,10 +42,6 @@ class Controller_events extends Controller {
 	
 	private function selectevent($id,$photo)
 	{
-		
-		$sqlphoto='';
-		if($photo) $sqlphoto='p.photo,';
-		
 		
 		$sql='select  e.id as id_event, e.event_code as id_eventtype, e.event_time as datetime, e.grz as id_card, e.comment, e.id_gate  , hlec.name as eventtype_name ,
         coalesce(hlp.name, hlp2.name) as device_name,
@@ -59,7 +56,7 @@ class Controller_events extends Controller {
         left join people p on p.id_pep=c.id_pep
         left join organization o on o.id_org=p.id_org
 		where  e.id >'.($id-30).'
-		order by e.event_time';
+		order by e.id';
 		
 				
 		
@@ -128,6 +125,8 @@ class Controller_events extends Controller {
 					break;
 					
 					case 65:
+					//case 40:
+					//case 41:
 						$row['COLOR']=15779526;
 						
 					break;

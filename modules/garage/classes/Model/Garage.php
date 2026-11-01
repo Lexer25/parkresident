@@ -983,6 +983,23 @@ class Model_Garage extends Model {
 		where hl_org.id_garage = '.$garage->id.'
 		AND hle.event_time >= (CURRENT_DATE - '.$deepEventDay.')
 		order by hle.event_time desc;';
+		
+		
+		$sql='select hle.event_time, hle.event_code, hlp.is_enter, hlp.name as gate_name, 
+			   hlp.id_parking, hle.grz, hle.id_pep, hle.id_gate, hle.comment, 
+			   et.name as event_name, p.surname, p.name, p.PATRONYMIC, hl_org.id_garage
+		from hl_orgaccess hl_org
+		join people p on p.id_org = hl_org.id_org
+		left join card c on c.id_pep = p.id_pep
+		join hl_events hle on hle.grz = c.id_card 
+						
+		left join hl_param hlp on hlp.id = hle.id_gate
+		left join hl_eventcode et on et.id = hle.event_code
+		where hl_org.id_garage = '.$garage->id.'
+		AND hle.event_time >= (CURRENT_DATE - '.$deepEventDay.')
+		order by hle.event_time desc;';
+		
+		
 
 //echo Debug::vars('983', $sql);exit;			
 			try

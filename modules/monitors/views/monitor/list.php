@@ -40,7 +40,8 @@
 			);
 		}
 	}
-	//get запрос для получения данных журнала событий
+	//get запрос для получения данных журнала событий 
+	//C:\xampp\htdocs\parkresident\modules\monitors\classes\controller\events.php
 	xmlhttp.open("GET","/parkresident/events/getEvent?photo="+photoneed,false);
 	// отправка запроса
 	xmlhttp.send();
