@@ -315,6 +315,10 @@ class Model_Gates extends Model {
 				left join eventtype  et on et.id_eventtype=hlm.eventcode
 				where hlm.eventcode is not null';
 		
+		$sql='select hle.name as eventName, hlm.eventcode, hlm.text as eventMessage, hlm.param, hlm.smalname from hl_messages hlm
+                left join HL_EVENTCODE  hle on hle.id=hlm.eventcode
+                where hle.id is not null';
+		
 		try
 				{
 				$query = DB::query(Database::SELECT, $sql)
