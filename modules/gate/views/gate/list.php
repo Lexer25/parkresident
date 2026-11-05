@@ -265,7 +265,7 @@ echo Form::open('gate/control');
 					<div class="panel-body">
 						
 
-				В нижзней строке табло выводится приглашение к проезду или пояснения к причине отказа.
+				В нижней строке табло выводится приглашение к проезду или пояснения к причине отказа.
 				<?php
 					$tmess=Model::factory('gates')->tabloMessages();
 					//echo Debug::vars('206', $tmess);//exit;
