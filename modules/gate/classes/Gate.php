@@ -2,10 +2,10 @@
 
 /**
 * @package    ParkResident/Gate
- * @category   Base
- * @author     Artonit
- * @copyright  (c) 2025 Artonit Team
- * @license    http://artonit/ru 
+* @category   Base
+* @author     Artonit
+* @copyright  (c) 2025 Artonit Team
+* @license    http://artonit/ru 
  
  */
  
@@ -198,8 +198,9 @@ class Gate
 			
 			} catch (Exception $e) {
 				Log::instance()->add(Log::DEBUG, 'Line 139 '. $e->getMessage());
-				$this->mess=$e->getMessage();	
-				return true;				
+				$this->mess=$e->getMessage();
+				// ошибка БД не должна выглядеть как успешное удаление
+				return false;
 			}
 	}
 	

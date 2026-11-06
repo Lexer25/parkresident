@@ -243,7 +243,7 @@ class Model_Gates extends Model {
 	{
 			$_data= $this->get_info_gate($id_gate);
 				//создаю объект MPT
-			$mpt=new phpMPT(Arr::get($_data,'box_ip'), Arr::get($connect_param, 'box_port'));
+			$mpt=new phpMPT(Arr::get($_data,'box_ip'), Arr::get($_data, 'box_port'));
 			$mpt->openGate(Arr::get($_data,'mode'));// открыть ворота с учетом режима работы
 		return $mpt->result;
 	}

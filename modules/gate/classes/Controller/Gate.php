@@ -1,10 +1,10 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /**
 * @package    ParkResident/Gate
- * @category   Base
- * @author     Artonit
- * @copyright  (c) 2025 Artonit Team
- * @license    http://artonit/ru 
+* @category   Base
+* @author     Artonit
+* @copyright  (c) 2025 Artonit Team
+* @license    http://artonit/ru 
  
  */
 
@@ -33,61 +33,14 @@ class Controller_Gate extends Controller_Template { // класс описыва
 	
 	public function action_index()// просмотр ворот и их настроек
 	{
-		echo Debug::vars('28', $_POST);exit;
-		//$_SESSION['menu_active']='gate';
-		$query=Validation::factory($this->request->query());
-					$query->rule('id_parking', 'not_empty')
-							->rule('id_parking', 'digit')
-							;
-					if($query->check())
-					{
-						$id=Arr::get($query, 'id_parking'); // имеется номер ворот
-						
-						
-					} else 
-					{
-						$id=0; // вывести список ворота
-					}
-					
-		
-		echo Debug::vars('38', $_GET, $_POST, $id_parking); //exit;
-		$gate_list=Model::Factory('gates')->get_list_gate($id_parking);//список ворот
-		$checkplaceenable=Model::Factory('gates')->checkplaceenable();//статус счетчиков
-		$tabloMessages=Model::Factory('gates')->tabloMessages();//информация по строкам табло
-		$tabloMessageIdle=Model::Factory('gates')->tabloMessageIdle();//информация по строкам табло на время ожидания
-		
-			
-		$data=Validation::factory($gate_list);
-		$data->rule('result', 'digit')
-			->rule('result', 'in_array', array(':value', array(0)))
-			->rule('res', 'not_empty')
-			;
-		if($data->check())
-		{			
-			Session::instance()->set('ok_mess', array('ok_mess' => 'Данные обновлены успешно'));
-			//echo Debug::vars('56', $data, Arr::get($data, 'res')); exit;
-			$content = View::factory('gate/gatelist', array(
-			'gate_list'=>Arr::get($data, 'res'),
-			'id_parking'=>$id_parking,
-			'checkplaceenable'=>$checkplaceenable,
-			'tabloMessages'=>$tabloMessages,
-			'tabloMessageIdle'=>$tabloMessageIdle,
-			));
-		} else {
-			
-			Session::instance()->set('e_mess', array('Ошибка '.Arr::get($data, 'result').' не могу выдать данные по КПП.'));
-			$content = View::factory('gate/gatelist', array(
-			//'gate_list'=>null,
-			'gate_list'=>Arr::get($data, 'res'),
-			'id_parking'=>$id_parking,
-			'id_parking'=>$id_parking,
-			'checkplaceenable'=>$checkplaceenable,
-			'tabloMessages'=>$tabloMessages,
-			'tabloMessageIdle'=>$tabloMessageIdle,
-			));
-		}
-		
-        $this->template->content = $content;
+		// /gate показывает тот же список КПП, что и /gate/list. Именно сюда
+		// возвращают redirect('gate') обработчики счётчиков свободных мест.
+		// Раньше здесь был отладочный вывод с exit и шаблон gate/gatelist,
+		// которого в модуле нет.
+		$content = View::factory('gate/list', array(
+			'gate_list'=>Model::factory('gates')->getAll(),
+		));
+		$this->template->content = $content;
 	}
 	
 	
@@ -213,7 +166,6 @@ class Controller_Gate extends Controller_Template { // класс описыва
 						;
 				if($_data->check())
 				{
-					echo Debug::vars('208', $_data);//exit;
 					$entity = new Gate (Arr::get($_data, 'id'));
 					
 					$entity->tablo_ip = Arr::get($_data, 'tablo_ip');
@@ -245,7 +197,6 @@ class Controller_Gate extends Controller_Template { // класс описыва
 					
 				} else 
 				{
-					echo Debug::vars('231');exit;
 					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 					
 				}
@@ -300,19 +251,18 @@ class Controller_Gate extends Controller_Template { // класс описыва
 			
 			case 'set_tablo_text':		//сохранить параметры табло
 				//echo Debug::vars('172', $_POST); exit;
-				//$data=Validation::factory($this->request->post());
-				$data->rule('new_tablo_text', 'not_empty')
+				$_data=Validation::factory($this->request->post());
+				$_data->rule('new_tablo_text', 'not_empty')
 						->rule('new_tablo_text', 'is_array')
 						;
-				if($data->check())
+				if($_data->check())
 				{
-					//echo Debug::vars('179 OK', $data); //exit;
-					Model::factory('gates')->update_gate_messages(Arr::get($data, 'new_tablo_text'), Arr::get($data, 'dx'), Arr::get($data, 'dy'), Arr::get($data, 'messColor'),Arr::get($data, 'messScroll'));
+					//echo Debug::vars('179 OK', $_data); //exit;
+					Model::factory('gates')->update_gate_messages(Arr::get($_data, 'new_tablo_text'), Arr::get($_data, 'dx'), Arr::get($_data, 'dy'), Arr::get($_data, 'messColor'),Arr::get($_data, 'messScroll'));
 					$this->redirect('gate');
 				} else 
 				{
-					echo Debug::vars('267 err', $data); exit;
-					Session::instance()->set('e_mess', $data->errors('Valid_mess'));
+					Session::instance()->set('e_mess', $_data->errors('Valid_mess'));
 						$this->redirect('gate');
 				}
 		
@@ -327,19 +277,29 @@ class Controller_Gate extends Controller_Template { // класс описыва
 	
 	public function action_edit()//редактировать и просматривать  ворота
 	{
-		//$_SESSION['menu_active']='kp_park_menu';
-		
 		$id_gate = $this->request->param('id');
-		$info_gate=Model::Factory('gates')->get_info_gate($id_gate); //получить общую информацию о воротах
-		
-		//echo Debug::vars('139', $info_gate, $_POST); exit;
-		
+
+		// id приходит из адреса, поэтому в SQL отдаём только цифры
+		if ( ! ctype_digit((string) $id_gate))
+		{
+			Session::instance()->set('e_mess', array('ok_mess' => 'Некорректный номер КПП'));
+			$this->redirect('gate/list');
+		}
+
+		// gate/edit ждёт объект Gate (обращается к $info_gate->name и т.д.),
+		// а не массив из Model_Gates::get_info_gate()
+		$info_gate = new Gate($id_gate);
+
+		if (empty($info_gate->id))
+		{
+			Session::instance()->set('e_mess', array('ok_mess' => 'КПП '.$id_gate.' не найдено'));
+			$this->redirect('gate/list');
+		}
+
 		$content = View::factory('gate/edit', array(
 			'info_gate'=>$info_gate,
-			
 		));
-        $this->template->content = $content;
-		
+		$this->template->content = $content;
 	}
 	
 	
